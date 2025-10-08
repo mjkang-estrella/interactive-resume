@@ -12,7 +12,7 @@
         />
     </head>
     <body>
-        <div class="page">
+        <div class="page deck-hidden">
             <!-- Left: Resume paper -->
             <main class="paper" id="paper" aria-label="Resume">
                 <h1 class="name">MYEONGJIN KANG</h1>
@@ -102,7 +102,7 @@
                         <ul class="bullets">
                             <li>
                                 <button
-                                    class="bullet"
+                                    class="bullet bullet--intro"
                                     data-role="Toss Bank — Social Squad"
                                     data-section="Experience"
                                     data-text="Launched ‘Challenge Account’ for group challenge participants, achieving 300K+ MAU within one month (fastest in company history), 70%+ week‑1 retention, ultimately reducing company‑wide churn by 5%"
@@ -401,13 +401,39 @@
                 </section>
             </main>
 
-            <!-- Right: Dynamic page deck -->
-            <aside class="deck">
-                <div class="hint" id="deck-hint">
-                    Click any bullet to open a new page →
-                </div>
-                <div class="strip" id="deck-strip" aria-live="polite"></div>
+            <!-- Right: Detail panel -->
+            <aside class="deck" id="deck" hidden aria-live="polite">
+                <section class="doc paper" id="deck-doc" tabindex="-1" aria-label="Bullet details">
+                    <header class="doc-head">
+                        <div>
+                            <p class="doc-sub">Select a bullet</p>
+                            <h3 class="doc-title">Detail view</h3>
+                        </div>
+                        <button class="doc-close" data-action="close" aria-label="Close detail view">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </header>
+                    <div class="doc-body">
+                        <div class="section-bar single-bottom doc-section-bar">Highlight</div>
+                        <div class="entry doc-entry">
+                            <div class="entry-row">
+                                <div class="company doc-role">Role</div>
+                                <div class="meta doc-section">Section</div>
+                            </div>
+                            <ul class="bullets">
+                                <li>
+                                    <span class="doc-bullet"
+                                        >Pick any bullet on the resume to populate this detail.</span
+                                    >
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
             </aside>
+        </div>
+        <div class="toast" id="tip-toast" role="status" aria-live="polite">
+            💡 Tip: Click on any bullet point to see project details.
         </div>
         <script src="main.js"></script>
     </body>
