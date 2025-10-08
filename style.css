@@ -1,0 +1,292 @@
+:root {
+    --page-width: 768px;
+    --page-pad-x: 48px;
+    --page-pad-y: 20px;
+    --deck-min: 440px; /* min width of each right-hand page */
+    --deck-ideal: 48vw; /* ideal width (responsive) */
+    --deck-max: 768px; /* max width of each right-hand page */
+    --paper-bg: #fff;
+    --bg: #f5f5f5; /* neutral-100 */
+    --bar-border: #111; /* black */
+    --text: #0f172a; /* slate-900-ish */
+}
+html,
+body {
+    height: 100%;
+}
+body {
+    margin: 0;
+    background: var(--bg);
+    font-family:
+        "Inter",
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Helvetica Neue",
+        Helvetica,
+        Arial,
+        "Apple SD Gothic Neo",
+        "Noto Sans KR",
+        system-ui,
+        Segoe UI,
+        Roboto,
+        "Apple Color Emoji",
+        "Segoe UI Emoji";
+    color: var(--text);
+}
+
+:root {
+    --sec-my: 1px;
+    --sec-py: 2px;
+}
+
+/* Layout: resume on the left, dynamic pages on the right */
+.page {
+    display: grid;
+    grid-template-columns: var(--page-width) minmax(
+            var(--deck-min),
+            min(var(--deck-ideal), var(--deck-max))
+        );
+    column-gap: 20px;
+    align-items: start;
+    max-width: calc(var(--page-width) + var(--deck-max) + 40px);
+    margin: 0 auto;
+    padding: 24px 16px;
+}
+
+.paper {
+    width: var(--page-width);
+    background: var(--paper-bg);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    padding: var(--page-pad-y) var(--page-pad-x);
+    position: relative;
+    justify-self: center;
+}
+
+/* Header */
+.name {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-align: center;
+    margin: 0;
+}
+.contact-bar {
+    margin-top: 6px;
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.2;
+    padding-bottom: 4px;
+    background: transparent;
+    border: 0;
+    border-bottom: 3px double var(--bar-border);
+}
+
+/* Section bar (double rule) */
+.section-bar {
+    margin: var(--sec-my) 0;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    width: 100%;
+    display: grid;
+    place-items: center;
+}
+.section-bar.single-bottom {
+    padding: var(--sec-py) 0;
+    border-bottom: 1px solid var(--bar-border);
+}
+.section-bar.band {
+    margin: var(--sec-my) 0;
+    padding: var(--sec-py) 0;
+    border-top: 1px solid var(--bar-border);
+    border-bottom: 1px solid var(--bar-border);
+}
+
+/* Entries */
+.entry {
+    margin-bottom: 8px;
+}
+.entry-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+}
+.company {
+    font-size: 13px;
+    font-weight: bold;
+}
+.meta {
+    font-size: 12px;
+    color: #111;
+}
+.role {
+    font-style: italic;
+    font-size: 13px;
+    font-weight: bold;
+}
+.link {
+    font-size: 12px;
+    color: #111;
+    text-decoration: none;
+}
+.link:hover {
+    text-decoration: underline;
+}
+/* Bullets: custom dots centered to first line */
+.bullets {
+    margin: 6px 0 0 0;
+    padding-left: 0;
+}
+.bullets li {
+    list-style: none;
+    position: relative;
+    font-size: 12.5px;
+    line-height: 1.35;
+    margin: 0 0 3px;
+    padding-left: 16px;
+}
+.bullets li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.68em;
+    width: 4px;
+    height: 4px;
+    background: currentColor;
+    border-radius: 50%;
+    transform: translateY(-50%);
+}
+.bullets button {
+    all: unset;
+    cursor: pointer;
+}
+.bullets button:hover {
+    text-decoration: underline;
+}
+
+/* Right-side deck that accumulates pages */
+.deck {
+    position: relative;
+    height: 100%;
+}
+.strip {
+    position: sticky;
+    top: 16px;
+    height: calc(100vh - 32px);
+    display: flex;
+    align-items: stretch;
+    gap: 12px;
+    overflow-x: auto;
+    padding: 8px;
+    border-left: 1px solid #e5e7eb;
+    background: #fafafa;
+}
+.hint {
+    position: sticky;
+    top: 0;
+    font-size: 12px;
+    color: #64748b;
+    padding: 4px 8px;
+}
+
+.doc {
+    flex: 0 0 auto;
+    width: min(max(var(--deck-min), var(--deck-ideal)), var(--deck-max));
+    height: 100%;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+}
+.doc-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 10px 12px;
+    border-bottom: 1px solid #e5e7eb;
+    background: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+.doc-title {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.doc-sub {
+    margin: 0;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #525252;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.doc-actions {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+.btn {
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    font: inherit;
+    font-size: 12px;
+    padding: 6px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.btn:hover {
+    background: #f8fafc;
+}
+.btn-danger {
+    border-color: #fecaca;
+    background: #fff1f2;
+}
+.btn-danger:hover {
+    background: #ffe4e6;
+}
+
+.doc-body {
+    padding: 12px;
+    overflow: auto;
+}
+.card {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+.card h4 {
+    margin: 0 0 4px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #525252;
+}
+.card p {
+    margin: 0;
+    font-size: 13px;
+    color: #0f172a;
+}
+
+.focus {
+    outline: 2px solid #6366f1;
+    outline-offset: 0;
+}
