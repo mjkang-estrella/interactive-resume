@@ -14,6 +14,9 @@
     const bullet = $(".doc-bullet", doc);
     const closeBtn = $(".doc-close", doc);
     const toast = $("#tip-toast");
+    const highlight = $("#doc-highlight");
+    const embedWrap = $("#doc-embed");
+    const embedFrame = $("#doc-embed-frame");
 
     function triggerIntroHighlight() {
         const introBullet = $(".bullet--intro");
@@ -49,7 +52,7 @@
         doc.classList.remove("focus");
     }
 
-    function updateDoc({ section, roleTitle, bulletText }) {
+    function updateDoc({ section, roleTitle, bulletText, url }) {
         if (sub) sub.textContent = section || "Selected bullet";
         if (sectionLabel) sectionLabel.textContent = section || "";
         if (title) title.textContent = roleTitle || "Detail view";
@@ -58,6 +61,29 @@
             bullet.textContent =
                 bulletText || "Pick any bullet on the resume to populate this detail.";
         }
+        if (embedWrap && embedFrame) {
+            if (url) {
+                embedFrame.src = url;
+                embedWrap.hidden = false;
+                embedWrap.style.display = "flex";
+            } else {
+                embedFrame.src = "about:blank";
+                embedWrap.hidden = true;
+                embedWrap.style.display = "none";
+            }
+        }
+        if (highlight) {
+            highlight.hidden = false;
+        }
+        syncDocHeight();
+    }
+
+    function syncDocHeight() {
+        if (!doc || !paper) return;
+        const paperHeight = paper.offsetHeight;
+        doc.style.height = `${paperHeight}px`;
+        doc.style.minHeight = `${paperHeight}px`;
+        doc.style.maxHeight = `${paperHeight}px`;
     }
 
     function focusDoc() {
@@ -85,6 +111,7 @@
                 roleTitle: btn.getAttribute("data-role"),
                 bulletText:
                     btn.getAttribute("data-text") || btn.textContent.trim(),
+                url: btn.getAttribute("data-url"),
             });
 
             requestAnimationFrame(focusDoc);
@@ -106,4 +133,7 @@
             });
         });
     }
+
+    syncDocHeight();
+    window.addEventListener("resize", syncDocHeight);
 })();
