@@ -321,7 +321,7 @@ body {
     flex-direction: column;
     gap: 16px;
 }
-.doc-case__summary {
+.doc-case > h3 {
     font-size: 14px;
     line-height: 1.6;
     color: var(--ink-600);
