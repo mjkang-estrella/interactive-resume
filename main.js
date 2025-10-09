@@ -34,6 +34,7 @@
     let deckAnimationInstance = null;
     let docAnimationInstance = null;
     let deckAnimationState = deck.hidden ? "closed" : "open";
+    let docContentSwapAnimation = null;
 
     const deckEnterKeyframes = [
         { opacity: 0, transform: "translateX(36px)" },
@@ -75,6 +76,15 @@
         { opacity: 0, transform: "translateX(12px) scale(0.97)" },
     ];
 
+    const docSwapOutKeyframes = [
+        { opacity: 1, transform: "translateY(0)" },
+        { opacity: 0, transform: "translateY(8px)" },
+    ];
+    const docSwapInKeyframes = [
+        { opacity: 0, transform: "translateY(8px)" },
+        { opacity: 1, transform: "translateY(0)" },
+    ];
+
     const docEnterTiming = {
         duration: 360,
         easing: "cubic-bezier(0.16, 1, 0.3, 1)",
@@ -85,6 +95,17 @@
         duration: 260,
         easing: "cubic-bezier(0.4, 0, 0.2, 1)",
         fill: "forwards",
+    };
+    const docSwapOutTiming = {
+        duration: 150,
+        easing: "cubic-bezier(0.4, 0, 0.2, 1)",
+        fill: "forwards",
+    };
+    const docSwapInTiming = {
+        duration: 220,
+        easing: "cubic-bezier(0.16, 1, 0.3, 1)",
+        fill: "forwards",
+        delay: 30,
     };
 
     function cleanupDocAnimation() {
@@ -101,6 +122,13 @@
         }
     }
 
+    function cleanupDocContentAnimation() {
+        if (docContentSwapAnimation) {
+            docContentSwapAnimation.cancel();
+            docContentSwapAnimation = null;
+        }
+    }
+
     function resetDeckPositioning() {
         deck.style.removeProperty("position");
         deck.style.removeProperty("top");
@@ -114,6 +142,57 @@
 
     function canAnimate() {
         return !prefersReducedMotion && canAnimateDeck;
+    }
+
+    async function animateDocSwap(callback) {
+        if (
+            !callback ||
+            !canAnimate() ||
+            deckAnimationState !== "open" ||
+            typeof docContent.animate !== "function"
+        ) {
+            cleanupDocContentAnimation();
+            await callback();
+            return;
+        }
+
+        cleanupDocContentAnimation();
+        const outbound = docContent.animate(docSwapOutKeyframes, docSwapOutTiming);
+        docContentSwapAnimation = outbound;
+        try {
+            await outbound.finished;
+        } catch {
+            if (docContentSwapAnimation !== outbound) {
+                return;
+            }
+        }
+
+        if (docContentSwapAnimation !== outbound) {
+            return;
+        }
+
+        let callbackError;
+        try {
+            await callback();
+        } catch (error) {
+            callbackError = error;
+        }
+
+        const inbound = docContent.animate(docSwapInKeyframes, docSwapInTiming);
+        docContentSwapAnimation = inbound;
+        try {
+            await inbound.finished;
+        } catch {
+            /* ignore */
+        } finally {
+            if (docContentSwapAnimation === inbound) {
+                docContentSwapAnimation = null;
+            }
+        }
+
+        if (callbackError) {
+            throw callbackError;
+        }
     }
 
     function triggerIntroHighlight() {
@@ -147,6 +226,7 @@
 
         cleanupDeckAnimation();
         cleanupDocAnimation();
+        cleanupDocContentAnimation();
         resetDeckPositioning();
 
         if (!wasClosed) {
@@ -218,6 +298,7 @@
 
         cleanupDeckAnimation();
         cleanupDocAnimation();
+        cleanupDocContentAnimation();
 
         const shouldAnimate = canAnimate();
 
@@ -383,18 +464,31 @@
         if (title) title.textContent = roleTitle || "Detail view";
 
         const requestedTemplate = template || "default";
-        try {
-            await loadTemplate(requestedTemplate);
-        } catch (error) {
-            if (requestedTemplate !== "default") {
-                await loadTemplate("default");
-            } else {
-                throw error;
+        const loadAndRender = async () => {
+            try {
+                await loadTemplate(requestedTemplate);
+            } catch (error) {
+                if (requestedTemplate !== "default") {
+                    await loadTemplate("default");
+                } else {
+                    throw error;
+                }
             }
-        }
 
-        applyDocData({ section, roleTitle, bulletText, url });
-        syncDocHeight();
+            applyDocData({ section, roleTitle, bulletText, url });
+            syncDocHeight();
+        };
+
+        const hasRenderableContent =
+            docContent.childElementCount > 0 &&
+            docContent.dataset &&
+            docContent.dataset.template &&
+            docContent.dataset.template !== "default";
+        if (hasRenderableContent && deckAnimationState === "open") {
+            await animateDocSwap(loadAndRender);
+        } else {
+            await loadAndRender();
+        }
     }
 
     function syncDocHeight() {
