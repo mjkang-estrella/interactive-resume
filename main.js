@@ -15,6 +15,106 @@
     const templateCache = new Map();
     const TEMPLATE_DIR = "doc-pages";
     let activeTemplate = null;
+    let motionQuery = null;
+    let prefersReducedMotion = false;
+    if (window.matchMedia) {
+        motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+        prefersReducedMotion = motionQuery.matches;
+        const motionListener = (event) => {
+            prefersReducedMotion = event.matches;
+        };
+        if (typeof motionQuery.addEventListener === "function") {
+            motionQuery.addEventListener("change", motionListener);
+        } else if (typeof motionQuery.addListener === "function") {
+            motionQuery.addListener(motionListener);
+        }
+    }
+
+    const canAnimateDeck = typeof deck.animate === "function" && typeof doc.animate === "function";
+    let deckAnimationInstance = null;
+    let docAnimationInstance = null;
+    let deckAnimationState = deck.hidden ? "closed" : "open";
+
+    const deckEnterKeyframes = [
+        { opacity: 0, transform: "translateX(36px)" },
+        { opacity: 1, transform: "translateX(0)" },
+    ];
+    const deckLeaveKeyframes = [
+        { opacity: 1, transform: "translateX(0)" },
+        { opacity: 0, transform: "translateX(40px)" },
+    ];
+
+    const deckEnterTiming = {
+        duration: 340,
+        easing: "cubic-bezier(0.16, 1, 0.3, 1)",
+        fill: "forwards",
+    };
+    const deckLeaveTiming = {
+        duration: 260,
+        easing: "cubic-bezier(0.4, 0, 0.2, 1)",
+        fill: "forwards",
+    };
+
+    const paperEnterTiming = {
+        duration: 340,
+        easing: "cubic-bezier(0.16, 1, 0.3, 1)",
+        fill: "both",
+    };
+    const paperLeaveTiming = {
+        duration: 260,
+        easing: "cubic-bezier(0.4, 0, 0.2, 1)",
+        fill: "none",
+    };
+
+    const docEnterKeyframes = [
+        { opacity: 0, transform: "translateX(18px) scale(0.98)" },
+        { opacity: 1, transform: "translateX(0) scale(1)" },
+    ];
+    const docLeaveKeyframes = [
+        { opacity: 1, transform: "translateX(0) scale(1)" },
+        { opacity: 0, transform: "translateX(12px) scale(0.97)" },
+    ];
+
+    const docEnterTiming = {
+        duration: 360,
+        easing: "cubic-bezier(0.16, 1, 0.3, 1)",
+        fill: "forwards",
+        delay: 40,
+    };
+    const docLeaveTiming = {
+        duration: 260,
+        easing: "cubic-bezier(0.4, 0, 0.2, 1)",
+        fill: "forwards",
+    };
+
+    function cleanupDocAnimation() {
+        if (docAnimationInstance) {
+            docAnimationInstance.cancel();
+            docAnimationInstance = null;
+        }
+    }
+
+    function cleanupDeckAnimation() {
+        if (deckAnimationInstance) {
+            deckAnimationInstance.cancel();
+            deckAnimationInstance = null;
+        }
+    }
+
+    function resetDeckPositioning() {
+        deck.style.removeProperty("position");
+        deck.style.removeProperty("top");
+        deck.style.removeProperty("left");
+        deck.style.removeProperty("width");
+        deck.style.removeProperty("height");
+        deck.style.removeProperty("pointer-events");
+        deck.style.removeProperty("z-index");
+        page.classList.remove("deck-measuring-hide");
+    }
+
+    function canAnimate() {
+        return !prefersReducedMotion && canAnimateDeck;
+    }
 
     function triggerIntroHighlight() {
         const introBullet = $(".bullet--intro");
@@ -39,15 +139,171 @@
     let lastTrigger = null;
 
     function showDeck() {
+        const wasClosed =
+            deck.hidden ||
+            page.classList.contains("deck-hidden") ||
+            deckAnimationState === "closing" ||
+            deckAnimationState === "closed";
+
+        cleanupDeckAnimation();
+        cleanupDocAnimation();
+        resetDeckPositioning();
+
+        if (!wasClosed) {
+            deckAnimationState = "open";
+            deck.hidden = false;
+            page.classList.remove("deck-hidden");
+            return;
+        }
+
+        const shouldAnimate = canAnimate();
+        let paperDeltaX = 0;
+        let paperAnimation = null;
+
+        let paperFirstRect = null;
+        if (shouldAnimate) {
+            paperFirstRect = paper.getBoundingClientRect();
+        }
+
         deck.hidden = false;
         page.classList.remove("deck-hidden");
+
+        if (!shouldAnimate) {
+            deckAnimationState = "open";
+            return;
+        }
+
+        const paperLastRect = paper.getBoundingClientRect();
+        paperDeltaX = paperFirstRect.left - paperLastRect.left;
+
+        deckAnimationState = "opening";
+
+        if (paperDeltaX !== 0) {
+            paperAnimation = paper.animate(
+                [
+                    { transform: `translateX(${paperDeltaX}px)` },
+                    { transform: "translateX(0)" },
+                ],
+                paperEnterTiming
+            );
+            const cleanupPaper = () => {
+                paperAnimation = null;
+            };
+            paperAnimation.addEventListener("finish", cleanupPaper);
+            paperAnimation.addEventListener("cancel", cleanupPaper);
+        }
+
+        deckAnimationInstance = deck.animate(deckEnterKeyframes, deckEnterTiming);
+        docAnimationInstance = doc.animate(docEnterKeyframes, docEnterTiming);
+
+        deckAnimationInstance.addEventListener("finish", () => {
+            deckAnimationInstance = null;
+            deckAnimationState = "open";
+        });
+        deckAnimationInstance.addEventListener("cancel", () => {
+            deckAnimationInstance = null;
+        });
+
+        const docCleanup = () => {
+            docAnimationInstance = null;
+        };
+        docAnimationInstance.addEventListener("finish", docCleanup);
+        docAnimationInstance.addEventListener("cancel", docCleanup);
     }
 
     function hideDeck() {
-        if (deck.hidden) return;
-        deck.hidden = true;
-        page.classList.add("deck-hidden");
+        if (deck.hidden || deckAnimationState === "closed" || deckAnimationState === "closing") {
+            return Promise.resolve(deckAnimationState === "closed");
+        }
+
+        cleanupDeckAnimation();
+        cleanupDocAnimation();
+
+        const shouldAnimate = canAnimate();
+
+        if (!shouldAnimate) {
+            resetDeckPositioning();
+            deck.hidden = true;
+            page.classList.add("deck-hidden");
+            deckAnimationState = "closed";
+            doc.classList.remove("focus");
+            return Promise.resolve(true);
+        }
+
+        const paperFirstRect = paper.getBoundingClientRect();
+        const pageRect = page.getBoundingClientRect();
+        const deckRect = deck.getBoundingClientRect();
+
+        page.classList.add("deck-measuring-hide");
+        deck.style.position = "absolute";
+        deck.style.left = `${deckRect.left - pageRect.left}px`;
+        deck.style.top = `${deckRect.top - pageRect.top}px`;
+        deck.style.width = `${deckRect.width}px`;
+        deck.style.height = `${deckRect.height}px`;
+        deck.style.pointerEvents = "none";
+        deck.style.zIndex = "2";
+
+        const paperLastRect = paper.getBoundingClientRect();
+        const deltaX = paperFirstRect.left - paperLastRect.left;
+
+        deckAnimationState = "closing";
         doc.classList.remove("focus");
+
+        let paperAnimation = null;
+        if (deltaX !== 0) {
+            paperAnimation = paper.animate(
+                [
+                    { transform: `translateX(${deltaX}px)` },
+                    { transform: "translateX(0)" },
+                ],
+                paperLeaveTiming
+            );
+        }
+
+        deckAnimationInstance = deck.animate(deckLeaveKeyframes, deckLeaveTiming);
+        docAnimationInstance = doc.animate(docLeaveKeyframes, docLeaveTiming);
+
+        const finishPromise = new Promise((resolve) => {
+            const finalize = () => {
+                resetDeckPositioning();
+                deck.hidden = true;
+                page.classList.add("deck-hidden");
+                deckAnimationState = "closed";
+                deckAnimationInstance = null;
+                doc.classList.remove("focus");
+                resolve(true);
+            };
+
+            deckAnimationInstance.addEventListener("finish", finalize);
+            deckAnimationInstance.addEventListener("cancel", () => {
+                deckAnimationInstance = null;
+                const isClosed = deck.hidden || page.classList.contains("deck-hidden");
+                resetDeckPositioning();
+                deckAnimationState = isClosed ? "closed" : "open";
+                if (isClosed) {
+                    doc.classList.remove("focus");
+                }
+                resolve(isClosed);
+            });
+
+            const docCleanup = () => {
+                docAnimationInstance = null;
+            };
+            docAnimationInstance.addEventListener("finish", docCleanup);
+            docAnimationInstance.addEventListener("cancel", docCleanup);
+
+            if (paperAnimation) {
+                const cleanupPaper = () => {
+                    paperAnimation = null;
+                    paperAnimation.removeEventListener("finish", cleanupPaper);
+                    paperAnimation.removeEventListener("cancel", cleanupPaper);
+                };
+                paperAnimation.addEventListener("finish", cleanupPaper);
+                paperAnimation.addEventListener("cancel", cleanupPaper);
+            }
+        });
+
+        return finishPromise;
     }
 
     function normalizeTemplateName(name) {
@@ -194,17 +450,22 @@
 
     if (closeBtn) {
         closeBtn.addEventListener("click", () => {
-            hideDeck();
+            const closing = hideDeck();
             if (lastTrigger) {
                 lastTrigger.focus();
             }
-            requestAnimationFrame(() => {
+            const scrollToPaper = () => {
                 paper.scrollIntoView({
                     behavior: "smooth",
                     block: "nearest",
                     inline: "center",
                 });
-            });
+            };
+            if (closing && typeof closing.then === "function") {
+                closing.then(scrollToPaper);
+            } else {
+                scrollToPaper();
+            }
         });
     }
 

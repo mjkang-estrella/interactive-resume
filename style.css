@@ -62,12 +62,14 @@ body {
 .page {
     display: flex;
     align-items: flex-start;
+    justify-content: center;
     gap: 32px;
     max-width: calc(var(--page-width) * 2 + 96px);
     margin: 0 auto;
     padding: 24px 16px;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
+    position: relative;
 }
 .page::-webkit-scrollbar {
     height: 8px;
@@ -79,11 +81,15 @@ body {
 .page::-webkit-scrollbar-track {
     background: transparent;
 }
-.page.deck-hidden {
-    justify-content: center;
-}
 .page.deck-hidden .deck {
     display: none;
+}
+.page.deck-measuring-hide {
+    position: relative;
+}
+.page.deck-measuring-hide .deck {
+    position: absolute;
+    pointer-events: none;
 }
 
 .paper {
@@ -224,6 +230,7 @@ body {
     flex-direction: column;
     flex: 0 0 auto;
     width: var(--page-width);
+    will-change: transform, opacity;
 }
 
 .doc {
@@ -234,6 +241,7 @@ body {
     flex-direction: column;
     box-sizing: border-box;
     min-height: var(--page-height, auto);
+    will-change: transform, opacity;
 }
 .doc-head {
     display: flex;
