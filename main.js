@@ -439,8 +439,18 @@
         const embedContainer = docContent.querySelector("[data-slot='embed-container']");
         const embedFrame = docContent.querySelector("[data-slot='embed-frame']");
         if (embedFrame) {
+            const isStaticEmbed =
+                (embedContainer && embedContainer.hasAttribute("data-static-embed")) ||
+                embedFrame.hasAttribute("data-static-embed");
             if (url) {
                 embedFrame.src = url;
+                if (embedContainer) {
+                    embedContainer.hidden = false;
+                    embedContainer.style.display = "flex";
+                } else {
+                    embedFrame.hidden = false;
+                }
+            } else if (isStaticEmbed) {
                 if (embedContainer) {
                     embedContainer.hidden = false;
                     embedContainer.style.display = "flex";

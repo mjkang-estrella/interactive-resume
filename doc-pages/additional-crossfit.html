@@ -1,0 +1,151 @@
+<div class="doc-case doc-case--crossfit" data-template="additional-crossfit">
+    <h3>CrossFit Analyzer</h3>
+    <div class="doc-case__section">
+        <h4>Tech Stack</h4>
+        <p>
+            Figma&nbsp;Make (Prototype) · Supabase (Backend &amp; Auth) · OpenAI
+            API (AI Analysis Engine)
+        </p>
+    </div>
+    <div class="doc-case__section">
+        <h4>1. Background</h4>
+        <p>
+            CrossFit workouts, known as WODs (Workout of the Day), combine
+            constantly varied functional movements across ten domains: strength,
+            stamina, endurance, flexibility, power, speed, coordination,
+            agility, balance, and accuracy. Most athletes only record their
+            scores (time, rounds, or weight) and miss insight into which domains
+            they actually improve. Over time it becomes difficult to identify
+            weaknesses, track balanced progress, or program future training
+            cycles.
+        </p>
+    </div>
+    <div class="doc-case__section">
+        <h4>2. Problem</h4>
+        <p>
+            Athletes log WODs inconsistently across notebooks, spreadsheets, and
+            apps, with no standardized way to analyze domain balance (e.g.,
+            power vs. endurance focus). Existing tools concentrate on score
+            tracking rather than performance insight, leaving both coaches and
+            athletes without a clear picture of how training distributions shape
+            their fitness profile.
+        </p>
+    </div>
+    <div class="doc-case__section">
+        <h4>3. Solution</h4>
+        <p>
+            CrossFit Analyzer automatically parses every WOD, classifies
+            movements, and generates a domain-based performance profile.
+        </p>
+        <ul class="bullets doc-bullets">
+            <li>
+                WOD Recorder: streamlined logging interface for results and
+                movements.
+            </li>
+            <li>
+                Movement Library: rich descriptions, scaling tips, and related
+                WOD suggestions for each movement.
+            </li>
+            <li>
+                Domain Analytics: OpenAI-powered classification assigns each WOD
+                to CrossFit’s ten domains.
+            </li>
+            <li>
+                Performance Visualization: trend plots expose domain
+                distribution and highlight overtraining or gaps.
+            </li>
+            <li>
+                Supabase Auth + Database: secure storage for athletes and their
+                training history.
+            </li>
+        </ul>
+    </div>
+    <div class="doc-case__section">
+        <h4>4. Analytics &amp; Iteration</h4>
+        <ul class="bullets doc-bullets">
+            <li>
+                Crafted an orange-accented mobile prototype with Figma Make for
+                rapid testing.
+            </li>
+            <li>
+                Modeled Supabase tables for Users, Movements, and WOD Records to
+                streamline ingest and querying.
+            </li>
+            <li>
+                Integrated GPT-based analysis that outputs domain splits (e.g.,
+                “70% endurance · 30% power”) per WOD.
+            </li>
+            <li>
+                Ran mock WOD inputs, refined domain mapping, sped up input UI,
+                and simplified analytics visuals for clarity.
+            </li>
+        </ul>
+    </div>
+    <div class="doc-case__section">
+        <h4>5. Results &amp; Learnings</h4>
+        <ul class="bullets doc-bullets">
+            <li>
+                Demonstrated AI-driven domain analysis that boosts athlete
+                self-awareness.
+            </li>
+            <li>
+                Delivered an end-to-end prototype: Auth → WOD Input → AI
+                Analysis → Domain Visualization.
+            </li>
+            <li>
+                Early testers highlighted how domain-based visuals motivate
+                balanced training over raw score chasing.
+            </li>
+        </ul>
+    </div>
+    <div class="doc-case__section">
+        <h4>6. Next Steps</h4>
+        <ul class="bullets doc-bullets">
+            <li>
+                Integrate wearable metrics (heart rate, power output) for deeper
+                physiological context.
+            </li>
+            <li>
+                Add domain-filterable community leaderboards to foster targeted
+                competition.
+            </li>
+            <li>
+                Ship a coaching workspace so trainers can monitor clients’
+                domain balance and prescribe programming.
+            </li>
+            <li>
+                Experiment with AI-generated personalized WOD recommendations
+                and launch an MVP to validate retention.
+            </li>
+        </ul>
+    </div>
+    <div class="doc-case__section">
+        <h4>Live Demo</h4>
+        <p>
+            Explore the current build and release notes at
+            <a
+                class="link"
+                href="https://ardent-footer-45845870.figma.site"
+                target="_blank"
+                rel="noopener"
+                >crossfit-analyzer.com</a
+            >.
+        </p>
+    </div>
+    <div class="doc-case__section doc-case__section--embed">
+        <div
+            class="doc-embed doc-embed--crossfit"
+            data-slot="embed-container"
+            data-static-embed
+        >
+            <iframe
+                title="CrossFit Analyzer live demo"
+                loading="lazy"
+                data-slot="embed-frame"
+                data-static-embed
+                sandbox="allow-popups allow-popups-to-escape-sandbox"
+                srcdoc="<!DOCTYPE html><html lang='en'><head><meta charset='utf-8'/><style>body{margin:0;font-family:Inter,Arial,sans-serif;background:#0f172a;color:#f8fafc;display:flex;align-items:center;justify-content:center;height:100vh;padding:16px;text-align:center;}a{color:#facc15;text-decoration:none;font-weight:600;}a:hover{text-decoration:underline;}</style></head><body><div><p>Interactive preview opens in a new tab.</p><a href='https://crossfit-analyzer.com' target='_blank' rel='noopener'>Open crossfit-analyzer.com</a></div></body></html>"
+            ></iframe>
+        </div>
+    </div>
+</div>

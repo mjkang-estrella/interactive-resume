@@ -330,10 +330,11 @@ body {
     gap: 16px;
 }
 .doc-case > h3 {
-    font-size: 14px;
+    font-size: 20px;
     line-height: 1.6;
     color: var(--ink-600);
     margin: 0;
+    text-align: center;
 }
 .doc-case__section {
     display: flex;
