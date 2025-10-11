@@ -6,6 +6,10 @@ import {
   sendJson,
 } from "./utils";
 
+export const config = {
+  runtime: "nodejs20.x",
+};
+
 export default async function handler(
   req: IncomingMessage & { method?: string },
   res: ServerResponse,
