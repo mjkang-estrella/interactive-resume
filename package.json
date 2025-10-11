@@ -2,37 +2,41 @@
   "name": "interactive_resume",
   "version": "1.0.0",
   "description": "Interactive resume site with optional ChatKit agent backend.",
-  "main": "main.js",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
   "scripts": {
-    "dev": "ts-node-dev --respawn --transpile-only --project backend/tsconfig.json backend/server.ts",
-    "build": "tsc -p backend/tsconfig.json",
-    "start": "node dist/server.js",
-    "lint": "tsc -p backend/tsconfig.json --noEmit"
+    "dev": "npm run dev --workspace=backend",
+    "dev:frontend": "npm run dev --workspace=frontend",
+    "dev:backend": "npm run dev --workspace=backend",
+    "build": "npm run build --workspaces",
+    "build:frontend": "npm run build --workspace=frontend",
+    "build:backend": "npm run build --workspace=backend",
+    "start": "npm run start --workspace=backend",
+    "lint": "npm run lint --workspaces",
+    "clean": "npm run clean --workspaces"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mjkang-estrella/interactive-resume.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "resume",
+    "interactive",
+    "portfolio",
+    "chatkit",
+    "typescript",
+    "vite"
+  ],
+  "author": "Myeongjin Kang <mj.kang@mba.berkeley.edu>",
   "license": "ISC",
-  "type": "commonjs",
   "bugs": {
     "url": "https://github.com/mjkang-estrella/interactive-resume/issues"
   },
   "homepage": "https://github.com/mjkang-estrella/interactive-resume#readme",
-  "dependencies": {
-    "cookie-parser": "^1.4.7",
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.5",
-    "express": "^4.19.2",
-    "openai": "^6.3.0"
-  },
   "devDependencies": {
-    "@types/cookie-parser": "^1.4.3",
-    "@types/express": "^4.17.21",
-    "@types/node": "^20.14.9",
-    "ts-node-dev": "^2.0.0",
-    "typescript": "^5.5.4"
+    "concurrently": "^8.2.2"
   }
 }
