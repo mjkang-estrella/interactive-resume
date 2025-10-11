@@ -17,6 +17,10 @@ const hostedDomainKey =
   import.meta.env.OPENAI_DOMAIN_KEY ??
   undefined;
 
+if (hostedDomainKey) {
+  (window as unknown as Record<string, unknown>).OPENAI_DOMAIN_KEY = hostedDomainKey;
+}
+
 export const AGENTKIT_CONFIG: AgentKitConfig = {
   integrationType: 'hosted',
 
@@ -24,7 +28,6 @@ export const AGENTKIT_CONFIG: AgentKitConfig = {
     startUrl: '/api/chatkit/session',
     refreshUrl: '/api/chatkit/refresh',
     agentId: hostedAgentId,
-    domainKey: hostedDomainKey,
     headers: {
       'Content-Type': 'application/json',
     },

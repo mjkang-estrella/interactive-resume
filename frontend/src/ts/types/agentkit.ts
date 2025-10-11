@@ -13,7 +13,6 @@ export interface AgentKitHostedConfig {
   startUrl: string;
   refreshUrl?: string;
   agentId?: string;
-  domainKey?: string;
   authToken?: string;
   headers?: Record<string, string>;
   credentials?: RequestCredentials;

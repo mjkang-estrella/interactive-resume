@@ -85,7 +85,6 @@ class AgentKit {
     }
 
     const options: {
-      domainKey?: string;
       getClientSecret: (currentClientSecret?: string) => Promise<string>;
     } = {
       getClientSecret: async (currentClientSecret?: string): Promise<string> => {
@@ -133,11 +132,6 @@ class AgentKit {
         return data.client_secret;
       },
     };
-
-    if (hosted.domainKey) {
-      options.domainKey = hosted.domainKey;
-    }
-
     return options;
   }
 
