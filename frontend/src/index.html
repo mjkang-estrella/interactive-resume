@@ -4,7 +4,7 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>MJ Kang — Resume Navigator</title>
-        <link href="style.css" rel="stylesheet" />
+        <link href="styles/style.css" rel="stylesheet" />
         <!-- Inter font -->
         <link
             href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
@@ -52,8 +52,7 @@
                                     data-doc="edu-haas-courses"
                                 >
                                     Courses: AI Agent, The Ethics of AI,
-                                    Entrepreneurship, Technology &
-                                    Entrepreneurship in Silicon Valley
+                                    Entrepreneurship
                                 </button>
                             </li>
                             <li>
@@ -91,8 +90,13 @@
                     <div class="entry">
                         <div class="entry-row">
                             <div class="company">
-                                Toss Bank (Largest Fintech Company in Korea),
-                                Seoul, Korea
+                                <a
+                                    href="https://toss.im/en/team"
+                                    target="_blank"
+                                    class="link"
+                                    >Toss Bank (Largest Fintech Company in
+                                    Korea), Seoul, Korea</a
+                                >
                             </div>
                             <div class="meta">Jun 2023–Jul 2025</div>
                         </div>
@@ -161,7 +165,7 @@
                     </div>
                     <div class="entry">
                         <div class="entry-row">
-                            <div class="company">
+                            <div class="role">
                                 Product Manager, Growth Squad
                             </div>
                             <div class="meta">Jun 2023–Jan 2024</div>
@@ -254,10 +258,14 @@
                     </div>
                     <div class="entry">
                         <div class="entry-row">
-                            <div class="company">
+                            <a
+                                href="https://hyperconnect.com/en/"
+                                target="_blank"
+                                class="company link"
+                            >
                                 Match Group Inc., HYPERCONNECT (Global
                                 Livestreaming Platform), Seoul, Korea
-                            </div>
+                            </a>
                             <div class="meta">Dec 2020–May 2023</div>
                         </div>
                         <div class="role">
@@ -324,7 +332,7 @@
                     </div>
                     <div class="entry">
                         <div class="entry-row">
-                            <div class="company">
+                            <div class="role">
                                 Product Strategy Intern, CPO Team
                             </div>
                             <div class="meta">Dec 2020–Feb 2021</div>
@@ -426,9 +434,52 @@
                 </section>
             </aside>
         </div>
+        <div
+            class="agentkit"
+            data-agentkit
+            data-state="closed"
+            aria-live="polite"
+        >
+            <div
+                class="agentkit__banner"
+                data-agentkit-banner
+                role="alert"
+                hidden
+            ></div>
+            <openai-chatkit
+                id="agentkit-widget"
+                class="agentkit__panel"
+                data-agentkit-panel
+                hidden
+                aria-label="Chat with MJ Kang’s AI agent"
+            ></openai-chatkit>
+            <button
+                type="button"
+                class="agentkit__launcher"
+                data-action="toggle-agentkit"
+                aria-haspopup="dialog"
+                aria-controls="agentkit-widget"
+                aria-expanded="false"
+            >
+                <span class="agentkit__launcher-label">
+                    <span aria-hidden="true">🤖</span>
+                    <span>Ask the AI Agent</span>
+                </span>
+                <span class="agentkit__launcher-hint">
+                    Resume, projects, roadmap
+                </span>
+            </button>
+        </div>
         <div class="toast" id="tip-toast" role="status" aria-live="polite">
             💡 Tip: Click on any bullet point to see project details.
         </div>
-        <script src="main.js"></script>
+        <script
+            src="https://cdn.platform.openai.com/deployments/chatkit/chatkit.js"
+            async
+            data-agentkit-loader="chatkit"
+        ></script>
+        <script type="module" src="/ts/agentkit-config.ts"></script>
+        <script type="module" src="/ts/agentkit.ts"></script>
+        <script type="module" src="/ts/main.ts"></script>
     </body>
 </html>

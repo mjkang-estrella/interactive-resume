@@ -1,0 +1,42 @@
+{
+  "name": "interactive_resume",
+  "version": "1.0.0",
+  "description": "Interactive resume site with optional ChatKit agent backend.",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=backend",
+    "dev:frontend": "npm run dev --workspace=frontend",
+    "dev:backend": "npm run dev --workspace=backend",
+    "build": "npm run build --workspaces",
+    "build:frontend": "npm run build --workspace=frontend",
+    "build:backend": "npm run build --workspace=backend",
+    "start": "npm run start --workspace=backend",
+    "lint": "npm run lint --workspaces",
+    "clean": "npm run clean --workspaces"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mjkang-estrella/interactive-resume.git"
+  },
+  "keywords": [
+    "resume",
+    "interactive",
+    "portfolio",
+    "chatkit",
+    "typescript",
+    "vite"
+  ],
+  "author": "Myeongjin Kang <mj.kang@mba.berkeley.edu>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mjkang-estrella/interactive-resume/issues"
+  },
+  "homepage": "https://github.com/mjkang-estrella/interactive-resume#readme",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
