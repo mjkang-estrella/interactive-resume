@@ -37,6 +37,8 @@
   },
   "homepage": "https://github.com/mjkang-estrella/interactive-resume#readme",
   "devDependencies": {
-    "concurrently": "^8.2.2"
+    "@types/node": "^20.14.9",
+    "concurrently": "^8.2.2",
+    "typescript": "^5.5.4"
   }
 }

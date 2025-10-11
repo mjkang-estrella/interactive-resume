@@ -1,6 +1,6 @@
-import crypto from "node:crypto";
-import path from "node:path";
-import type { IncomingMessage, ServerResponse } from "node:http";
+import crypto from "crypto";
+import path from "path";
+import type { IncomingMessage, ServerResponse } from "http";
 import { config as loadEnv } from "dotenv";
 import { OpenAI } from "openai";
 
@@ -58,22 +58,23 @@ function parseCookies(req: IncomingMessage): Record<string, string> {
     return {};
   }
 
-  return header
+  const tokens = header
     .split(";")
-    .map((part) => part.trim())
-    .filter(Boolean)
-    .map((cookie) => {
-      const [name, ...value] = cookie.split("=");
-      return [name, value.join("=")] as const;
-    })
-    .reduce<Record<string, string>>((acc, [name, value]) => {
-      try {
-        acc[name] = decodeURIComponent(value);
-      } catch {
-        acc[name] = value;
-      }
-      return acc;
-    }, {});
+    .map((part: string) => part.trim())
+    .filter((part: string) => part.length > 0)
+    .map((cookie: string) => {
+      const [name, ...valueParts] = cookie.split("=");
+      return [name, valueParts.join("=")] as const;
+    });
+
+  return tokens.reduce<Record<string, string>>((acc, [name, value]) => {
+    try {
+      acc[name] = decodeURIComponent(value);
+    } catch {
+      acc[name] = value;
+    }
+    return acc;
+  }, {});
 }
 
 function appendSetCookie(res: ServerResponse, cookie: string): void {
