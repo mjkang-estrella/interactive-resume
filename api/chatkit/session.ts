@@ -7,7 +7,7 @@ import {
 } from "./utils";
 
 export const config = {
-  runtime: "nodejs20.x",
+  runtime: "nodejs",
 };
 
 export default async function handler(
