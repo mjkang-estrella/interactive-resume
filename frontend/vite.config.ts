@@ -9,6 +9,7 @@ const __dirname = path.dirname(__filename);
 export default defineConfig({
   root: path.join(__dirname, 'src'),
   publicDir: false,
+  envPrefix: ['VITE_', 'OPENAI_'],
   build: {
     outDir: path.join(__dirname, 'dist'),
     emptyOutDir: true,

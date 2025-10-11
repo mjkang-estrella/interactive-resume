@@ -54,6 +54,8 @@ Add your environment variables:
 # Required
 OPENAI_API_KEY=your_openai_api_key_here
 CHATKIT_WORKFLOW_ID=your_workflow_id_here
+# Required for deployed environments (ChatKit domain allowlist)
+OPENAI_DOMAIN_KEY=your_domain_key_here
 
 # Optional
 PORT=3000
@@ -65,6 +67,8 @@ CHATKIT_MAX_FILES=5
 CHATKIT_MAX_FILE_SIZE_MB=10
 CHATKIT_MAX_REQUESTS_PER_MINUTE=10
 ```
+
+> **Heads up:** The frontend reads `OPENAI_DOMAIN_KEY` (or `VITE_CHATKIT_DOMAIN_KEY`) at build time to satisfy ChatKit’s hosted-domain verification. Make sure the same value is configured in your Vercel environment variables so production builds can access it.
 
 ### 4. Run in Development Mode
 

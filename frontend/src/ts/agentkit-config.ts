@@ -7,13 +7,24 @@
 
 import type { AgentKitConfig } from './types/agentkit';
 
+const hostedAgentId =
+  import.meta.env.VITE_CHATKIT_AGENT_ID ??
+  import.meta.env.OPENAI_AGENT_ID ??
+  'replace-with-agent-id';
+
+const hostedDomainKey =
+  import.meta.env.VITE_CHATKIT_DOMAIN_KEY ??
+  import.meta.env.OPENAI_DOMAIN_KEY ??
+  undefined;
+
 export const AGENTKIT_CONFIG: AgentKitConfig = {
   integrationType: 'hosted',
 
   hosted: {
     startUrl: '/api/chatkit/session',
     refreshUrl: '/api/chatkit/refresh',
-    agentId: 'replace-with-agent-id',
+    agentId: hostedAgentId,
+    domainKey: hostedDomainKey,
     headers: {
       'Content-Type': 'application/json',
     },

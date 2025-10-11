@@ -21,6 +21,7 @@ window.AGENTKIT_CONFIG = {
         startUrl: "/api/chatkit/session",
         refreshUrl: "/api/chatkit/refresh",
         agentId: "replace-with-agent-id",
+        domainKey: window?.ENV_OPENAI_DOMAIN_KEY ?? undefined,
         headers: {
             "Content-Type": "application/json",
         },

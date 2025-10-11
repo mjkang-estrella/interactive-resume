@@ -84,7 +84,10 @@ class AgentKit {
       throw new Error("AgentKit hosted.startUrl is required when integrationType is 'hosted'.");
     }
 
-    return {
+    const options: {
+      domainKey?: string;
+      getClientSecret: (currentClientSecret?: string) => Promise<string>;
+    } = {
       getClientSecret: async (currentClientSecret?: string): Promise<string> => {
         const isRefresh = Boolean(currentClientSecret);
         const targetUrl = isRefresh && refreshUrl ? refreshUrl : startUrl;
@@ -130,6 +133,12 @@ class AgentKit {
         return data.client_secret;
       },
     };
+
+    if (hosted.domainKey) {
+      options.domainKey = hosted.domainKey;
+    }
+
+    return options;
   }
 
   private buildCustomApiOptions() {
