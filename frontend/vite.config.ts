@@ -7,15 +7,15 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export default defineConfig({
-  root: path.resolve(__dirname, './src'),
-  publicDir: path.resolve(__dirname, './public'),
+  root: path.join(__dirname, 'src'),
+  publicDir: false,
   build: {
-    outDir: path.resolve(__dirname, './dist'),
+    outDir: path.join(__dirname, 'dist'),
     emptyOutDir: true,
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
+      '@': path.join(__dirname, 'src'),
     },
   },
   server: {
