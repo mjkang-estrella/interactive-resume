@@ -43,6 +43,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Updated Vite from v5.4.0 to v7.1.9 (addresses esbuild security vulnerabilities)
+- Replaced ts-node-dev with tsx for faster development server and no deprecated dependencies
+- Removed all deprecated npm warnings (inflight, rimraf, glob)
+
 ### Planned
 - ESLint and Prettier configuration
 - Automated testing (unit, integration, E2E)

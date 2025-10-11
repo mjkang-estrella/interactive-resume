@@ -69,7 +69,7 @@ cd backend
 # Install dependencies (if not using workspace)
 npm install
 
-# Start development server
+# Start development server (uses tsx for fast reloading)
 npm run dev
 
 # Type check
