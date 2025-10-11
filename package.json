@@ -36,6 +36,10 @@
     "url": "https://github.com/mjkang-estrella/interactive-resume/issues"
   },
   "homepage": "https://github.com/mjkang-estrella/interactive-resume#readme",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "openai": "^6.3.0"
+  },
   "devDependencies": {
     "@types/node": "^20.14.9",
     "concurrently": "^8.2.2",
