@@ -12,6 +12,9 @@ export default defineConfig({
   build: {
     outDir: path.join(__dirname, 'dist'),
     emptyOutDir: true,
+    rollupOptions: {
+      input: path.join(__dirname, 'src', 'index.html'),
+    },
   },
   resolve: {
     alias: {
@@ -27,19 +30,22 @@ export default defineConfig({
       name: 'copy-doc-pages',
       closeBundle() {
         // Copy doc-pages to dist after build
-        const srcPagesDir = path.resolve(__dirname, 'src/pages/doc-pages');
-        const distPagesDir = path.resolve(__dirname, 'dist/pages/doc-pages');
+        const srcPagesDir = path.join(__dirname, 'src', 'pages', 'doc-pages');
+        const distPagesDir = path.join(__dirname, 'dist', 'pages', 'doc-pages');
 
-        mkdirSync(distPagesDir, { recursive: true });
-
-        const files = readdirSync(srcPagesDir);
-        files.forEach(file => {
-          copyFileSync(
-            path.join(srcPagesDir, file),
-            path.join(distPagesDir, file)
-          );
-        });
-        console.log(`✓ Copied ${files.length} doc-pages to dist`);
+        try {
+          mkdirSync(distPagesDir, { recursive: true });
+          const files = readdirSync(srcPagesDir);
+          files.forEach(file => {
+            copyFileSync(
+              path.join(srcPagesDir, file),
+              path.join(distPagesDir, file)
+            );
+          });
+          console.log(`✓ Copied ${files.length} doc-pages to dist`);
+        } catch (err) {
+          console.error('Error copying doc-pages:', err);
+        }
       },
     },
   ],
