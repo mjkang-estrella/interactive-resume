@@ -1,8 +1,8 @@
 # Backend (deploy separately if needed)
 backend/
 
-# Source files (only serve built output)
-frontend/src/
+# Source files (needed for builds)
+# (Do not ignore frontend/src so Vite can build on Vercel)
 
 # Development files
 .env
