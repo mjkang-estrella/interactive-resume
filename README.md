@@ -68,28 +68,26 @@ CHATKIT_MAX_REQUESTS_PER_MINUTE=10
 
 ### 4. Run in Development Mode
 
-**Option A: Backend Only (serves production build)**
+**Option A: Full stack (frontend + API)**
 
 ```bash
 npm run dev
-# Server runs at http://localhost:3000
+# Frontend: http://localhost:5173
+# API:      http://localhost:3000
 ```
 
-**Option B: Frontend with Vite (hot reload)**
+**Option B: Frontend only (Vite with HMR)**
 
 ```bash
 npm run dev:frontend
 # Vite dev server runs at http://localhost:5173
 ```
 
-**Option C: Both separately (for full-stack development)**
+**Option C: Backend only (serves built frontend)**
 
 ```bash
-# Terminal 1
 npm run dev:backend
-
-# Terminal 2
-npm run dev:frontend
+# Express server runs at http://localhost:3000
 ```
 
 ### 5. Build for Production
@@ -166,9 +164,9 @@ Interactive_Resume/
 
 ```bash
 # Development
-npm run dev              # Run backend server (default)
-npm run dev:frontend     # Run Vite dev server with HMR
-npm run dev:backend      # Run backend with auto-reload
+npm run dev              # Run frontend (Vite) + backend API together
+npm run dev:frontend     # Run Vite dev server with HMR only
+npm run dev:backend      # Run backend with auto-reload only
 
 # Building
 npm run build            # Build both frontend and backend
@@ -209,7 +207,14 @@ npm run clean            # Remove dist folder
 
 ### Development Workflow
 
-1. **Frontend Development** (with hot reload):
+1. **Full-Stack Development** (recommended):
+   ```bash
+   npm run dev
+   ```
+   - Runs Vite on port 5173 and API on port 3000
+   - `/api/chatkit/*` requests are proxied to the backend automatically
+
+2. **Frontend Development** (with hot reload only):
    ```bash
    npm run dev:frontend
    ```
@@ -217,7 +222,7 @@ npm run clean            # Remove dist folder
    - Changes reflect immediately in browser
    - TypeScript errors shown in terminal
 
-2. **Backend Development**:
+3. **Backend Development**:
    ```bash
    npm run dev:backend
    ```
@@ -225,11 +230,10 @@ npm run clean            # Remove dist folder
    - Serves frontend from `frontend/src/` in development
    - Serves frontend from `frontend/dist/` in production
 
-3. **Full-Stack Development**:
-   - Run both frontend and backend servers simultaneously
-   - Frontend: http://localhost:5173 (Vite)
-   - Backend: http://localhost:3000 (Express)
-   - Configure proxy in `frontend/vite.config.ts` if needed
+4. **Manual full-stack (two terminals)**:
+   - Terminal 1: `npm run dev:backend`
+   - Terminal 2: `npm run dev:frontend`
+   - Useful if you need to restart one side independently
 
 ### Adding New Content
 

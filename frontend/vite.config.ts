@@ -24,6 +24,12 @@ export default defineConfig({
   server: {
     port: 5173,
     open: false,
+    proxy: {
+      "/api/chatkit": {
+        target: "http://localhost:3000",
+        changeOrigin: true,
+      },
+    },
   },
   plugins: [
     {
