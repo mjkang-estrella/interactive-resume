@@ -17,17 +17,30 @@
     let activeTemplate = null;
     let motionQuery = null;
     let prefersReducedMotion = false;
+
+    function applyPageMotionPreference() {
+        if (prefersReducedMotion) {
+            page.classList.add("page--no-motion");
+        } else {
+            page.classList.remove("page--no-motion");
+        }
+    }
+
     if (window.matchMedia) {
         motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
         prefersReducedMotion = motionQuery.matches;
+        applyPageMotionPreference();
         const motionListener = (event) => {
             prefersReducedMotion = event.matches;
+            applyPageMotionPreference();
         };
         if (typeof motionQuery.addEventListener === "function") {
             motionQuery.addEventListener("change", motionListener);
         } else if (typeof motionQuery.addListener === "function") {
             motionQuery.addListener(motionListener);
         }
+    } else {
+        applyPageMotionPreference();
     }
 
     const canAnimateDeck = typeof deck.animate === "function" && typeof doc.animate === "function";
