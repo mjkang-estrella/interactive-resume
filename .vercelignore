@@ -1,0 +1,27 @@
+# Backend (deploy separately if needed)
+backend/
+
+# Source files (only serve built output)
+frontend/src/
+
+# Development files
+.env
+.env.local
+*.log
+
+# Documentation
+docs/
+*.md
+!README.md
+
+# Git
+.git/
+.gitignore
+
+# Dependencies
+node_modules/
+
+# Misc
+.DS_Store
+*.swp
+*.swo

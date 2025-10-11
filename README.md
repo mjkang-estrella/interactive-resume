@@ -404,12 +404,72 @@ Both frontend and backend use strict TypeScript:
 
 **Recommended Platforms:**
 
-- **Vercel**: Excellent for Node.js apps with serverless functions
-- **Railway**: Easy deployment with GitHub integration
-- **Render**: Free tier available, auto-deploys from Git
+#### Vercel (Frontend Only - Easiest)
+
+This project includes a `vercel.json` configuration for easy deployment of the static frontend:
+
+1. **Connect your GitHub repository** to Vercel
+2. **Vercel will automatically detect** the configuration
+3. **Set environment variables** (if using ChatKit features, deploy backend separately)
+4. **Deploy!**
+
+The frontend will be deployed as a static site. For ChatKit functionality, you'll need to:
+- Deploy the backend separately (see Backend Deployment below)
+- Update the ChatKit API URLs in the frontend configuration
+
+#### Other Options
+
+- **Railway**: Easy deployment with GitHub integration (supports full-stack)
+- **Render**: Free tier available, auto-deploys from Git (supports full-stack)
 - **Heroku**: Classic PaaS with easy setup
 - **DigitalOcean App Platform**: Managed platform with reasonable pricing
 - **AWS / GCP / Azure**: For more control and scalability
+
+### Backend Deployment (For ChatKit Features)
+
+If you need the ChatKit AI agent functionality, deploy the backend separately:
+
+**Option 1: Railway**
+```bash
+# Install Railway CLI
+npm i -g @railway/cli
+
+# Login and init
+railway login
+railway init
+
+# Set environment variables
+railway variables set OPENAI_API_KEY=your_key
+railway variables set CHATKIT_WORKFLOW_ID=your_workflow_id
+
+# Deploy backend
+railway up
+```
+
+**Option 2: Render**
+1. Create a new Web Service
+2. Connect your GitHub repository
+3. Set build command: `npm run build:backend`
+4. Set start command: `npm start`
+5. Add environment variables in Render dashboard
+
+**Option 3: Heroku**
+```bash
+# Install Heroku CLI and login
+heroku login
+
+# Create app
+heroku create your-app-name
+
+# Set environment variables
+heroku config:set OPENAI_API_KEY=your_key
+heroku config:set CHATKIT_WORKFLOW_ID=your_workflow_id
+
+# Deploy
+git push heroku main
+```
+
+After deploying the backend, update the frontend configuration (`frontend/src/ts/agentkit-config.ts`) with your backend URL.
 
 ### Docker Deployment (Optional)
 
