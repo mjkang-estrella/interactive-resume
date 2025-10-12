@@ -62,8 +62,8 @@ window.AGENTKIT_CONFIG = {
      * Launcher button copy and behavioural tweaks.
      */
     launcher: {
-        label: "Ask the AI Agent",
-        hint: "Resume, projects, roadmap",
+        label: "AI Agent",
+        hint: "Resume, Interview Questions",
         /**
          * Optional auto-open delay in milliseconds. Set to a number to auto-open the widget.
          */
