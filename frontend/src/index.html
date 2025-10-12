@@ -446,13 +446,23 @@
                 role="alert"
                 hidden
             ></div>
-            <openai-chatkit
-                id="agentkit-widget"
-                class="agentkit__panel"
-                data-agentkit-panel
-                hidden
-                aria-label="Chat with MJ Kang’s AI agent"
-            ></openai-chatkit>
+            <div
+                class="agentkit__panel-wrapper"
+                data-agentkit-panel-wrapper
+                data-loading="false"
+            >
+                <openai-chatkit
+                    id="agentkit-widget"
+                    class="agentkit__panel"
+                    data-agentkit-panel
+                    hidden
+                    aria-label="Chat with MJ Kang’s AI agent"
+                ></openai-chatkit>
+                <div class="agentkit__spinner" data-agentkit-spinner>
+                    <div class="agentkit__spinner-ring" aria-hidden="true"></div>
+                    <p>Warming up AI agent…</p>
+                </div>
+            </div>
             <button
                 type="button"
                 class="agentkit__launcher"

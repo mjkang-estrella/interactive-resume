@@ -137,33 +137,38 @@ window.AGENTKIT_CONFIG = {
     },
 
     startScreen: {
-        greeting: "Hi! I can answer questions about MJ Kang’s journey.",
+        greeting: "Hi — I’m an AI assistant trained on MJ Kang’s resume. Ask me anything about his experience, impact, and philosophy.",
         prompts: [
-            {
-                icon: "circle-question",
-                label: "What is ChatKit?",
-                prompt: "What is ChatKit and how is it used on this site?",
-            },
-            {
-                icon: "analytics",
-                label: "Show growth wins",
-                prompt: "Summarize MJ Kang’s biggest growth experiments.",
-            },
-            {
-                icon: "sparkle",
-                label: "Product philosophy",
-                prompt: "Describe MJ Kang’s product philosophy and leadership style.",
-            },
-            {
-                icon: "suitcase",
-                label: "Training insights",
-                prompt: "How does MJ connect CrossFit coaching with product building?",
-            },
-            {
-                icon: "lightbulb",
-                label: "MBA prep",
-                prompt: "What is MJ’s plan heading into the Berkeley Haas MBA?",
-            },
+          {
+            icon: "circle-question",
+            label: "What can you do?",
+            prompt: "What can this assistant answer, and what data is it using?"
+          },
+          // TMAY
+          {
+            icon: "person-speaking",
+            label: "Tell me about yourself",
+            prompt: "Give MJ’s 90-second 'Tell me about yourself' answer."
+          },
+
+          // Impact / Growth
+          {
+            icon: "analytics",
+            label: "Show growth impact",
+            prompt: "Summarize MJ’s top 3 measurable wins (with metrics)."
+          },
+
+          // Behavioral set
+          {
+            icon: "chat-sparkle",
+            label: "Cross-Functional Leadership example",
+            prompt: "Share a STAR story where MJ led a cross-functional team."
+          },
+          {
+            icon: "lightbulb",
+            label: "Product philosophy",
+            prompt: "How does MJ balance user needs, speed, and business goals?"
+          }
         ],
     },
 };

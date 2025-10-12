@@ -220,6 +220,8 @@ class AgentKit {
       const launcher = container?.querySelector<HTMLElement>('[data-action="toggle-agentkit"]');
       const panel = container?.querySelector<HTMLElement>('[data-agentkit-panel]');
       const banner = container?.querySelector<HTMLElement>('[data-agentkit-banner]');
+      const spinner = container?.querySelector<HTMLElement>('[data-agentkit-spinner]');
+      const panelWrapper = container?.querySelector<HTMLElement>('[data-agentkit-panel-wrapper]');
 
       if (!container || !launcher || !panel) {
         console.warn('[AgentKit] Widget markup not found. Skipping init.');
@@ -250,6 +252,13 @@ class AgentKit {
         banner.setAttribute('hidden', '');
         delete banner.dataset.variant;
       };
+
+      const setLoading = (loading: boolean) => {
+        if (panelWrapper) {
+          panelWrapper.dataset.loading = loading ? 'true' : 'false';
+        }
+      };
+      setLoading(false);
 
       let optionsApplied = false;
       let isOpening = false;
@@ -289,8 +298,12 @@ class AgentKit {
         isOpening = true;
         try {
           hideBanner();
+          if (!optionsApplied) {
+            setLoading(true);
+          }
           await ensureOptionsApplied();
           this.toggleState({ container, launcher, panel }, true);
+          setLoading(false);
         } catch (error) {
           console.error('[AgentKit] Failed to open widget.', error);
           const message =
@@ -298,6 +311,7 @@ class AgentKit {
               ? (error as Error).message
               : 'Unable to connect to the AI agent right now.';
           showBanner(message, 'warning');
+          setLoading(false);
         } finally {
           isOpening = false;
         }
@@ -308,6 +322,7 @@ class AgentKit {
           return;
         }
         this.toggleState({ container, launcher, panel }, false);
+        setLoading(false);
       };
 
       launcher.addEventListener('click', () => {
