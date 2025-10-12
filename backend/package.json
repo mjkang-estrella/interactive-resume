@@ -2,11 +2,11 @@
   "name": "@interactive-resume/backend",
   "version": "1.0.0",
   "description": "Backend server for Interactive Resume with ChatKit integration",
-  "main": "dist/server.js",
+  "main": "dist/backend/src/server.js",
   "scripts": {
     "dev": "tsx watch --tsconfig tsconfig.json src/server.ts",
     "build": "tsc -p tsconfig.json",
-    "start": "node dist/server.js",
+    "start": "node dist/backend/src/server.js",
     "lint": "tsc -p tsconfig.json --noEmit",
     "clean": "rm -rf dist"
   },

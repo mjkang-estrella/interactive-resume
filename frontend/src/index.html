@@ -478,6 +478,17 @@
             async
             data-agentkit-loader="chatkit"
         ></script>
+        <script type="module">
+            if (typeof window !== 'undefined' && !window.OPENAI_DOMAIN_KEY) {
+                const candidates = [import.meta.env.VITE_CHATKIT_DOMAIN_KEY, import.meta.env.OPENAI_DOMAIN_KEY];
+                for (const candidate of candidates) {
+                    if (typeof candidate === 'string' && candidate.trim().length > 0) {
+                        window.OPENAI_DOMAIN_KEY = candidate;
+                        break;
+                    }
+                }
+            }
+        </script>
         <script type="module" src="/ts/agentkit-config.ts"></script>
         <script type="module" src="/ts/agentkit.ts"></script>
         <script type="module" src="/ts/main.ts"></script>

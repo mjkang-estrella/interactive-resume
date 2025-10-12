@@ -12,104 +12,12 @@ An interactive, animated resume website featuring clickable bullet points that r
 - **Template System**: Dynamic content loading for project details
 - **Production Ready**: Optimized builds with Vite bundling
 
-## 📋 Prerequisites
+## 🚀 Getting Started
 
-Before you begin, ensure you have the following installed:
-
-- **Node.js**: v18.x or higher
-- **npm**: v9.x or higher (comes with Node.js)
-- **OpenAI API Key**: Required for ChatKit integration
-
-## 🚀 Quick Start
-
-### 1. Clone the Repository
-
-```bash
-git clone https://github.com/mjkang-estrella/interactive-resume.git
-cd interactive-resume
-```
-
-### 2. Install Dependencies
-
-This project uses npm workspaces for monorepo management:
-
-```bash
-npm install
-```
-
-This will install dependencies for both frontend and backend workspaces.
-
-### 3. Set Up Environment Variables
-
-Create a `.env.local` file in the root directory:
-
-```bash
-cp .env.example .env.local  # If .env.example exists
-# OR create manually:
-```
-
-Add your environment variables:
-
-```env
-# Required
-OPENAI_API_KEY=your_openai_api_key_here
-CHATKIT_WORKFLOW_ID=your_workflow_id_here
-# Required for deployed environments (ChatKit domain allowlist)
-OPENAI_DOMAIN_KEY=your_domain_key_here
-
-# Optional
-PORT=3000
-NODE_ENV=development
-CHATKIT_SESSION_COOKIE=chatkit_session_id
-CHATKIT_CORS_ORIGIN=true
-CHATKIT_ENABLE_UPLOADS=true
-CHATKIT_MAX_FILES=5
-CHATKIT_MAX_FILE_SIZE_MB=10
-CHATKIT_MAX_REQUESTS_PER_MINUTE=10
-```
-
-> **Heads up:** The frontend reads `OPENAI_DOMAIN_KEY` (or `VITE_CHATKIT_DOMAIN_KEY`) at build time to satisfy ChatKit’s hosted-domain verification. Make sure the same value is configured in your Vercel environment variables so production builds can access it.
-
-### 4. Run in Development Mode
-
-**Option A: Full stack (frontend + API)**
-
-```bash
-npm run dev
-# Frontend: http://localhost:5173
-# API:      http://localhost:3000
-```
-
-**Option B: Frontend only (Vite with HMR)**
-
-```bash
-npm run dev:frontend
-# Vite dev server runs at http://localhost:5173
-```
-
-**Option C: Backend only (serves built frontend)**
-
-```bash
-npm run dev:backend
-# Express server runs at http://localhost:3000
-```
-
-### 5. Build for Production
-
-```bash
-npm run build
-```
-
-This builds both frontend and backend. Output:
-- Frontend: `frontend/dist/`
-- Backend: `backend/dist/`
-
-### 6. Run Production Build
-
-```bash
-npm start
-# Server runs at http://localhost:3000
-```
+- Installation, development, and deployment instructions live in the [Runbook](docs/RUNBOOK.md).
+- `.env.example` documents every environment variable. Copy it to `.env.local` and fill in the required keys.
+- For a two-minute setup, follow the condensed [Quick Start](docs/QUICK_START.md).
+- ChatKit configuration and domain verification are covered in [ChatKit Integration](docs/CHATKIT.md).
 
 ## 📁 Project Structure
 
@@ -148,11 +56,15 @@ Interactive_Resume/
 │   ├── package.json              # Backend dependencies & scripts
 │   └── tsconfig.json             # TypeScript configuration
 │
-├── shared/                        # Shared resources
+├── shared/                        # Shared modules
+│   ├── chatkit/                  # ChatKit session helpers
 │   └── types/                    # Shared TypeScript types
 │
 ├── docs/                          # Documentation
-│   └── AGENTS.md                 # AI agent documentation
+│   ├── RUNBOOK.md               # Full setup / deployment guide
+│   ├── QUICK_START.md           # Two-minute checklist
+│   ├── CHATKIT.md               # ChatKit integration guide
+│   └── AGENTS.md                # AI agent overview
 │
 ├── .env.local                     # Environment variables (not in git)
 ├── .gitignore                     # Git ignore rules
@@ -161,6 +73,8 @@ Interactive_Resume/
 ```
 
 ## 🛠️ Development
+
+See the [Runbook](docs/RUNBOOK.md#4-development-workflows) for deeper explanations; the tables below are quick references.
 
 ### Available Scripts
 

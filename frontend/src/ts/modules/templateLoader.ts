@@ -2,10 +2,27 @@
  * Template loading and caching
  */
 
-const TEMPLATE_DIR = 'pages/doc-pages';
+const TEMPLATE_MANIFEST = import.meta.glob<string>(
+  '../../pages/doc-pages/*.html',
+  {
+    eager: true,
+    query: '?raw',
+    import: 'default',
+  }
+) as Record<string, string>;
+
+const TEMPLATE_CACHE = new Map<string, string>();
+for (const [importPath, markup] of Object.entries(TEMPLATE_MANIFEST)) {
+  const normalized =
+    importPath
+      .replace('../../pages/doc-pages/', '')
+      .replace(/\.html(\?raw)?$/, '')
+      .toLowerCase()
+      .replace(/[^a-z0-9-_]/g, '') || 'default';
+  TEMPLATE_CACHE.set(normalized, markup);
+}
 
 export class TemplateLoader {
-  private templateCache = new Map<string, string>();
   private activeTemplate: string | null = null;
 
   public getActiveTemplate(): string | null {
@@ -31,16 +48,12 @@ export class TemplateLoader {
       return templateName;
     }
 
-    if (!this.templateCache.has(templateName)) {
-      const response = await fetch(`${TEMPLATE_DIR}/${templateName}.html`);
-      if (!response.ok) {
-        throw new Error(`Unable to load template: ${templateName}`);
-      }
-      const markup = await response.text();
-      this.templateCache.set(templateName, markup);
+    const markup = TEMPLATE_CACHE.get(templateName);
+    if (!markup) {
+      throw new Error(`Unable to load template: ${templateName}`);
     }
 
-    docContent.innerHTML = this.templateCache.get(templateName) || '';
+    docContent.innerHTML = markup;
     docContent.dataset.template = templateName;
     this.activeTemplate = templateName;
     return templateName;

@@ -1,20 +1,36 @@
-# Repository Guidelines
+# AI Agent Overview
 
-## Project Structure & Module Organization
-The root contains `index.html`, which drives the full layout, semantic sections, and the interactive bullet buttons. Styling lives in `style.css`, which defines CSS custom properties and reusable utility classes. When adding images or downloadable assets, create an `assets/` directory at the top level and reference files with relative paths so the static hosting setup remains portable.
+This document summarizes how the interactive resume integrates OpenAI ChatKit. For configuration details, see [`docs/CHATKIT.md`](./CHATKIT.md).
 
-## Build, Test, and Development Commands
-The site is static, so no build step is needed. Use a lightweight local server to review changes with live reload from your editor:
-```sh
-python3 -m http.server 8000
-```
-Then open `http://localhost:8000/index.html` to validate layout, hover states, and button interactions. If you prefer Node tooling, `npx serve .` works similarly.
+## Architecture
 
-## Coding Style & Naming Conventions
-Match the existing four-space indentation in both HTML and CSS. Keep markup semantic by reusing established classes (`.page`, `.section-bar`, `.entry`) and extend them with descriptive, kebab-case modifiers when necessary (for example, `.section-bar--highlight`). Font stacks and color tokens are centralized in the `:root` block—add new theme values there before using them inside rules. Run a formatter such as `npx prettier --write index.html style.css` before opening a pull request.
+- **Frontend widget** (`frontend/src/ts/agentkit.ts`) renders the ChatKit panel and handles session refresh.
+- **Backend Express server** (`backend/src/server.ts`) serves the production build and proxies `/api/chatkit/*`.
+- **Serverless routes** (`api/chatkit/session.ts`, `api/chatkit/refresh.ts`) provide the same endpoints on Vercel.
+- **Shared helpers** (`shared/chatkit/session.ts`) centralize environment loading and session creation.
 
-## Testing Guidelines
-There is no automated test suite. Manually check updates in current Chrome, Safari, and Firefox, and confirm the layout holds at common breakpoints (≥1024px desktop and ≈768px tablet). Trigger each `.bullet` button to ensure dataset attributes remain in sync with the rendered text. Document any visual changes with before/after screenshots when proposing UI adjustments.
+## Data Flow
 
-## Commit & Pull Request Guidelines
-Write commits in the imperative mood (e.g., `Add timeline badges`) and keep subject lines under 72 characters with concise bodies describing rationale. Pull requests should include: a short summary of the change, instructions for manual verification (commands run, browsers tested), and any relevant links or issue IDs. Request review before merging, and wait for at least one approval if collaborating with multiple agents.
+1. Browser loads `openai-chatkit` web component from the CDN.
+2. Widget requests `/api/chatkit/session`.
+3. Backend uses the OpenAI SDK to create a ChatKit session and returns a client secret.
+4. Widget establishes a conversation with the OpenAI API using that client secret.
+
+## Local Development Checklist
+
+- Run `npm run dev` so both Vite (5173) and Express (3000) are available.
+- Keep `.env.local` at the repository root with `OPENAI_API_KEY` and `CHATKIT_WORKFLOW_ID`.
+- Inspect the browser console for `[AgentKit]` messages during debugging.
+
+## Production Checklist
+
+- Allow-list the deployment domains in the OpenAI dashboard.
+- Provide the generated `OPENAI_DOMAIN_KEY` (or `VITE_CHATKIT_DOMAIN_KEY`) in your host environment.
+- Verify `/api/chatkit/session` returns HTTP 200 after deployment.
+- Monitor function logs (`vercel logs --source function`) for runtime errors.
+
+## Helpful References
+
+- [ChatKit Integration Guide](./CHATKIT.md)
+- [Runbook](./RUNBOOK.md)
+- [Quick Start](./QUICK_START.md)

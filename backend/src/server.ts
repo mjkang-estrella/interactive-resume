@@ -3,31 +3,24 @@ import crypto from "node:crypto";
 import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import { config as loadEnv } from "dotenv";
-import { OpenAI } from "openai";
+import {
+  ensureEnvLoaded,
+  requireEnv,
+  createChatKitSessionForUser,
+} from "../../shared/chatkit/session";
 
 // Load .env files from project root
 const ROOT_PATH = path.resolve(__dirname, "../..");
-const ENV_FILES = [".env", ".env.local"];
-for (const file of ENV_FILES) {
-  loadEnv({ path: path.join(ROOT_PATH, file), override: true });
-}
+ensureEnvLoaded();
 
 const REQUIRED_ENV = ["OPENAI_API_KEY", "CHATKIT_WORKFLOW_ID"] as const;
 for (const key of REQUIRED_ENV) {
-  if (!process.env[key]) {
-    throw new Error(
-      `Missing environment variable ${key}. ` +
-        `Create a .env.local file with ${key}=... to run the ChatKit backend.`,
-    );
-  }
+  requireEnv(key);
 }
 
 const PORT = Number(process.env.PORT || process.env.CHATKIT_PORT || 3000);
 const COOKIE_NAME = process.env.CHATKIT_SESSION_COOKIE ?? "chatkit_session_id";
 const COOKIE_MAX_AGE = 1000 * 60 * 60 * 24 * 30; // 30 days
-const ALLOW_ATTACHMENTS = process.env.CHATKIT_ENABLE_UPLOADS !== "false";
-
 const app = express();
 app.use(
   cors({
@@ -37,10 +30,6 @@ app.use(
 );
 app.use(express.json());
 app.use(cookieParser());
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
 
 // Serve built frontend in production, src in development
 // Use ROOT_PATH to ensure we're relative to project root, not backend dir
@@ -67,44 +56,13 @@ function ensureUserSession(req: SessionRequest, res: Response): string {
   return sessionId;
 }
 
-function mapChatKitConfiguration() {
-  if (!ALLOW_ATTACHMENTS) {
-    return undefined;
-  }
-  return {
-    file_upload: {
-      enabled: true,
-      max_files: Number(process.env.CHATKIT_MAX_FILES ?? 5),
-      max_file_size: Number(process.env.CHATKIT_MAX_FILE_SIZE_MB ?? 10),
-    },
-  };
-}
-
 app.post(
   "/api/chatkit/session",
   async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
       const user = ensureUserSession(req, res);
-      const workflowId = process.env.CHATKIT_WORKFLOW_ID as string;
-
-      const chatSession = await openai.beta.chatkit.sessions.create({
-        user,
-        workflow: {
-          id: workflowId,
-        },
-        chatkit_configuration: mapChatKitConfiguration(),
-        rate_limits: {
-          max_requests_per_1_minute: Number(
-            process.env.CHATKIT_MAX_REQUESTS_PER_MINUTE ?? 10,
-          ),
-        },
-      });
-
-      res.json({
-        client_secret: chatSession.client_secret,
-        expires_at: chatSession.expires_at,
-        session_id: chatSession.id,
-      });
+      const session = await createChatKitSessionForUser(user);
+      res.json(session);
     } catch (error) {
       next(error);
     }
@@ -127,21 +85,8 @@ app.post(
       }
 
       const user = ensureUserSession(req, res);
-      const workflowId = process.env.CHATKIT_WORKFLOW_ID as string;
-
-      const chatSession = await openai.beta.chatkit.sessions.create({
-        user,
-        workflow: {
-          id: workflowId,
-        },
-        chatkit_configuration: mapChatKitConfiguration(),
-      });
-
-      res.json({
-        client_secret: chatSession.client_secret,
-        expires_at: chatSession.expires_at,
-        session_id: chatSession.id,
-      });
+      const session = await createChatKitSessionForUser(user);
+      res.json(session);
     } catch (error) {
       next(error);
     }

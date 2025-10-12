@@ -29,71 +29,23 @@ backend/
 └── README.md              # This file
 ```
 
-## Prerequisites
+## Prerequisites & Configuration
 
-1. **Node.js**: v18.x or higher
-2. **OpenAI API Key**: With AgentKit access
-3. **ChatKit Workflow ID**: From Agent Builder
-
-## Environment Variables
-
-The backend loads environment variables from the **project root** (not the backend directory).
-
-Required variables in `../../.env.local`:
-
-```env
-OPENAI_API_KEY=sk-proj-your-key-here
-CHATKIT_WORKFLOW_ID=wf_your-workflow-id
-```
-
-Optional variables:
-
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `PORT` | Server port | `3000` |
-| `NODE_ENV` | Environment mode | `development` |
-| `CHATKIT_SESSION_COOKIE` | Cookie name | `chatkit_session_id` |
-| `CHATKIT_MAX_FILES` | Max file uploads | `5` |
-| `CHATKIT_MAX_FILE_SIZE_MB` | Max file size (MB) | `10` |
-| `CHATKIT_MAX_REQUESTS_PER_MINUTE` | Rate limit | `10` |
-| `CHATKIT_CORS_ORIGIN` | CORS origin | `true` (all) |
-| `CHATKIT_ENABLE_UPLOADS` | Enable uploads | `true` |
+- Follow the project [Runbook](../docs/RUNBOOK.md) for installation and environment setup.
+- Required secrets (`OPENAI_API_KEY`, `CHATKIT_WORKFLOW_ID`, and `OPENAI_DOMAIN_KEY`) live in the root `.env.local`. The backend inherits them automatically.
+- Additional ChatKit tuning options are documented in [docs/CHATKIT.md](../docs/CHATKIT.md).
 
 ## Development
 
-### From Backend Directory
+Use the workspace scripts from the repository root (recommended):
 
 ```bash
-cd backend
-
-# Install dependencies (if not using workspace)
-npm install
-
-# Start development server (uses tsx for fast reloading)
-npm run dev
-
-# Type check
-npm run lint
-
-# Build
-npm run build
-
-# Run built code
-npm start
-```
-
-### From Project Root (Recommended)
-
-```bash
-# Run backend
-npm run dev:backend
-
-# Build backend
-npm run build:backend
-
-# Type check backend
+npm run dev:backend      # Auto-reload dev server
+npm run build:backend    # Compile TypeScript to dist/
 npm run lint --workspace=backend
 ```
+
+If you need to operate inside `backend/`, run `npm install` once to hydrate local `node_modules` and reuse the same scripts.
 
 ## API Endpoints
 
@@ -186,17 +138,11 @@ dist/
 
 ## Production Deployment
 
-1. **Build the backend:**
-   ```bash
-   npm run build
-   ```
+See the [Runbook deployment section](../docs/RUNBOOK.md#6-deployment) for the canonical checklist. In short:
 
-2. **Set environment variables** on your hosting platform
-
-3. **Start the server:**
-   ```bash
-   NODE_ENV=production npm start
-   ```
+1. `npm run build`
+2. Ensure host environment variables match `.env.example`
+3. Launch with `npm start` (or rely on the Vercel serverless handlers)
 
 The server will serve the frontend from `frontend/dist/` in production mode.
 

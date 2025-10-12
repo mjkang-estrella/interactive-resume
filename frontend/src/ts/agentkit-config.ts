@@ -12,15 +12,6 @@ const hostedAgentId =
   import.meta.env.OPENAI_AGENT_ID ??
   'replace-with-agent-id';
 
-const hostedDomainKey =
-  import.meta.env.VITE_CHATKIT_DOMAIN_KEY ??
-  import.meta.env.OPENAI_DOMAIN_KEY ??
-  undefined;
-
-if (hostedDomainKey) {
-  (window as unknown as Record<string, unknown>).OPENAI_DOMAIN_KEY = hostedDomainKey;
-}
-
 export const AGENTKIT_CONFIG: AgentKitConfig = {
   integrationType: 'hosted',
 

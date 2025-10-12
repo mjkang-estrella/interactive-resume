@@ -7,6 +7,9 @@ import type { TemplateLoader } from './templateLoader';
 import type { AnimationController } from './animationController';
 
 export class DocManager {
+  private resizeObserver?: ResizeObserver;
+  private fallbackResizeHandler?: () => void;
+
   constructor(
     private docContent: HTMLElement,
     private sub: HTMLElement | null,
@@ -15,7 +18,20 @@ export class DocManager {
     private paper: HTMLElement,
     private templateLoader: TemplateLoader,
     private animationController: AnimationController
-  ) {}
+  ) {
+    if (typeof window !== 'undefined' && 'ResizeObserver' in window) {
+      this.resizeObserver = new ResizeObserver((entries) => {
+        const entry = entries[0];
+        if (entry) {
+          this.syncDocHeight(entry.contentRect.height);
+        }
+      });
+      this.resizeObserver.observe(this.paper);
+    } else if (typeof window !== 'undefined') {
+      this.fallbackResizeHandler = () => this.syncDocHeight();
+      window.addEventListener('resize', this.fallbackResizeHandler);
+    }
+  }
 
   private applyDocData({ section, roleTitle, bulletText, url }: DocData): void {
     const sectionSlot = this.docContent.querySelector<HTMLElement>("[data-slot='section']");
@@ -112,9 +128,10 @@ export class DocManager {
     }
   }
 
-  public syncDocHeight(): void {
+  public syncDocHeight(measuredHeight?: number): void {
     if (!this.doc || !this.paper) return;
-    const paperHeight = this.paper.offsetHeight;
+    const paperHeight =
+      typeof measuredHeight === 'number' ? measuredHeight : this.paper.getBoundingClientRect().height;
     this.doc.style.height = `${paperHeight}px`;
     this.doc.style.minHeight = `${paperHeight}px`;
     this.doc.style.maxHeight = `${paperHeight}px`;

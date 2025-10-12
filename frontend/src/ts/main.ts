@@ -2,7 +2,7 @@
  * Main entry point for Interactive Resume
  */
 
-import { $, $$ } from './utils/dom';
+import { $ } from './utils/dom';
 import { MotionPreference } from './utils/motion';
 import { TemplateLoader } from './modules/templateLoader';
 import { AnimationController } from './modules/animationController';
@@ -59,7 +59,7 @@ class InteractiveResume {
     );
 
     // Set up event listeners
-    this.setupBulletClickHandlers(toast);
+    this.setupBulletClickHandlers(toast, paper);
     this.setupCloseButton(closeBtn, paper);
     this.setupToastAndHighlight(toast);
 
@@ -71,42 +71,45 @@ class InteractiveResume {
       });
 
     this.docManager.syncDocHeight();
-    window.addEventListener('resize', () => this.docManager.syncDocHeight());
   }
 
-  private setupBulletClickHandlers(toast: HTMLElement | null): void {
-    $$<HTMLButtonElement>('.bullet').forEach((btn) => {
-      btn.addEventListener('click', async () => {
-        this.lastTrigger = btn;
-        this.animationController.showDeck();
+  private setupBulletClickHandlers(toast: HTMLElement | null, paper: HTMLElement): void {
+    paper.addEventListener('click', async (event) => {
+      const target = (event.target as HTMLElement | null)?.closest<HTMLButtonElement>('.bullet');
+      if (!target || !paper.contains(target)) {
+        return;
+      }
 
-        if (toast) {
-          toast.classList.remove('show');
+      this.lastTrigger = target;
+      this.animationController.showDeck();
+
+      if (toast) {
+        toast.classList.remove('show');
+      }
+
+      const templateName = target.getAttribute('data-doc');
+      const dataText = target.getAttribute('data-text');
+      const bulletText =
+        dataText !== null ? dataText : templateName ? null : target.textContent?.trim();
+
+      try {
+        await this.docManager.populateDoc({
+          section: target.getAttribute('data-section') || undefined,
+          roleTitle: target.getAttribute('data-role') || undefined,
+          bulletText,
+          url: target.getAttribute('data-url') || undefined,
+          template: templateName || undefined,
+        });
+      } catch (error) {
+        const docContent = $<HTMLElement>('#doc-content');
+        if (docContent) {
+          docContent.innerHTML =
+            '<p>Unable to load resume details. Please refresh and try again.</p>';
         }
+        console.error(error);
+      }
 
-        const templateName = btn.getAttribute('data-doc');
-        const dataText = btn.getAttribute('data-text');
-        const bulletText = dataText !== null ? dataText : templateName ? null : btn.textContent?.trim();
-
-        try {
-          await this.docManager.populateDoc({
-            section: btn.getAttribute('data-section') || undefined,
-            roleTitle: btn.getAttribute('data-role') || undefined,
-            bulletText,
-            url: btn.getAttribute('data-url') || undefined,
-            template: templateName || undefined,
-          });
-        } catch (error) {
-          const docContent = $<HTMLElement>('#doc-content');
-          if (docContent) {
-            docContent.innerHTML =
-              '<p>Unable to load resume details. Please refresh and try again.</p>';
-          }
-          console.error(error);
-        }
-
-        requestAnimationFrame(() => this.docManager.focusDoc());
-      });
+      requestAnimationFrame(() => this.docManager.focusDoc());
     });
   }
 

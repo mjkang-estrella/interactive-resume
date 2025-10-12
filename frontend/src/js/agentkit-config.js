@@ -5,10 +5,6 @@
  * agent identifiers, and authentication headers. This file is loaded before
  * `agentkit.js` and should only contain non-sensitive, client-safe values.
  */
-if (typeof window !== "undefined" && window.ENV_OPENAI_DOMAIN_KEY) {
-    window.OPENAI_DOMAIN_KEY = window.ENV_OPENAI_DOMAIN_KEY;
-}
-
 window.AGENTKIT_CONFIG = {
     /**
      * Choose the integration mode to control how ChatKit reaches your backend.

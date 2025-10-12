@@ -1,37 +1,13 @@
 import crypto from "crypto";
-import path from "path";
 import type { IncomingMessage, ServerResponse } from "http";
-import { config as loadEnv } from "dotenv";
-import { OpenAI } from "openai";
+import {
+  ensureEnvLoaded,
+  createChatKitSessionForUser,
+} from "../../shared/chatkit/session";
+
+export { createChatKitSessionForUser } from "../../shared/chatkit/session";
 
 type Json = Record<string, unknown>;
-
-const ENV_FILES = [".env", ".env.local"] as const;
-let envLoaded = false;
-
-function ensureEnvLoaded(): void {
-  if (envLoaded) {
-    return;
-  }
-  envLoaded = true;
-
-  const root = process.cwd();
-  for (const file of ENV_FILES) {
-    loadEnv({ path: path.join(root, file), override: true });
-  }
-}
-
-function requireEnv(key: string): string {
-  ensureEnvLoaded();
-
-  const value = process.env[key];
-  if (!value) {
-    throw new Error(
-      `Missing environment variable ${key}. Set ${key}=... in your Vercel project or .env.local.`,
-    );
-  }
-  return value;
-}
 
 const COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 30; // 30 days
 
@@ -123,51 +99,6 @@ export function ensureUserSession(
   const sessionId = `user_${crypto.randomUUID()}`;
   appendSetCookie(res, serializeCookie(cookieName, sessionId));
   return sessionId;
-}
-
-function openAiClient(): OpenAI {
-  ensureEnvLoaded();
-  const apiKey = requireEnv("OPENAI_API_KEY");
-  return new OpenAI({ apiKey });
-}
-
-const openai = openAiClient();
-
-function mapChatKitConfiguration(): Json | undefined {
-  ensureEnvLoaded();
-  if (process.env.CHATKIT_ENABLE_UPLOADS === "false") {
-    return undefined;
-  }
-
-  return {
-    file_upload: {
-      enabled: true,
-      max_files: Number(process.env.CHATKIT_MAX_FILES ?? 5),
-      max_file_size: Number(process.env.CHATKIT_MAX_FILE_SIZE_MB ?? 10),
-    },
-  };
-}
-
-export async function createChatKitSessionForUser(user: string) {
-  const workflowId = requireEnv("CHATKIT_WORKFLOW_ID");
-  const chatSession = await openai.beta.chatkit.sessions.create({
-    user,
-    workflow: {
-      id: workflowId,
-    },
-    chatkit_configuration: mapChatKitConfiguration(),
-    rate_limits: {
-      max_requests_per_1_minute: Number(
-        process.env.CHATKIT_MAX_REQUESTS_PER_MINUTE ?? 10,
-      ),
-    },
-  });
-
-  return {
-    client_secret: chatSession.client_secret,
-    expires_at: chatSession.expires_at,
-    session_id: chatSession.id,
-  };
 }
 
 export async function readJsonBody(req: IncomingMessage): Promise<Json> {
