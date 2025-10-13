@@ -1,10 +1,32 @@
-import path from "path";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { config as loadEnv } from "dotenv";
 import { OpenAI } from "openai";
 
 const ENV_FILES = [".env", ".env.local"] as const;
 let envLoaded = false;
 let cachedClient: OpenAI | null = null;
+const MODULE_DIR = path.dirname(fileURLToPath(import.meta.url));
+
+function collectCandidateRoots(...starts: string[]): string[] {
+  const roots: string[] = [];
+  const seen = new Set<string>();
+
+  for (const start of starts) {
+    let current = path.resolve(start);
+    while (!seen.has(current)) {
+      roots.push(current);
+      seen.add(current);
+      const parent = path.dirname(current);
+      if (parent === current) {
+        break;
+      }
+      current = parent;
+    }
+  }
+
+  return roots;
+}
 
 export function ensureEnvLoaded(): void {
   if (envLoaded) {
@@ -12,10 +34,7 @@ export function ensureEnvLoaded(): void {
   }
   envLoaded = true;
 
-  const searchRoots = new Set<string>([
-    path.resolve(__dirname, "..", ".."),
-    process.cwd(),
-  ]);
+  const searchRoots = collectCandidateRoots(MODULE_DIR, process.cwd());
 
   for (const root of searchRoots) {
     for (const file of ENV_FILES) {

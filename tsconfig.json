@@ -12,6 +12,6 @@
     "types": ["node"],
     "lib": ["ES2022"]
   },
-  "include": ["api/**/*.ts", "shared/**/*.ts"],
+  "include": ["api/**/*.ts", "packages/shared/src/**/*.ts"],
   "exclude": ["node_modules"]
 }

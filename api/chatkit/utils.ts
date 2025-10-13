@@ -1,11 +1,7 @@
 import crypto from "crypto";
 import type { IncomingMessage, ServerResponse } from "http";
-import {
-  ensureEnvLoaded,
-  createChatKitSessionForUser,
-} from "../../shared/chatkit/session";
-
-export { createChatKitSessionForUser } from "../../shared/chatkit/session";
+import { ensureEnvLoaded } from "@interactive-resume/shared";
+import type { ControllerResult } from "@interactive-resume/shared";
 
 type Json = Record<string, unknown>;
 
@@ -136,6 +132,18 @@ export function sendJson(res: ServerResponse, status: number, payload: Json) {
   res.statusCode = status;
   res.setHeader("Content-Type", "application/json");
   res.end(JSON.stringify(payload));
+}
+
+export function applyControllerResult(
+  res: ServerResponse,
+  result: ControllerResult<Json>,
+) {
+  if (result.headers) {
+    for (const [name, value] of Object.entries(result.headers)) {
+      res.setHeader(name, value);
+    }
+  }
+  sendJson(res, result.status, result.body);
 }
 
 export function handleError(res: ServerResponse, error: unknown): void {

@@ -408,12 +408,21 @@ body {
 .doc-case__section ul + p {
     margin-top: 6px;
 }
+.doc-case__section ul + h4,
+.doc-case__section ul + p {
+    margin-top: 12px;
+}
 .doc-case__section p + figure,
 .doc-case__section ul + figure {
     margin-top: 8px;
 }
 .doc-case__section ul {
     margin: 0;
+}
+.doc-case__divider {
+    border: 0;
+    border-top: 1px solid rgba(15, 23, 42, 0.1);
+    margin: 12px 0;
 }
 .doc-case__block {
     display: flex;

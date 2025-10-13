@@ -1,4 +1,5 @@
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import crypto from "node:crypto";
 import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
@@ -6,11 +7,13 @@ import cookieParser from "cookie-parser";
 import {
   ensureEnvLoaded,
   requireEnv,
-  createChatKitSessionForUser,
-} from "../../shared/chatkit/session";
+  createSessionController,
+} from "@interactive-resume/shared";
+import type { ControllerResult } from "@interactive-resume/shared";
 
 // Load .env files from project root
-const ROOT_PATH = path.resolve(__dirname, "../..");
+const MODULE_DIR = path.dirname(fileURLToPath(import.meta.url));
+const ROOT_PATH = path.resolve(MODULE_DIR, "../..");
 ensureEnvLoaded();
 
 const REQUIRED_ENV = ["OPENAI_API_KEY", "CHATKIT_WORKFLOW_ID"] as const;
@@ -22,6 +25,7 @@ const PORT = Number(process.env.PORT || process.env.CHATKIT_PORT || 3000);
 const COOKIE_NAME = process.env.CHATKIT_SESSION_COOKIE ?? "chatkit_session_id";
 const COOKIE_MAX_AGE = 1000 * 60 * 60 * 24 * 30; // 30 days
 const app = express();
+const sessionController = createSessionController();
 app.use(
   cors({
     origin: process.env.CHATKIT_CORS_ORIGIN ?? true,
@@ -33,9 +37,10 @@ app.use(cookieParser());
 
 // Serve built frontend in production, src in development
 // Use ROOT_PATH to ensure we're relative to project root, not backend dir
-const FRONTEND_DIR = process.env.NODE_ENV === 'production'
-  ? path.join(ROOT_PATH, "frontend", "dist")
-  : path.join(ROOT_PATH, "frontend", "src");
+const FRONTEND_DIR =
+  process.env.NODE_ENV === "production"
+    ? path.join(ROOT_PATH, "frontend", "dist")
+    : path.join(ROOT_PATH, "frontend", "src");
 app.use(express.static(FRONTEND_DIR));
 
 interface SessionRequest extends Request {
@@ -56,13 +61,28 @@ function ensureUserSession(req: SessionRequest, res: Response): string {
   return sessionId;
 }
 
+function applyControllerResult(
+  res: Response,
+  result: ControllerResult<Record<string, unknown>>,
+) {
+  if (result.headers) {
+    for (const [name, value] of Object.entries(result.headers)) {
+      res.setHeader(name, value);
+    }
+  }
+  res.status(result.status).json(result.body);
+}
+
 app.post(
   "/api/chatkit/session",
   async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
       const user = ensureUserSession(req, res);
-      const session = await createChatKitSessionForUser(user);
-      res.json(session);
+      const result = await sessionController.create({
+        method: req.method,
+        user,
+      });
+      applyControllerResult(res, result);
     } catch (error) {
       next(error);
     }
@@ -73,20 +93,13 @@ app.post(
   "/api/chatkit/refresh",
   async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
-      const currentClientSecret = req.body?.current_client_secret;
-      if (
-        typeof currentClientSecret !== "string" ||
-        currentClientSecret.length === 0
-      ) {
-        res
-          .status(400)
-          .json({ error: "current_client_secret is required to refresh." });
-        return;
-      }
-
       const user = ensureUserSession(req, res);
-      const session = await createChatKitSessionForUser(user);
-      res.json(session);
+      const result = await sessionController.refresh({
+        method: req.method,
+        user,
+        currentClientSecret: req.body?.current_client_secret,
+      });
+      applyControllerResult(res, result);
     } catch (error) {
       next(error);
     }

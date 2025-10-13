@@ -2,6 +2,7 @@
   "name": "@interactive-resume/backend",
   "version": "1.0.0",
   "description": "Backend server for Interactive Resume with ChatKit integration",
+  "type": "module",
   "main": "dist/backend/src/server.js",
   "scripts": {
     "dev": "tsx watch --tsconfig tsconfig.json src/server.ts",
@@ -11,6 +12,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
+    "@interactive-resume/shared": "workspace:*",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",

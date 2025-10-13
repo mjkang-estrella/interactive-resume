@@ -1,29 +1,28 @@
 import type { IncomingMessage, ServerResponse } from "http";
 import {
-  createChatKitSessionForUser,
   ensureUserSession,
   handleError,
-  sendJson,
+  applyControllerResult,
 } from "./utils";
+import { createSessionController } from "@interactive-resume/shared";
 
 export const config = {
   runtime: "nodejs",
 };
 
+const sessionController = createSessionController();
+
 export default async function handler(
   req: IncomingMessage & { method?: string },
   res: ServerResponse,
 ) {
-  if (req.method && req.method !== "POST") {
-    res.setHeader("Allow", "POST");
-    sendJson(res, 405, { error: "Method Not Allowed" });
-    return;
-  }
-
   try {
     const user = ensureUserSession(req, res);
-    const session = await createChatKitSessionForUser(user);
-    sendJson(res, 200, session);
+    const result = await sessionController.create({
+      method: req.method,
+      user,
+    });
+    applyControllerResult(res, result);
   } catch (error) {
     handleError(res, error);
   }

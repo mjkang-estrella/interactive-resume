@@ -4,6 +4,7 @@
   "description": "Interactive resume site with optional ChatKit agent backend.",
   "private": true,
   "workspaces": [
+    "packages/shared",
     "frontend",
     "backend"
   ],
