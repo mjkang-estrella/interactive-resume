@@ -17,7 +17,8 @@
     "build:backend": "npm run build --workspace=backend",
     "start": "npm run start --workspace=backend",
     "lint": "npm run lint --workspaces",
-    "clean": "npm run clean --workspaces"
+    "clean": "npm run clean --workspaces",
+    "postinstall": "npm run build --workspace=@interactive-resume/shared"
   },
   "repository": {
     "type": "git",

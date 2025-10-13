@@ -65,9 +65,13 @@ function applyControllerResult(
   res: Response,
   result: ControllerResult<Record<string, unknown>>,
 ) {
-  if (result.headers) {
-    for (const [name, value] of Object.entries(result.headers)) {
-      res.setHeader(name, value);
+  const headers = result.headers;
+  if (headers) {
+    for (const name of Object.keys(headers)) {
+      const value = headers[name];
+      if (value !== undefined) {
+        res.setHeader(name, value);
+      }
     }
   }
   res.status(result.status).json(result.body);

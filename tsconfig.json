@@ -10,7 +10,13 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "types": ["node"],
-    "lib": ["ES2022"]
+    "lib": ["ES2022"],
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "@interactive-resume/shared": ["packages/shared/src/index.ts"],
+      "@interactive-resume/shared/*": ["packages/shared/src/*"]
+    }
   },
   "include": ["api/**/*.ts", "packages/shared/src/**/*.ts"],
   "exclude": ["node_modules"]
