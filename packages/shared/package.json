@@ -7,31 +7,39 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "dist-cjs"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "clean": "rm -rf dist"
+    "build": "tsc -p tsconfig.json && node ./scripts/build-cjs.mjs",
+    "clean": "rm -rf dist dist-cjs"
   },
   "dependencies": {
     "dotenv": "^16.4.5",
     "openai": "^6.3.0"
   },
   "devDependencies": {
+    "esbuild": "^0.25.10",
     "typescript": "^5.5.4"
   },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "import": "./dist/index.js",
+      "require": "./dist-cjs/index.cjs",
+      "default": "./dist/index.js"
     },
     "./chatkit/session": {
       "types": "./dist/chatkit/session.d.ts",
-      "import": "./dist/chatkit/session.js"
+      "import": "./dist/chatkit/session.js",
+      "require": "./dist-cjs/chatkit/session.cjs",
+      "default": "./dist/chatkit/session.js"
     },
     "./chatkit/controllers": {
       "types": "./dist/chatkit/controllers.d.ts",
-      "import": "./dist/chatkit/controllers.js"
+      "import": "./dist/chatkit/controllers.js",
+      "require": "./dist-cjs/chatkit/controllers.cjs",
+      "default": "./dist/chatkit/controllers.js"
     },
     "./package.json": "./package.json"
   }

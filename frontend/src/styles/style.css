@@ -130,6 +130,45 @@ body {
     scroll-snap-align: center;
     height: auto;
 }
+.pdf-link {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(17, 17, 17, 0.08);
+    border: 1px solid rgba(17, 17, 17, 0.12);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    transition: background 0.2s ease, transform 0.2s ease,
+        box-shadow 0.2s ease;
+    text-decoration: none;
+}
+.pdf-link:hover,
+.pdf-link:focus-visible {
+    background: rgba(196, 31, 31, 0.12);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+}
+.pdf-link:focus-visible {
+    outline: 2px solid rgba(196, 31, 31, 0.5);
+    outline-offset: 2px;
+}
+.pdf-link__icon {
+    display: block;
+}
+.pdf-link__icon path:last-of-type {
+    fill: #c41f1f;
+}
+
+@media print {
+    .pdf-link {
+        display: none;
+    }
+}
 
 /* Header */
 .name {
