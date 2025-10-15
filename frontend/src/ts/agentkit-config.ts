@@ -104,7 +104,7 @@ export const AGENTKIT_CONFIG: AgentKitConfig = {
 
   startScreen: {
     greeting:
-      "Hi - I'm an AI assistant trained on MJ Kang's resume. Ask me anything about his experience, impact, and philosophy.",
+      "What questions do you have about MJ’s Journey?",
     prompts: [
       {
         icon: 'circle-question',
