@@ -12,6 +12,10 @@
     --ink-500: #475569; /* slate-600 */
     --ink-600: #334155; /* slate-700 */
     --ink-700: #1e293b; /* slate-800 */
+    --highlight-ink: rgba(255, 245, 157, 0.95);
+    --highlight-ink-secondary: rgba(255, 235, 120, 0.92);
+    --highlight-slope: -15deg;
+    --highlight-slope-inverse: 15deg;
 }
 html,
 body {
@@ -41,21 +45,6 @@ body {
 :root {
     --sec-my: 1px;
     --sec-py: 2px;
-}
-
-@keyframes bulletPulse {
-    0% {
-        background-color: transparent;
-        box-shadow: inset 0 -2px 0 rgba(255, 165, 0, 0);
-    }
-    50% {
-        background-color: rgba(255, 165, 0, 0.15);
-        box-shadow: inset 0 -2px 0 rgba(255, 165, 0, 0.6);
-    }
-    100% {
-        background-color: transparent;
-        box-shadow: inset 0 -2px 0 rgba(255, 165, 0, 0);
-    }
 }
 
 @keyframes pageEnter {
@@ -134,34 +123,27 @@ body {
     position: absolute;
     top: 18px;
     right: 18px;
-    width: 34px;
-    height: 34px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border-radius: 50%;
-    background: rgba(17, 17, 17, 0.08);
-    border: 1px solid rgba(17, 17, 17, 0.12);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    transition: background 0.2s ease, transform 0.2s ease,
-        box-shadow 0.2s ease;
     text-decoration: none;
+    color: #c41f1f;
+    font-size: 22px;
+    line-height: 1;
+    transition: color 0.2s ease, transform 0.2s ease;
 }
 .pdf-link:hover,
 .pdf-link:focus-visible {
-    background: rgba(196, 31, 31, 0.12);
+    color: #a41818;
     transform: translateY(-1px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
 }
 .pdf-link:focus-visible {
-    outline: 2px solid rgba(196, 31, 31, 0.5);
-    outline-offset: 2px;
+    outline: 2px solid rgba(196, 31, 31, 0.4);
+    outline-offset: 4px;
+    border-radius: 4px;
 }
-.pdf-link__icon {
+.pdf-link .hgi {
     display: block;
-}
-.pdf-link__icon path:last-of-type {
-    fill: #c41f1f;
 }
 
 @media print {
@@ -279,14 +261,54 @@ body {
     text-decoration: underline;
 }
 
+.bullet-label {
+    position: relative;
+    display: inline;
+    z-index: 0;
+}
+.highlight-ink-layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+    overflow: visible;
+}
+.highlight-ink-wrap {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 1em;
+    width: 0;
+    opacity: 1;
+    overflow: hidden;
+    transition: opacity 180ms ease-out;
+    will-change: width, opacity;
+    pointer-events: none;
+    transform-origin: left center;
+    transform: skewX(var(--highlight-slope));
+}
+.highlight-ink-wrap--fading {
+    opacity: 0;
+}
+.highlight-ink {
+    position: absolute;
+    inset: 0;
+    height: 100%;
+    width: calc(100% + 24px);
+    transform-origin: left center;
+    transform: skewX(var(--highlight-slope-inverse));
+    mix-blend-mode: multiply;
+    background: linear-gradient(0deg, var(--highlight-ink) 0%, var(--highlight-ink-secondary) 100%);
+    clip-path: inset(0 round 3px);
+    will-change: width;
+    filter: url(#bulletHighlightEdge);
+}
+
 .bullet--intro {
     position: relative;
     display: inline;
     border-radius: 4px;
     padding: 0 2px;
-}
-.bullet--intro.pulsing {
-    animation: bulletPulse 2s ease-in-out 1;
 }
 
 /* Right-side detail panel */

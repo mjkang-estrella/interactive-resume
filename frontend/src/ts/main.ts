@@ -7,6 +7,7 @@ import { MotionPreference } from './utils/motion';
 import { TemplateLoader } from './modules/templateLoader';
 import { AnimationController } from './modules/animationController';
 import { DocManager } from './modules/docManager';
+import { BulletHighlighter } from './modules/bulletHighlighter';
 
 class InteractiveResume {
   private motionPreference!: MotionPreference;
@@ -14,6 +15,8 @@ class InteractiveResume {
   private animationController!: AnimationController;
   private docManager!: DocManager;
   private lastTrigger: HTMLElement | null = null;
+  private activeBullet: HTMLButtonElement | null = null;
+  private bulletHighlighters = new WeakMap<HTMLButtonElement, BulletHighlighter>();
 
   constructor() {
     this.init();
@@ -58,10 +61,12 @@ class InteractiveResume {
       this.animationController
     );
 
+    this.prepareBulletHighlighters(paper);
+
     // Set up event listeners
     this.setupBulletClickHandlers(toast, paper);
     this.setupCloseButton(closeBtn, paper);
-    this.setupToastAndHighlight(toast);
+    this.setupToast(toast);
 
     // Initialize with default template
     this.docManager
@@ -71,6 +76,16 @@ class InteractiveResume {
       });
 
     this.docManager.syncDocHeight();
+  }
+
+  private prepareBulletHighlighters(paper: HTMLElement): void {
+    const bullets = paper.querySelectorAll<HTMLButtonElement>('.bullet');
+    bullets.forEach((button) => {
+      const highlighter = BulletHighlighter.create(button);
+      if (highlighter) {
+        this.bulletHighlighters.set(button, highlighter);
+      }
+    });
   }
 
   private setupBulletClickHandlers(toast: HTMLElement | null, paper: HTMLElement): void {
@@ -100,7 +115,9 @@ class InteractiveResume {
           url: target.getAttribute('data-url') || undefined,
           template: templateName || undefined,
         });
+        await this.setActiveBullet(target);
       } catch (error) {
+        await this.clearActiveBullet();
         const docContent = $<HTMLElement>('#doc-content');
         if (docContent) {
           docContent.innerHTML =
@@ -116,7 +133,8 @@ class InteractiveResume {
   private setupCloseButton(closeBtn: HTMLElement | null, paper: HTMLElement): void {
     if (!closeBtn) return;
 
-    closeBtn.addEventListener('click', () => {
+    closeBtn.addEventListener('click', async () => {
+      await this.clearActiveBullet();
       const closing = this.animationController.hideDeck();
       if (this.lastTrigger) {
         this.lastTrigger.focus();
@@ -136,26 +154,44 @@ class InteractiveResume {
     });
   }
 
-  private setupToastAndHighlight(toast: HTMLElement | null): void {
-    if (toast) {
-      requestAnimationFrame(() => toast.classList.add('show'));
-      setTimeout(() => {
-        toast.classList.remove('show');
-        this.triggerIntroHighlight();
-      }, 3000);
-    } else {
-      this.triggerIntroHighlight();
-    }
+  private setupToast(toast: HTMLElement | null): void {
+    if (!toast) return;
+
+    requestAnimationFrame(() => toast.classList.add('show'));
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 3000);
   }
 
-  private triggerIntroHighlight(): void {
-    const introBullet = $<HTMLElement>('.bullet--intro');
-    if (introBullet) {
-      introBullet.classList.add('pulsing');
-      setTimeout(() => {
-        introBullet.classList.remove('pulsing');
-      }, 3000);
+  private async setActiveBullet(bullet: HTMLButtonElement): Promise<void> {
+    if (this.activeBullet && this.activeBullet !== bullet) {
+      const previous = this.activeBullet;
+      const previousHighlighter = this.bulletHighlighters.get(previous);
+      previous.classList.remove('bullet--active');
+      await previousHighlighter?.fadeOut();
+    } else if (this.activeBullet === bullet) {
+      const currentHighlighter = this.bulletHighlighters.get(bullet);
+      await currentHighlighter?.fadeOut();
     }
+
+    this.activeBullet = bullet;
+    this.activeBullet.classList.add('bullet--active');
+
+    const highlighter = this.bulletHighlighters.get(bullet);
+    highlighter?.highlight();
+  }
+
+  private async clearActiveBullet(): Promise<void> {
+    if (!this.activeBullet) {
+      return;
+    }
+
+    const bullet = this.activeBullet;
+    const highlighter = this.bulletHighlighters.get(bullet);
+
+    this.activeBullet = null;
+    bullet.classList.remove('bullet--active');
+    await highlighter?.fadeOut();
   }
 }
 
