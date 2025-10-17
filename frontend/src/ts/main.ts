@@ -8,12 +8,14 @@ import { TemplateLoader } from './modules/templateLoader';
 import { AnimationController } from './modules/animationController';
 import { DocManager } from './modules/docManager';
 import { BulletHighlighter } from './modules/bulletHighlighter';
+import { ResponsiveScaler } from './modules/responsiveScaler';
 
 class InteractiveResume {
   private motionPreference!: MotionPreference;
   private templateLoader!: TemplateLoader;
   private animationController!: AnimationController;
   private docManager!: DocManager;
+  private responsiveScaler: ResponsiveScaler | null = null;
   private lastTrigger: HTMLElement | null = null;
   private activeBullet: HTMLButtonElement | null = null;
   private bulletHighlighters = new WeakMap<HTMLButtonElement, BulletHighlighter>();
@@ -61,6 +63,8 @@ class InteractiveResume {
       this.animationController
     );
 
+    this.responsiveScaler = new ResponsiveScaler(page, paper, deck, doc);
+
     this.prepareBulletHighlighters(paper);
 
     // Set up event listeners
@@ -73,9 +77,13 @@ class InteractiveResume {
       .populateDoc({ template: 'default' })
       .catch(() => {
         docContent.innerHTML = '<p>Unable to load resume details. Please refresh the page.</p>';
+      })
+      .finally(() => {
+        this.responsiveScaler?.triggerUpdate();
       });
 
     this.docManager.syncDocHeight();
+    this.responsiveScaler?.triggerUpdate();
   }
 
   private prepareBulletHighlighters(paper: HTMLElement): void {
@@ -116,6 +124,7 @@ class InteractiveResume {
           template: templateName || undefined,
         });
         await this.setActiveBullet(target);
+        this.responsiveScaler?.triggerUpdate();
       } catch (error) {
         await this.clearActiveBullet();
         const docContent = $<HTMLElement>('#doc-content');
@@ -145,6 +154,7 @@ class InteractiveResume {
           block: 'nearest',
           inline: 'center',
         });
+        this.responsiveScaler?.triggerUpdate();
       };
       if (closing && typeof closing.then === 'function') {
         closing.then(scrollToPaper);

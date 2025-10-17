@@ -2,6 +2,7 @@
     --page-width: 768px;
     --page-pad-x: 48px;
     --page-pad-y: 20px;
+    --page-gap: 32px;
     --deck-min: 440px; /* min width of each right-hand page */
     --deck-ideal: 48vw; /* ideal width (responsive) */
     --deck-max: 768px; /* max width of each right-hand page */
@@ -40,6 +41,7 @@ body {
         "Apple Color Emoji",
         "Segoe UI Emoji";
     color: var(--text);
+    overflow-x: hidden;
 }
 
 :root {
@@ -60,10 +62,11 @@ body {
 
 /* Layout: resume and detail panel share a horizontal scroll */
 .page {
+    --page-scale: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 32px;
+    gap: var(--page-gap);
     width: 100vw;
     height: 100vh;
     box-sizing: border-box;
@@ -72,6 +75,12 @@ body {
     overflow: hidden;
     opacity: 0;
     animation: pageEnter 560ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    transform-origin: top center;
+    transition: transform 180ms ease;
+}
+
+.page--scaled {
+    transform: scale(var(--page-scale));
 }
 .page::-webkit-scrollbar {
     height: 8px;
@@ -151,6 +160,9 @@ body {
 @media print {
     .pdf-link {
         display: none;
+    }
+    .page {
+        transform: none !important;
     }
 }
 
