@@ -8,6 +8,7 @@ import { TemplateLoader } from './modules/templateLoader';
 import { AnimationController } from './modules/animationController';
 import { DocManager } from './modules/docManager';
 import { BulletHighlighter } from './modules/bulletHighlighter';
+import { ResponsiveScaler } from './modules/responsiveScaler';
 
 class InteractiveResume {
   private motionPreference!: MotionPreference;
@@ -17,6 +18,7 @@ class InteractiveResume {
   private lastTrigger: HTMLElement | null = null;
   private activeBullet: HTMLButtonElement | null = null;
   private bulletHighlighters = new WeakMap<HTMLButtonElement, BulletHighlighter>();
+  private responsiveScaler!: ResponsiveScaler;
 
   constructor() {
     this.init();
@@ -61,6 +63,8 @@ class InteractiveResume {
       this.animationController
     );
 
+    this.responsiveScaler = new ResponsiveScaler(page);
+
     this.prepareBulletHighlighters(paper);
 
     // Set up event listeners
@@ -97,6 +101,7 @@ class InteractiveResume {
 
       this.lastTrigger = target;
       this.animationController.showDeck();
+      this.responsiveScaler.requestUpdate();
 
       if (toast) {
         toast.classList.remove('show');
@@ -146,10 +151,14 @@ class InteractiveResume {
           inline: 'center',
         });
       };
-      if (closing && typeof closing.then === 'function') {
-        closing.then(scrollToPaper);
-      } else {
+      const finalize = () => {
         scrollToPaper();
+        this.responsiveScaler.requestUpdate();
+      };
+      if (closing && typeof closing.then === 'function') {
+        closing.then(finalize);
+      } else {
+        finalize();
       }
     });
   }
