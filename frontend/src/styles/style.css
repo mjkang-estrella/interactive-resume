@@ -1,7 +1,9 @@
 :root {
+    /* Gradually scale typography/spacing between small and large viewports */
+    --responsive-scale: clamp(0.6, calc(0.6 + (100vw - 360px) / 1600px), 1);
     --page-width: 768px;
-    --page-pad-x: 48px;
-    --page-pad-y: 20px;
+    --page-pad-x: calc(48px * var(--responsive-scale));
+    --page-pad-y: calc(20px * var(--responsive-scale));
     --deck-min: 440px; /* min width of each right-hand page */
     --deck-ideal: 48vw; /* ideal width (responsive) */
     --deck-max: 768px; /* max width of each right-hand page */
@@ -63,11 +65,11 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 32px;
+    gap: calc(32px * var(--responsive-scale));
     width: 100vw;
     height: 100vh;
     box-sizing: border-box;
-    padding: 24px 16px;
+    padding: calc(24px * var(--responsive-scale)) calc(16px * var(--responsive-scale));
     position: relative;
     overflow: hidden;
     opacity: 0;
@@ -130,7 +132,7 @@ body {
     justify-content: center;
     text-decoration: none;
     color: #c41f1f;
-    font-size: 22px;
+    font-size: calc(var(--responsive-scale) * 22px);
     line-height: 1;
     transition: color 0.2s ease, transform 0.2s ease;
 }
@@ -149,6 +151,9 @@ body {
 }
 
 @media print {
+    :root {
+        --responsive-scale: 1;
+    }
     .pdf-link {
         display: none;
     }
@@ -156,7 +161,7 @@ body {
 
 /* Header */
 .name {
-    font-size: 22px;
+    font-size: calc(var(--responsive-scale) * 22px);
     font-weight: 800;
     letter-spacing: 0.04em;
     text-transform: uppercase;
@@ -166,7 +171,7 @@ body {
 .contact-bar {
     margin-top: 6px;
     text-align: center;
-    font-size: 12px;
+    font-size: calc(var(--responsive-scale) * 12px);
     line-height: 1.2;
     padding-bottom: 4px;
     background: transparent;
@@ -178,7 +183,7 @@ body {
 .section-bar {
     margin: var(--sec-my) 0;
     text-align: center;
-    font-size: 12px;
+    font-size: calc(var(--responsive-scale) * 12px);
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.06em;
@@ -212,16 +217,16 @@ body {
     margin-bottom: 2px;
 }
 .company {
-    font-size: 13px;
+    font-size: calc(var(--responsive-scale) * 13px);
     font-weight: bold;
 }
 .meta {
-    font-size: 12px;
+    font-size: calc(var(--responsive-scale) * 12px);
     color: #111;
 }
 .role {
     font-style: italic;
-    font-size: 13px;
+    font-size: calc(var(--responsive-scale) * 13px);
     font-weight: bold;
 }
 .link {
@@ -239,7 +244,7 @@ body {
 .bullets li {
     list-style: none;
     position: relative;
-    font-size: 12.5px;
+    font-size: calc(var(--responsive-scale) * 12.5px);
     line-height: 1.35;
     margin: 0 0 3px;
     padding-left: 16px;
@@ -345,21 +350,21 @@ body {
 }
 .doc-sub {
     margin: 0;
-    font-size: 11px;
+    font-size: calc(var(--responsive-scale) * 11px);
     text-transform: uppercase;
     letter-spacing: 0.08em;
     color: #525252;
 }
 .doc-title {
     margin: 0;
-    font-size: 15px;
+    font-size: calc(var(--responsive-scale) * 15px);
     font-weight: 700;
     letter-spacing: 0.02em;
 }
 .doc-close {
     border: 1px solid #e5e7eb;
     background: transparent;
-    font-size: 18px;
+    font-size: calc(var(--responsive-scale) * 18px);
     line-height: 1;
     width: 32px;
     height: 32px;
@@ -399,7 +404,7 @@ body {
     margin-bottom: 0;
 }
 .doc-entry .bullets li {
-    font-size: 13px;
+    font-size: calc(var(--responsive-scale) * 13px);
 }
 .doc-entry .bullets li::before {
     top: 0.7em;
@@ -411,7 +416,7 @@ body {
     margin-top: 0;
 }
 .doc-bullet--plain {
-    font-size: 14px;
+    font-size: calc(var(--responsive-scale) * 14px);
     line-height: 1.6;
     margin: 0;
 }
@@ -429,10 +434,10 @@ body {
     font-weight: 700;
 }
 .doc-case > h2 {
-    font-size: 24px;
+    font-size: calc(var(--responsive-scale) * 24px);
 }
 .doc-case > h3 {
-    font-size: 20px;
+    font-size: calc(var(--responsive-scale) * 20px);
 }
 .doc-case__section {
     display: flex;
@@ -440,7 +445,7 @@ body {
     gap: 4px;
 }
 .doc-case__section h3 {
-    font-size: 16px;
+    font-size: calc(var(--responsive-scale) * 16px);
     font-weight: 700;
     letter-spacing: 0.01em;
     text-transform: none;
@@ -448,7 +453,7 @@ body {
     margin: 0;
 }
 .doc-case__section h4 {
-    font-size: 14px;
+    font-size: calc(var(--responsive-scale) * 14px);
     font-weight: 700;
     letter-spacing: 0.01em;
     text-transform: none;
@@ -457,7 +462,7 @@ body {
 }
 .doc-case__section p {
     margin: 0;
-    font-size: 12.5px;
+    font-size: calc(var(--responsive-scale) * 12.5px);
     line-height: 1.35;
     color: var(--ink-700);
 }
@@ -495,7 +500,7 @@ body {
     gap: 10px;
 }
 .doc-case__eyebrow {
-    font-size: 11px;
+    font-size: calc(var(--responsive-scale) * 11px);
     letter-spacing: 0.1em;
     text-transform: uppercase;
     font-weight: 700;
@@ -543,7 +548,7 @@ body {
 }
 .doc-case__split-meta h3,
 .doc-case__split-meta h4 {
-    font-size: 13px;
+    font-size: calc(var(--responsive-scale) * 13px);
     font-weight: 700;
     letter-spacing: 0.01em;
     text-transform: none;
@@ -675,7 +680,7 @@ body {
     box-shadow:
         0 12px 32px rgba(30, 64, 175, 0.32),
         0 4px 12px rgba(30, 64, 175, 0.18);
-    font-size: 13px;
+    font-size: clamp(11px, calc(var(--responsive-scale) * 13px), 13px);
     line-height: 1.3;
     opacity: 0;
     pointer-events: none;
@@ -728,7 +733,7 @@ body {
     color: #f8fafc;
     padding: 10px 14px;
     border-radius: 12px;
-    font-size: 12px;
+    font-size: clamp(11px, calc(var(--responsive-scale) * 12px), 12px);
     line-height: 1.4;
     box-shadow:
         0 10px 24px rgba(15, 23, 42, 0.28),
@@ -743,7 +748,7 @@ body {
     align-items: center;
     gap: 8px;
     font-weight: 600;
-    font-size: 12px;
+    font-size: clamp(11px, calc(var(--responsive-scale) * 12px), 12px);
     pointer-events: none;
     padding: 12px 16px;
 }
@@ -794,7 +799,7 @@ body {
     border-radius: 999px;
     background: linear-gradient(135deg, #1d4ed8, #7c3aed);
     color: #f8fafc;
-    font-size: 14px;
+    font-size: clamp(12px, calc(var(--responsive-scale) * 14px), 14px);
     font-weight: 600;
     letter-spacing: 0.02em;
     padding: 10px 18px;
@@ -827,11 +832,11 @@ body {
     gap: 8px;
 }
 .agentkit__launcher-label > span:first-child {
-    font-size: 18px;
+    font-size: clamp(16px, calc(var(--responsive-scale) * 18px), 18px);
     line-height: 1;
 }
 .agentkit__launcher-hint {
-    font-size: 12px;
+    font-size: clamp(11px, calc(var(--responsive-scale) * 12px), 12px);
     font-weight: 400;
     opacity: 0.9;
 }
