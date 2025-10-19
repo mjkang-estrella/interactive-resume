@@ -8,6 +8,7 @@ import { TemplateLoader } from './modules/templateLoader';
 import { AnimationController } from './modules/animationController';
 import { DocManager } from './modules/docManager';
 import { BulletHighlighter } from './modules/bulletHighlighter';
+import { CompanyTooltip } from './modules/companyTooltip';
 
 class InteractiveResume {
   private motionPreference!: MotionPreference;
@@ -17,6 +18,7 @@ class InteractiveResume {
   private lastTrigger: HTMLElement | null = null;
   private activeBullet: HTMLButtonElement | null = null;
   private bulletHighlighters = new WeakMap<HTMLButtonElement, BulletHighlighter>();
+  private companyTooltip?: CompanyTooltip;
 
   constructor() {
     this.init();
@@ -64,6 +66,7 @@ class InteractiveResume {
     );
 
     this.prepareBulletHighlighters(paper);
+    this.companyTooltip = new CompanyTooltip(paper);
 
     // Set up event listeners
     this.setupBulletClickHandlers(toast, paper);
