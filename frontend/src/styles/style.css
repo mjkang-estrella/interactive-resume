@@ -94,6 +94,11 @@ p {
     overflow-x: auto;
     justify-content: flex-start;
 }
+
+.page.page--deck-center:not(.deck-hidden) {
+    justify-content: center;
+    overflow-x: hidden;
+}
 .page.deck-measuring-hide {
     position: relative;
     justify-content: center;

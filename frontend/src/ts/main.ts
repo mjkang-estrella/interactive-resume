@@ -40,6 +40,8 @@ class InteractiveResume {
     const closeBtn = $<HTMLElement>('.doc-close', doc);
     const toast = $<HTMLElement>('#tip-toast');
 
+    this.setupDeckLayoutWatcher(page, deck);
+
     // Initialize modules
     this.motionPreference = new MotionPreference(page);
     this.templateLoader = new TemplateLoader();
@@ -86,6 +88,44 @@ class InteractiveResume {
         this.bulletHighlighters.set(button, highlighter);
       }
     });
+  }
+
+  private setupDeckLayoutWatcher(page: HTMLElement, deck: HTMLElement): void {
+    let rafId: number | null = null;
+
+    const updateAlignment = () => {
+      rafId = null;
+      const deckVisible = !deck.hidden && !page.classList.contains('deck-hidden');
+      if (!deckVisible) {
+        page.classList.remove('page--deck-center');
+        return;
+      }
+
+      const overflowAllowance = 1;
+      const hasOverflow = page.scrollWidth - page.clientWidth > overflowAllowance;
+      page.classList.toggle('page--deck-center', !hasOverflow);
+    };
+
+    const scheduleUpdate = () => {
+      if (rafId !== null) {
+        return;
+      }
+      rafId = requestAnimationFrame(updateAlignment);
+    };
+
+    window.addEventListener('resize', scheduleUpdate, { passive: true });
+
+    if (typeof ResizeObserver === 'function') {
+      const resizeObserver = new ResizeObserver(() => scheduleUpdate());
+      resizeObserver.observe(page);
+      resizeObserver.observe(deck);
+    }
+
+    const mutationObserver = new MutationObserver(() => scheduleUpdate());
+    mutationObserver.observe(deck, { attributes: true, attributeFilter: ['hidden'] });
+    mutationObserver.observe(page, { attributes: true, attributeFilter: ['class'] });
+
+    scheduleUpdate();
   }
 
   private setupBulletClickHandlers(toast: HTMLElement | null, paper: HTMLElement): void {
