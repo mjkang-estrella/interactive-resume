@@ -1,21 +1,24 @@
 :root {
-    --page-width: 768px;
-    --page-pad-x: 48px;
-    --page-pad-y: 20px;
-    --deck-min: 440px; /* min width of each right-hand page */
-    --deck-ideal: 48vw; /* ideal width (responsive) */
-    --deck-max: 768px; /* max width of each right-hand page */
-    --paper-bg: #FBFBFB;
-    --bg: #13131A;
-    --bar-border: #111; /* black */
-    --text: #0f172a; /* slate-900-ish */
-    --ink-500: #475569; /* slate-600 */
-    --ink-600: #334155; /* slate-700 */
-    --ink-700: #1e293b; /* slate-800 */
+    --paper-width: 816px; /* 8.5in * 96 */
+    --paper-height: 1056px; /* 11in * 96 */
+    --paper-scale: 1;
+    --page-gap: calc(var(--paper-width) * 0.04); /* scales with paper */
+    --viewport-margin: 24px;
+    --page-pad-x: 72px; /* 0.75in left/right */
+    --page-pad-y: 48px; /* 0.5in top/bottom */
+    --paper-bg: #fbfbfb;
+    --bg: #13131a;
+    --bar-border: #111;
+    --text: #0f172a;
+    --ink-500: #475569;
+    --ink-600: #334155;
+    --ink-700: #1e293b;
     --highlight-ink: rgba(255, 245, 157, 0.95);
     --highlight-ink-secondary: rgba(255, 235, 120, 0.92);
     --highlight-slope: -15deg;
     --highlight-slope-inverse: 15deg;
+    --sec-my: 1px;
+    --sec-py: 2px;
 }
 html,
 body {
@@ -39,12 +42,13 @@ body {
         Roboto,
         "Apple Color Emoji",
         "Segoe UI Emoji";
+    font-size: 12px;
+    line-height: 1.22;
     color: var(--text);
 }
 
-:root {
-    --sec-my: 1px;
-    --sec-py: 2px;
+p {
+    margin: 0 0 6px;
 }
 
 @keyframes pageEnter {
@@ -63,11 +67,11 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 32px;
+    gap: calc(var(--page-gap) * var(--paper-scale));
     width: 100vw;
     height: 100vh;
     box-sizing: border-box;
-    padding: 24px 16px;
+    padding: var(--viewport-margin);
     position: relative;
     overflow: hidden;
     opacity: 0;
@@ -86,12 +90,34 @@ body {
 .page.deck-hidden .deck {
     display: none;
 }
+.page:not(.deck-hidden) {
+    overflow-x: auto;
+    justify-content: flex-start;
+}
 .page.deck-measuring-hide {
     position: relative;
+    justify-content: center;
 }
 .page.deck-measuring-hide .deck {
     position: absolute;
     pointer-events: none;
+}
+
+.paper-viewport {
+    --paper-translate: 0px;
+    width: calc(var(--paper-width) * var(--paper-scale));
+    height: calc(var(--paper-height) * var(--paper-scale));
+    flex: 0 0 calc(var(--paper-width) * var(--paper-scale));
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    position: relative;
+    overflow: visible;
+    margin: 0 auto;
+    transform: translateX(var(--paper-translate));
+}
+.paper-viewport[data-paper-role='doc'] {
+    align-items: stretch;
 }
 
 .page--no-motion {
@@ -109,17 +135,21 @@ body {
 }
 
 .paper {
-    width: min(var(--page-width), calc(50vw - 16px));
-    max-width: var(--page-width);
-    flex: 1 1 min(var(--page-width), calc(50vw - 16px));
+    width: var(--paper-width);
+    min-width: var(--paper-width);
+    max-width: var(--paper-width);
+    height: var(--paper-height);
+    min-height: var(--paper-height);
+    max-height: var(--paper-height);
     background: var(--paper-bg);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
     padding: var(--page-pad-y) var(--page-pad-x);
     position: relative;
-    justify-self: center;
     flex: 0 0 auto;
     scroll-snap-align: center;
-    height: auto;
+    transform-origin: top left;
+    transform: scale(var(--paper-scale));
+    box-sizing: border-box;
 }
 .pdf-link {
     position: absolute;
@@ -156,8 +186,8 @@ body {
 
 /* Header */
 .name {
-    font-size: 22px;
-    font-weight: 800;
+    font-size: 24px;
+    font-weight: bold;
     letter-spacing: 0.04em;
     text-transform: uppercase;
     text-align: center;
@@ -178,8 +208,8 @@ body {
 .section-bar {
     margin: var(--sec-my) 0;
     text-align: center;
-    font-size: 12px;
-    font-weight: 700;
+    font-size: 14px;
+    font-weight: bold;
     text-transform: uppercase;
     letter-spacing: 0.06em;
     padding: 0;
@@ -202,7 +232,7 @@ body {
 
 /* Entries */
 .entry {
-    margin-bottom: 8px;
+    margin-bottom: 12px;
 }
 .entry-row {
     display: flex;
@@ -212,17 +242,17 @@ body {
     margin-bottom: 2px;
 }
 .company {
-    font-size: 13px;
-    font-weight: bold;
+    --font-weight: bold;
 }
 .meta {
-    font-size: 12px;
     color: #111;
+    text-align: right;
+    white-space: nowrap;
+    font-weight: bold;
 }
 .role {
     font-style: italic;
-    font-size: 13px;
-    font-weight: bold;
+    --font-weight: bold;
 }
 .link {
     color: #111;
@@ -233,27 +263,23 @@ body {
 }
 /* Bullets: custom dots centered to first line */
 .bullets {
-    margin: 2px 0 0 0;
-    padding-left: 0;
+    margin: 3px 0 0;
+    padding-left: 0.22in;
 }
 .bullets li {
     list-style: none;
     position: relative;
-    font-size: 12.5px;
-    line-height: 1.35;
+    line-height: 1.22;
     margin: 0 0 3px;
-    padding-left: 16px;
+    padding-left: 0.08in;
 }
 .bullets li::before {
-    content: "";
+    content: "•";
     position: absolute;
-    left: 0;
-    top: 0.68em;
-    width: 4px;
-    height: 4px;
-    background: currentColor;
-    border-radius: 50%;
-    transform: translateY(-50%);
+    left: calc(-0.2in);
+    font-size: 1.1em;
+    line-height: 1;
+    font-weight: bold;
 }
 .bullets button {
     all: unset;
@@ -317,10 +343,15 @@ body {
 .deck {
     display: flex;
     flex-direction: column;
-    flex: 1 1 min(var(--page-width), calc(50vw - 16px));
-    width: min(var(--page-width), calc(50vw - 16px));
-    max-width: var(--page-width);
+    align-items: center;
+    flex: 0 0 calc(var(--paper-width) * var(--paper-scale));
+    width: calc(var(--paper-width) * var(--paper-scale));
     will-change: transform, opacity;
+}
+
+.deck > .paper-viewport {
+    width: 100%;
+    height: calc(var(--paper-height) * var(--paper-scale));
 }
 
 .doc {
@@ -330,7 +361,9 @@ body {
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
-    min-height: var(--page-height, auto);
+    height: var(--paper-height);
+    min-height: var(--paper-height);
+    max-height: var(--paper-height);
     will-change: transform, opacity;
     background: var(--paper-bg);
 }
@@ -374,18 +407,23 @@ body {
 }
 
 .doc-body {
-    padding: var(--page-pad-y) var(--page-pad-x);
-    overflow: auto;
+    padding: 12px 16px;
+    overflow-y: auto;
+    overflow-x: hidden;
     display: flex;
     flex-direction: column;
     gap: 16px;
     flex: 1 1 auto;
+    min-height: 0;
+    max-height: 100%;
+    overscroll-behavior: contain;
 }
 .doc-content {
     display: flex;
     flex-direction: column;
     gap: 16px;
     flex: 1 1 auto;
+    min-height: 0;
 }
 .doc-highlight {
     display: flex;
@@ -398,11 +436,8 @@ body {
 .doc-entry {
     margin-bottom: 0;
 }
-.doc-entry .bullets li {
-    font-size: 13px;
-}
 .doc-entry .bullets li::before {
-    top: 0.7em;
+    top: 0.12em;
 }
 .doc-entry .bullets span {
     display: inline-block;
@@ -411,7 +446,6 @@ body {
     margin-top: 0;
 }
 .doc-bullet--plain {
-    font-size: 14px;
     line-height: 1.6;
     margin: 0;
 }
@@ -457,8 +491,7 @@ body {
 }
 .doc-case__section p {
     margin: 0;
-    font-size: 12.5px;
-    line-height: 1.35;
+    line-height: 1.4;
     color: var(--ink-700);
 }
 .doc-case__section p:last-child {
@@ -592,10 +625,8 @@ body {
     overflow: hidden;
 }
 .doc-embed--desktop {
-    width: min(100%, 520px);
+    width: min(100%, 600px);
     aspect-ratio: 16 / 10;
-    border-radius: 20px;
-    border: 12px solid #0f172a;
     background: #0f172a;
     box-shadow:
         0 18px 45px rgba(15, 23, 42, 0.28),
@@ -629,20 +660,6 @@ body {
     height: 8px;
     border-radius: 999px;
     background: rgba(241, 245, 249, 0.35);
-}
-.doc-embed--desktop::after {
-    content: '';
-    position: absolute;
-    top: 10px;
-    left: 20px;
-    width: 38px;
-    height: 10px;
-    border-radius: 999px;
-    background:
-        radial-gradient(circle, #f87171 50%, transparent 51%) no-repeat 0 center / 8px 8px,
-        radial-gradient(circle, #fbbf24 50%, transparent 51%) no-repeat 14px center / 8px 8px,
-        radial-gradient(circle, #34d399 50%, transparent 51%) no-repeat 28px center / 8px 8px;
-    opacity: 0.8;
 }
 
 @media (max-width: 900px) {
@@ -704,6 +721,7 @@ body {
     opacity: 0;
     transform: translateY(12px);
     pointer-events: none;
+    display: block;
 }
 .agentkit__panel-wrapper {
     position: relative;
@@ -714,6 +732,7 @@ body {
 .agentkit__panel-wrapper[data-loading="true"] .agentkit__panel {
     opacity: 0;
     pointer-events: none;
+    display: block;
 }
 .agentkit__panel-wrapper[data-loading="true"] .agentkit__spinner {
     display: flex;

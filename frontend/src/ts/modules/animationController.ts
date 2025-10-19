@@ -16,16 +16,6 @@ const deckLeaveKeyframes: Keyframe[] = [
   { opacity: 0, transform: 'translateX(40px)' },
 ];
 
-const docEnterKeyframes: Keyframe[] = [
-  { opacity: 0, transform: 'translateX(18px) scale(0.98)' },
-  { opacity: 1, transform: 'translateX(0) scale(1)' },
-];
-
-const docLeaveKeyframes: Keyframe[] = [
-  { opacity: 1, transform: 'translateX(0) scale(1)' },
-  { opacity: 0, transform: 'translateX(12px) scale(0.97)' },
-];
-
 const docSwapOutKeyframes: Keyframe[] = [
   { opacity: 1, transform: 'translateY(0)' },
   { opacity: 0, transform: 'translateY(8px)' },
@@ -102,6 +92,45 @@ export class AnimationController {
     private motionPreference: MotionPreference
   ) {
     this.deckAnimationState = deck.hidden ? 'closed' : 'open';
+  }
+
+  private getCurrentScale(): number {
+    const rootStyles = getComputedStyle(document.documentElement);
+    const scaleValue = rootStyles.getPropertyValue('--paper-scale').trim();
+    const parsed = parseFloat(scaleValue);
+    return Number.isFinite(parsed) && parsed > 0 ? parsed : 1;
+  }
+
+  private composePaperTransform(deltaX: number): string {
+    const scale = this.getCurrentScale();
+    const translatePart = Math.abs(deltaX) < 0.01 ? '' : `translateX(${deltaX}px)`;
+    const scalePart = Math.abs(scale - 1) < 0.0001 ? '' : `scale(${scale})`;
+    if (!translatePart && !scalePart) {
+      return 'none';
+    }
+    return [translatePart, scalePart].filter(Boolean).join(' ');
+  }
+
+  private composeDocTransform(deltaX: number, scaleMultiplier: number): string {
+    const scale = this.getCurrentScale();
+    const translatePart = Math.abs(deltaX) < 0.01 ? '' : `translateX(${deltaX}px)`;
+    const scaleValue = Math.max(0.01, scale * scaleMultiplier);
+    const scalePart = `scale(${scaleValue.toFixed(4)})`;
+    return [translatePart, scalePart].filter(Boolean).join(' ');
+  }
+
+  private buildDocEnterKeyframes(): Keyframe[] {
+    return [
+      { opacity: 0, transform: this.composeDocTransform(18, 0.98) },
+      { opacity: 1, transform: this.composeDocTransform(0, 1) },
+    ];
+  }
+
+  private buildDocLeaveKeyframes(): Keyframe[] {
+    return [
+      { opacity: 1, transform: this.composeDocTransform(0, 1) },
+      { opacity: 0, transform: this.composeDocTransform(12, 0.97) },
+    ];
   }
 
   private cleanupDocAnimation(): void {
@@ -218,6 +247,7 @@ export class AnimationController {
 
     this.deck.hidden = false;
     this.page.classList.remove('deck-hidden');
+    this.page.scrollLeft = 0;
 
     if (!shouldAnimate) {
       this.deckAnimationState = 'open';
@@ -232,10 +262,12 @@ export class AnimationController {
     this.deckAnimationState = 'opening';
 
     if (paperDeltaX !== 0) {
+      const fromTransform = this.composePaperTransform(paperDeltaX);
+      const toTransform = this.composePaperTransform(0);
       paperAnimation = this.paper.animate(
         [
-          { transform: `translateX(${paperDeltaX}px)` },
-          { transform: 'translateX(0)' },
+          { transform: fromTransform },
+          { transform: toTransform },
         ],
         paperEnterTiming
       );
@@ -247,7 +279,7 @@ export class AnimationController {
     }
 
     this.deckAnimationInstance = this.deck.animate(deckEnterKeyframes, deckEnterTiming);
-    this.docAnimationInstance = this.doc.animate(docEnterKeyframes, docEnterTiming);
+    this.docAnimationInstance = this.doc.animate(this.buildDocEnterKeyframes(), docEnterTiming);
 
     this.deckAnimationInstance.addEventListener('finish', () => {
       this.deckAnimationInstance = null;
@@ -283,6 +315,7 @@ export class AnimationController {
       this.resetDeckPositioning();
       this.deck.hidden = true;
       this.page.classList.add('deck-hidden');
+      this.page.scrollLeft = 0;
       this.deckAnimationState = 'closed';
       this.doc.classList.remove('focus');
       return Promise.resolve(true);
@@ -291,6 +324,7 @@ export class AnimationController {
     const paperFirstRect = this.paper.getBoundingClientRect();
     const pageRect = this.page.getBoundingClientRect();
     const deckRect = this.deck.getBoundingClientRect();
+    const initialScrollLeft = this.page.scrollLeft;
 
     this.page.classList.add('deck-measuring-hide');
     this.deck.style.position = 'absolute';
@@ -301,7 +335,15 @@ export class AnimationController {
     this.deck.style.pointerEvents = 'none';
     this.deck.style.zIndex = '2';
 
+    if (initialScrollLeft !== 0) {
+      this.page.scrollLeft = 0;
+    }
+
     const paperLastRect = this.paper.getBoundingClientRect();
+
+    if (initialScrollLeft !== 0) {
+      this.page.scrollLeft = initialScrollLeft;
+    }
     const deltaX = paperFirstRect.left - paperLastRect.left;
 
     this.deckAnimationState = 'closing';
@@ -309,14 +351,27 @@ export class AnimationController {
 
     let paperAnimation: Animation | null = null;
     if (deltaX !== 0) {
+      const fromTransform = this.composePaperTransform(deltaX);
+      const toTransform = this.composePaperTransform(0);
       paperAnimation = this.paper.animate(
-        [{ transform: `translateX(${deltaX}px)` }, { transform: 'translateX(0)' }],
+        [
+          { transform: fromTransform },
+          { transform: toTransform },
+        ],
         paperLeaveTiming
       );
     }
 
     this.deckAnimationInstance = this.deck.animate(deckLeaveKeyframes, deckLeaveTiming);
-    this.docAnimationInstance = this.doc.animate(docLeaveKeyframes, docLeaveTiming);
+    this.docAnimationInstance = this.doc.animate(this.buildDocLeaveKeyframes(), docLeaveTiming);
+
+    if (initialScrollLeft !== 0) {
+      if (typeof this.page.scrollTo === 'function') {
+        this.page.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        this.page.scrollLeft = 0;
+      }
+    }
 
     const finishPromise = new Promise<boolean>((resolve) => {
       const finalize = () => {

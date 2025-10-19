@@ -19,7 +19,7 @@ export class DocManager {
     private templateLoader: TemplateLoader,
     private animationController: AnimationController
   ) {
-    if (typeof window !== 'undefined' && 'ResizeObserver' in window) {
+    if (typeof window !== 'undefined' && typeof window.ResizeObserver === 'function') {
       this.resizeObserver = new ResizeObserver((entries) => {
         const entry = entries[0];
         if (entry) {
@@ -130,11 +130,12 @@ export class DocManager {
 
   public syncDocHeight(measuredHeight?: number): void {
     if (!this.doc || !this.paper) return;
-    const paperHeight =
-      typeof measuredHeight === 'number' ? measuredHeight : this.paper.getBoundingClientRect().height;
-    this.doc.style.height = `${paperHeight}px`;
-    this.doc.style.minHeight = `${paperHeight}px`;
-    this.doc.style.maxHeight = `${paperHeight}px`;
+    const baseHeight =
+      typeof measuredHeight === 'number' ? measuredHeight : this.paper.offsetHeight;
+    const roundedHeight = Math.round(baseHeight);
+    this.doc.style.height = `${roundedHeight}px`;
+    this.doc.style.minHeight = `${roundedHeight}px`;
+    this.doc.style.maxHeight = `${roundedHeight}px`;
   }
 
   public focusDoc(): void {
@@ -142,7 +143,7 @@ export class DocManager {
     this.doc.scrollIntoView({
       behavior: 'smooth',
       block: 'nearest',
-      inline: 'center',
+      inline: 'nearest',
     });
     this.doc.focus({ preventScroll: true });
   }
