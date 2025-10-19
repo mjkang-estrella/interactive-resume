@@ -48,7 +48,7 @@ body {
 }
 
 p {
-    margin: 0 0 6px;
+    margin: 0 0 3px;
 }
 
 @keyframes pageEnter {
@@ -184,8 +184,27 @@ p {
 }
 
 @media print {
-    .pdf-link {
-        display: none;
+    .pdf-link,
+    .toast,
+    .deck,
+    .agentkit {
+        display: none !important;
+    }
+
+    #stage {
+        padding: 0;
+        gap: 0;
+    }
+
+    .paper {
+        transform: none;
+        box-shadow: none;
+        page-break-after: always;
+    }
+
+    @page {
+        size: 8.5in 11in;
+        margin: 0;
     }
 }
 
@@ -285,6 +304,24 @@ p {
     font-size: 1.1em;
     line-height: 1;
     font-weight: bold;
+}
+ol.bullets {
+    counter-reset: bullets-counter;
+    margin: 3px 0 0;
+}
+ol.bullets > li {
+    counter-increment: bullets-counter;
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+ol.bullets > li::before {
+    content: counter(bullets-counter) ".";
+    left: calc(-0.28in);
+    min-width: 0.22in;
+    text-align: right;
+    font-size: 1em;
+    top: 0.12em;
+    margin: 3px;
 }
 .bullets button {
     all: unset;
@@ -501,23 +538,6 @@ p {
 }
 .doc-case__section p:last-child {
     margin-bottom: 0;
-}
-.doc-case__section h3 + *,
-.doc-case__section h4 + * {
-    margin-top: 8px;
-}
-.doc-case__section p + p,
-.doc-case__section p + ul,
-.doc-case__section ul + p {
-    margin-top: 6px;
-}
-.doc-case__section ul + h4,
-.doc-case__section ul + p {
-    margin-top: 12px;
-}
-.doc-case__section p + figure,
-.doc-case__section ul + figure {
-    margin-top: 8px;
 }
 .doc-case__section ul {
     margin: 0;

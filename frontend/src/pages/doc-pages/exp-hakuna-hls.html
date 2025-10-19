@@ -2,10 +2,8 @@
     <h2>Live Streaming Infrastructure</h2>
     <div class="doc-case__section">
         <h3>Background</h3>
-        <ul class="bullets doc-bullets">
-            <li>As a live streaming service, <strong>improving overall broadcast quality and reliability</strong> was a top priority.</li>
-            <li>We hypothesized that <strong>higher-quality streaming</strong> would directly lead to <strong>increased viewer satisfaction</strong>, <strong>longer watch times</strong>, and <strong>higher overall engagement</strong>.</li>
-        </ul>
+        <p>As a live streaming service, improving overall broadcast quality and reliability was a top priority.</p>
+        <p>We hypothesized that higher-quality streaming would directly lead to increased viewer satisfaction, longer watch times, and higher overall engagement.</p>
     </div>
 
     <hr class="doc-case__divider" />
@@ -14,18 +12,18 @@
         <h3>Iteration 1: Video &amp; Audio Quality Improvement</h3>
         <h4>Problem</h4>
         <ul class="bullets doc-bullets">
-            <li>Hakuna’s live streams were originally limited to <strong>480p resolution</strong>, which led to <strong>frequent user complaints</strong> about low visual quality.</li>
-            <li>This negatively impacted both <strong>perceived platform quality</strong> and <strong>user retention</strong>, especially in regions with better network infrastructure.</li>
+            <li>Hakuna’s live streams were originally limited to 480p resolution, which led to frequent user complaints about low visual quality.</li>
+            <li>This negatively impacted both perceived platform quality and user retention, especially in regions with better network infrastructure.</li>
         </ul>
         <h4>Solution</h4>
         <ul class="bullets doc-bullets">
-            <li>Upgraded the <strong>maximum streaming resolution to 720p</strong>, while introducing <strong>adaptive bitrate streaming</strong> to dynamically switch between 480p and 720p based on device performance and network conditions.</li>
-            <li>After evaluating trade-offs between infrastructure cost, user satisfaction, and global network environments, we selected <strong>720p</strong> instead of 1080p as the optimal resolution.</li>
+            <li><strong>Upgraded the maximum streaming resolution to 720p</strong>, while introducing adaptive bitrate streaming to dynamically switch between 480p and 720p based on device performance and network conditions.</li>
+            <li>After evaluating trade-offs between infrastructure cost, user satisfaction, and global network environments, we selected 720p instead of 1080p as the optimal resolution.</li>
         </ul>
         <h4>Result</h4>
         <ul class="bullets doc-bullets">
-            <li>Received <strong>positive feedback from streamers and viewers</strong> regarding improved broadcast quality.</li>
-            <li>The number of <strong>customer service complaints related to low resolution dropped by over 60%</strong>.</li>
+            <li>Received positive feedback from streamers and viewers regarding improved broadcast quality.</li>
+            <li>The number of customer service complaints related to low resolution dropped by over <strong>60%</strong>.</li>
         </ul>
     </div>
 
@@ -35,21 +33,21 @@
         <h3>Iteration 2: HLS-Based PC Broadcasting Infrastructure</h3>
         <h4>Background</h4>
         <ul class="bullets doc-bullets">
-            <li>Hakuna’s existing live streaming protocol was <strong>WebRTC</strong>, optimized for <strong>low-latency mobile streaming</strong>.</li>
-            <li>However, professional streamers typically use <strong>OBS (Open Broadcaster Software)</strong> for screen composition and output, which <strong>only supports Virtual Camera and HLS streaming</strong>.</li>
+            <li>Hakuna’s existing live streaming protocol was WebRTC, optimized for low-latency mobile streaming.</li>
+            <li>However, professional streamers typically use OBS (Open Broadcaster Software) for screen composition and output, which only supports Virtual Camera and HLS streaming.</li>
         </ul>
         <h4>Problem</h4>
         <ul class="bullets doc-bullets">
-            <li>While video quality had improved, <strong>demand for professional PC streaming</strong> increased rapidly.</li>
-            <li>To support both <strong>casual mobile users</strong> and <strong>professional streamers</strong>, Hakuna aimed to expand its ecosystem by providing a <strong>studio-grade broadcasting environment</strong>.</li>
-            <li>The existing WebRTC architecture, however, imposed <strong>limitations on advanced content creation</strong> and professional production.</li>
+            <li>While video quality had improved, demand for professional PC streaming increased rapidly.</li>
+            <li>To support both casual mobile users and professional streamers, Hakuna aimed to expand its ecosystem by providing a studio-grade broadcasting environment.</li>
+            <li>The existing WebRTC architecture, however, imposed limitations on advanced content creation and professional production.</li>
         </ul>
         <figure class="doc-case__figure">
             <img src="pages/doc-pages/exp-hakuna-hls-overview.png" alt="Diagram of Hakuna HLS-based streaming infrastructure" />
         </figure>
         <h4>Solution</h4>
         <ul class="bullets doc-bullets">
-            <li>Built a <strong>new HLS-based streaming infrastructure</strong> to enable <strong>PC broadcasting via OBS</strong>, supporting <strong>1080p resolution and 60fps</strong> frame rate.</li>
+            <li>Built a <strong>new HLS-based streaming infrastructure</strong> to enable PC broadcasting via OBS, supporting <strong>1080p resolution and 60fps</strong> frame rate.</li>
             <li>This allowed professional streamers to broadcast with higher flexibility, better visuals, and multi-screen composition capabilities.</li>
         </ul>
         <figure class="doc-case__figure">
@@ -57,10 +55,15 @@
         </figure>
         <h4>Result</h4>
         <ul class="bullets doc-bullets">
-            <li>HLS streamers showed <strong>25% more viewers per broadcast</strong> and <strong>9% longer average session duration</strong>.</li>
-            <li>Collected <strong>highly positive feedback</strong> from professional streamers.</li>
-            <li>However, compared to WebRTC, HLS incurred <strong>higher latency (1s → 7s delay)</strong> and <strong>significantly higher infrastructure costs (~$300/user/month)</strong>.</li>
-            <li>Therefore, the feature was <strong>limited to curated events and professional streamers</strong>, rather than full-scale rollout.</li>
+            <li>HLS streamers showed <strong>25% more viewers per broadcast and 9% longer average session duration.</strong></li>
+            <li>Collected highly positive feedback from professional streamers.</li>
+            <li>However, compared to WebRTC, HLS incurred:
+                <ul class="bullets doc-bullets">
+                    <li>Higher latency (1s → 7s delay)</li>
+                    <li>Significantly higher infrastructure costs (~$300/user/month)</li>
+                </ul>
+            </li>
+            <li>Therefore, the feature was limited to curated events and professional streamers, rather than full-scale rollout.</li>
         </ul>
     </div>
 
@@ -70,14 +73,20 @@
         <h3>Iteration 3: WebRTC-Based PC Broadcasting Infrastructure</h3>
         <h4>Problem</h4>
         <ul class="bullets doc-bullets">
-            <li>While HLS confirmed the <strong>demand and impact of PC broadcasting</strong>, its <strong>latency and cost</strong> made it unsuitable for full deployment.</li>
-            <li>A more scalable and cost-efficient infrastructure was needed for <strong>general user adoption</strong>.</li>
+            <li>While HLS confirmed the demand and impact of PC broadcasting, its latency and cost made it unsuitable for full deployment.</li>
+            <li>A more scalable and cost-efficient infrastructure was needed for general user adoption.</li>
         </ul>
         <h4>Solution</h4>
         <ul class="bullets doc-bullets">
             <li>Developed a <strong>WebRTC-based PC broadcasting system</strong>, leveraging the existing low-latency protocol.</li>
-            <li>Although limited to <strong>720p resolution and 30fps</strong>, it offered <strong>better accessibility</strong>, <strong>minimal delay</strong>, and <strong>lower operational cost</strong>.</li>
-            <li>This provided a more <strong>inclusive option</strong> for everyday streamers while maintaining acceptable quality.</li>
+            <li>Although limited to 720p resolution and 30fps, it offered:
+                <ul class="bullets doc-bullets">
+                    <li>Better accessibility</li>
+                    <li>Minimal delay</li>
+                    <li>Lower operational cost</li>
+                </ul>
+            </li>
+            <li>This provided a more inclusive option for everyday streamers while maintaining acceptable quality.</li>
             <li><em>(Illustration shows the WebRTC-based PC streaming workflow.)</em></li>
         </ul>
         <figure class="doc-case__figure">
@@ -85,9 +94,9 @@
         </figure>
         <h4>Result</h4>
         <ul class="bullets doc-bullets">
-            <li>The adoption rate of <strong>PC streaming increased over 4x</strong> after the rollout.</li>
-            <li>Viewers of WebRTC PC broadcasts exhibited <strong>over 10% higher average watch time</strong> than traditional mobile broadcasts.</li>
-            <li>This established a <strong>sustainable and scalable foundation</strong> for hybrid mobile–PC streaming growth.</li>
+            <li>The adoption rate of PC streaming increased over <strong>4x</strong> after the rollout.</li>
+            <li>Viewers of WebRTC PC broadcasts exhibited over <strong>10% higher average watch time</strong> than traditional mobile broadcasts.</li>
+            <li>This established a sustainable and scalable foundation for hybrid mobile–PC streaming growth.</li>
         </ul>
     </div>
 </div>

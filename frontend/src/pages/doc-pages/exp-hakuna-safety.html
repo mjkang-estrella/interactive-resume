@@ -1,41 +1,51 @@
 <div class="doc-case" data-template="exp-hakuna-safety">
     <h3>
-        Hakuna Safety
+        AI Moderation System
     </h3>
     <div class="doc-case__section">
         <h4>Background</h4>
         <p>
-            As Hakuna scaled globally, safety incidents risked regulatory scrutiny and creator churn; moderation combined machine learning classifiers with a distributed reviewer workforce.
+            Hakuna Live is a multi-participant live streaming platform where maintaining a safe and respectful environment is essential. To handle the massive volume of real-time video streams, the team had built an AI-powered, human-in-the-loop moderation system. The system took screenshots from live broadcasts every second or upon user reports and automatically screened them against a safety model trained through reinforcement learning. Human reviewers then verified or corrected the AI's decisions to continuously improve model performance.
         </p>
     </div>
     <div class="doc-case__section">
         <h4>Problem</h4>
         <p>
-            Review queues were noisy, label quality varied, and ops leaders lacked visibility into spikes—causing harmful content to slip through while safe streams were mistakenly flagged.
+            Despite having a feedback loop between AI and human reviewers, the accuracy of human labeling, which is the ground truth data for training, was inconsistent. After collaborating with the AI/ML team, we found that the human labeling dataset contained significant inaccuracies, causing the model to learn from unreliable feedback.
+        </p>
+        <p>
+            Through interviews with the human reviewers, I discovered that the root cause was not a lack of skill, but a <em>confusing and inefficient admin interface</em>. The labeling UI did not clearly display contextual information (e.g., sequence of frames, user reports, or confidence scores), leading to misjudgments and slower reviews.
         </p>
     </div>
     <div class="doc-case__section">
         <h4>Solution</h4>
-        <p>
-            Reworked annotation guidelines, tightened reviewer QA loops, and shipped a real-time safety dashboard exposing classifier confidence, queue health, and escalation SLAs; introduced continuous retraining pipelines.
-        </p>
+        <ol class="bullets doc-bullets">
+            <li>
+                <strong>Root-Cause Validation:</strong> Conducted structured interviews and workflow observations with the moderation team to identify where errors occurred and why reviewers often second-guessed the AI's confidence scores.
+            </li>
+            <li>
+                <strong>UI/UX Redesign</strong>
+                <ul class="bullets doc-bullets">
+                    <li>Rebuilt the moderation admin panel to show frame sequences and metadata for better context.</li>
+                    <li>Simplified the labeling process with clearer action buttons and keyboard shortcuts to reduce latency.</li>
+                    <li>Introduced real-time feedback indicators showing how human inputs influenced model retraining.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Labeling Policy &amp; Onboarding Manual:</strong> Defined standardized labeling guidelines and documentation to align reviewer decisions, ensuring consistent interpretation of the safety criteria across shifts and regions.
+            </li>
+            <li>
+                <strong>Safety Monitoring Dashboard:</strong> Partnered with data and AI/ML teams to build a <strong>centralized dashboard</strong> tracking detection accuracy, reviewer latency, and labeling consistency metrics in real time.
+            </li>
+        </ol>
     </div>
     <div class="doc-case__section">
-        <h4>Analytics &amp; Iteration</h4>
-        <p>
-            Monitored precision/recall per violation type, ran side-by-side tests of new models, and embedded proactive alerts for spikes in nudity or harassment signals to trigger human sweeps instantly.
-        </p>
-    </div>
-    <div class="doc-case__section">
-        <h4>Result</h4>
-        <p>
-            Detection accuracy climbed 30%, review latency halved, and appeals dropped by 25%; trust &amp; safety satisfaction scores improved as incident post-mortems became data-driven.
-        </p>
-    </div>
-    <div class="doc-case__section">
-        <h4>Follow-up Actions</h4>
-        <p>
-            Operationalized monthly calibration sessions with reviewers, set up a backlog for emerging policy categories, and aligned with legal on reporting cadence for key markets.
-        </p>
+        <h4>Result &amp; Analytics</h4>
+        <ul class="bullets doc-bullets">
+            <li>Detection accuracy improved by 30%, driven by higher-quality human-verified data.</li>
+            <li>Review latency reduced by 50% due to faster, clearer UI and standardized workflows.</li>
+            <li>The dashboard became a daily monitoring tool for both moderation and AI/ML teams, enabling ongoing optimization of model performance.</li>
+            <li>The project evolved into a company-wide case study on improving AI-human collaboration systems, showing how operational UX directly affects machine learning outcomes.</li>
+        </ul>
     </div>
 </div>
