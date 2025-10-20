@@ -1,15 +1,13 @@
 <div class="doc-case" data-template="exp-hakuna-safety">
-    <h3>
-        AI Moderation System
-    </h3>
+    <h2>AI Moderation System</h2>
     <div class="doc-case__section">
-        <h4>Background</h4>
+        <h3>Background</h3>
         <p>
-            Hakuna Live is a multi-participant live streaming platform where maintaining a safe and respectful environment is essential. To handle the massive volume of real-time video streams, the team had built an AI-powered, human-in-the-loop moderation system. The system took screenshots from live broadcasts every second or upon user reports and automatically screened them against a safety model trained through reinforcement learning. Human reviewers then verified or corrected the AI's decisions to continuously improve model performance.
+            Hakuna Live is a multi-participant live streaming platform where maintaining a safe and respectful environment is essential. To handle the massive volume of real-time video streams, the team had built an AI-powered, human-in-the-loop moderation system. The system took screenshots from live broadcasts every second or upon user reports and automatically screened them against a safety model trained through reinforcement learning. Human reviewers then verified or corrected the AI’s decisions to continuously improve model performance.
         </p>
     </div>
     <div class="doc-case__section">
-        <h4>Problem</h4>
+        <h3>Problem</h3>
         <p>
             Despite having a feedback loop between AI and human reviewers, the accuracy of human labeling, which is the ground truth data for training, was inconsistent. After collaborating with the AI/ML team, we found that the human labeling dataset contained significant inaccuracies, causing the model to learn from unreliable feedback.
         </p>
@@ -18,14 +16,14 @@
         </p>
     </div>
     <div class="doc-case__section">
-        <h4>Solution</h4>
-        <ol class="bullets doc-bullets">
+        <h3>Solution</h3>
+        <ol>
             <li>
-                <strong>Root-Cause Validation:</strong> Conducted structured interviews and workflow observations with the moderation team to identify where errors occurred and why reviewers often second-guessed the AI's confidence scores.
+                <strong>Root-Cause Validation:</strong> Conducted structured interviews and workflow observations with the moderation team to identify where errors occurred and why reviewers often second-guessed the AI’s confidence scores.
             </li>
             <li>
                 <strong>UI/UX Redesign</strong>
-                <ul class="bullets doc-bullets">
+                <ul>
                     <li>Rebuilt the moderation admin panel to show frame sequences and metadata for better context.</li>
                     <li>Simplified the labeling process with clearer action buttons and keyboard shortcuts to reduce latency.</li>
                     <li>Introduced real-time feedback indicators showing how human inputs influenced model retraining.</li>
@@ -40,8 +38,8 @@
         </ol>
     </div>
     <div class="doc-case__section">
-        <h4>Result &amp; Analytics</h4>
-        <ul class="bullets doc-bullets">
+        <h3>Result &amp; Analytics</h3>
+        <ul>
             <li>Detection accuracy improved by 30%, driven by higher-quality human-verified data.</li>
             <li>Review latency reduced by 50% due to faster, clearer UI and standardized workflows.</li>
             <li>The dashboard became a daily monitoring tool for both moderation and AI/ML teams, enabling ongoing optimization of model performance.</li>

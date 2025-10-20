@@ -1,41 +1,58 @@
 <div class="doc-case" data-template="exp-hakuna-insights-platform">
-    <h3>
-        Hakuna Insights Platform
-    </h3>
+    <h2>Data Platform</h2>
     <div class="doc-case__section">
-        <h4>Background</h4>
+        <h3>Background</h3>
         <p>
-            Hakuna&apos;s teams relied on siloed spreadsheets and delayed BI pulls; fast iteration on Metaverse Live and revenue experiments demanded trustworthy, self-serve data.
+            When I worked on the team, all data analysts had recently left, leaving a major operational gap. Teams relied on ad hoc SQL queries on BigQuery, and I became the main contact for data requests across departments. However, inconsistent query logic, fragmented data sources, and lack of centralized policies caused confusion and inefficiency in product decision-making.
         </p>
     </div>
     <div class="doc-case__section">
-        <h4>Problem</h4>
+        <h3>Problem</h3>
         <p>
-            Logging standards varied across squads, user IDs were inconsistent between mobile and web, and campaign reporting took over a week—forcing PMs to decide on intuition instead of insights.
+            Through discussions with product, engineering, and business teams, I identified three core issues:
+        </p>
+        <ol>
+            <li><strong>No data collection policy:</strong> Developers were logging events with inconsistent formats and naming conventions, making data unreliable.</li>
+            <li><strong>No single source of truth:</strong> Key metrics such as “Active User” or “Retention” were defined differently across teams, leading to misaligned reports and duplicated analyses.</li>
+            <li><strong>No centralized dashboards:</strong> Teams lacked visibility into live KPIs and had to run manual queries repeatedly for updates, delaying decisions.</li>
+        </ol>
+        <p>
+            These issues resulted in slow turnaround times, inconsistent insights, and limited trust in data.
         </p>
     </div>
     <div class="doc-case__section">
-        <h4>Solution</h4>
-        <p>
-            Drafted a data governance policy, partnered with infra to unify event schemas, and migrated pipelines into a central warehouse. Built real-time dashboards in Looker/Metabase with SLA alerts for anomalies.
-        </p>
+        <h3>Solution</h3>
+        <ol>
+            <li>
+                <strong>Defined and implemented data collection policies:</strong>
+                <ul>
+                    <li>Standardized event-logging structure and naming conventions across teams.</li>
+                    <li>Required PMs and engineers to sync on logging schema before each feature release.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Established unified metric definitions:</strong>
+                <ul>
+                    <li>Collaborated with strategy and business teams to create shared definitions for all core KPIs.</li>
+                    <li>Published a single source of truth document and trained PMs to apply it consistently.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Centralized data visualization:</strong>
+                <ul>
+                    <li>Learned Tableau from a neighboring team and independently built real-time dashboards for key metrics like MAU, retention, and session engagement.</li>
+                    <li>Linked all fragmented data pipelines into one integrated BigQuery dataset accessible to all product teams.</li>
+                </ul>
+            </li>
+        </ol>
     </div>
     <div class="doc-case__section">
-        <h4>Analytics &amp; Enablement</h4>
-        <p>
-            Launched a weekly data office hours, produced documentation for event taxonomy, and created template decks so squads could answer funnel and revenue questions independently within minutes.
-        </p>
-    </div>
-    <div class="doc-case__section">
-        <h4>Result</h4>
-        <p>
-            Decision turnaround dropped by 40%, experimentation cadence doubled, and leadership adopted the dashboards as the single source of truth for growth, safety, and monetization reviews.
-        </p>
-    </div>
-    <div class="doc-case__section">
-        <h4>Follow-up Actions</h4>
-        <p>
-            Instituted quarterly schema audits, automated QA alerts, and onboarded new squads with playbooks ensuring future features launch with complete instrumentation on day one.
-        </p>
+        <h3>Result &amp; Analytics</h3>
+        <ul>
+            <li><strong>Reduced data turnaround time by 40%</strong>, enabling faster experimentation and decision cycles.</li>
+            <li>Improved data accuracy and trust across the organization by enforcing unified definitions.</li>
+            <li>The dashboards became the default reference point for product and leadership meetings, removing redundant SQL queries and manual reporting.</li>
+            <li>The project created a foundation for scalable, data-driven operations — turning a data bottleneck into a self-service analytics culture.</li>
+        </ul>
     </div>
 </div>
