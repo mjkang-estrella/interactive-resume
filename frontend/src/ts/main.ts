@@ -20,6 +20,7 @@ class InteractiveResume {
   private activeBullet: HTMLButtonElement | null = null;
   private bulletHighlighters = new WeakMap<HTMLButtonElement, BulletHighlighter>();
   private companyTooltip?: CompanyTooltip;
+  private hasDocumentOpened = false;
 
   constructor() {
     this.init();
@@ -82,6 +83,17 @@ class InteractiveResume {
       });
 
     this.docManager.syncDocHeight();
+
+    setTimeout(() => {
+      if (this.activeBullet || this.hasDocumentOpened) {
+        return;
+      }
+      const resumeOsBullet = paper.querySelector<HTMLButtonElement>(
+        '.bullet[data-doc="additional-resume-os"]',
+      );
+      resumeOsBullet?.click();
+    }, 2000);
+
     new WaitlistPopup();
   }
 
@@ -218,6 +230,7 @@ class InteractiveResume {
 
     this.activeBullet = bullet;
     this.activeBullet.classList.add('bullet--active');
+    this.hasDocumentOpened = true;
 
     const highlighter = this.bulletHighlighters.get(bullet);
     highlighter?.highlight();

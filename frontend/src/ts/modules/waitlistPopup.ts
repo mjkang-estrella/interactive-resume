@@ -9,20 +9,27 @@ export class WaitlistPopup {
   private isSubmitting = false;
 
   constructor() {
-    this.container = this.buildPopup();
-    document.body.append(this.container);
+    setTimeout(() => {
+      this.container = this.buildPopup();
+      document.body.append(this.container);
 
-    this.form = this.container.querySelector("form");
-    this.emailInput = this.container.querySelector("input[type='email']");
-    this.submitButton = this.container.querySelector("button[type='submit']");
-    this.messageEl = this.container.querySelector(".waitlist-popup__message");
+      this.form = this.container.querySelector("form");
+      this.emailInput = this.container.querySelector("input[type='email']");
+      this.submitButton = this.container.querySelector("button[type='submit']");
+      this.messageEl = this.container.querySelector(".waitlist-popup__message");
 
-    const closeButton = this.container.querySelector<HTMLButtonElement>(
-      ".waitlist-popup__close",
-    );
+      const closeButton = this.container.querySelector<HTMLButtonElement>(
+        ".waitlist-popup__close",
+      );
 
-    closeButton?.addEventListener("click", () => this.dismiss());
-    this.form?.addEventListener("submit", (event) => this.handleSubmit(event));
+      closeButton?.addEventListener("click", () => this.dismiss());
+      this.form?.addEventListener("submit", (event) => this.handleSubmit(event));
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          this.container?.classList.add("waitlist-popup--visible");
+        });
+      });
+    }, 10000);
   }
 
   private buildPopup(): HTMLDivElement {
@@ -144,6 +151,18 @@ export class WaitlistPopup {
   }
 
   private dismiss(): void {
-    this.container?.remove();
+    if (!this.container) {
+      return;
+    }
+    this.container.classList.remove("waitlist-popup--visible");
+    const transitionDuration = 350;
+    window.setTimeout(() => {
+      this.container?.remove();
+      this.container = null;
+      this.form = null;
+      this.emailInput = null;
+      this.submitButton = null;
+      this.messageEl = null;
+    }, transitionDuration);
   }
 }

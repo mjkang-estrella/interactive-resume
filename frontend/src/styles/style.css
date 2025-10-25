@@ -631,6 +631,15 @@ ol.bullets > li::before {
     z-index: 1200;
     font-size: 13px;
     line-height: 1.4;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+    pointer-events: none;
+}
+.waitlist-popup--visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
 }
 .waitlist-popup__content {
     display: flex;
