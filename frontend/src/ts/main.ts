@@ -9,6 +9,7 @@ import { AnimationController } from './modules/animationController';
 import { DocManager } from './modules/docManager';
 import { BulletHighlighter } from './modules/bulletHighlighter';
 import { CompanyTooltip } from './modules/companyTooltip';
+import { WaitlistPopup } from './modules/waitlistPopup';
 
 class InteractiveResume {
   private motionPreference!: MotionPreference;
@@ -81,6 +82,7 @@ class InteractiveResume {
       });
 
     this.docManager.syncDocHeight();
+    new WaitlistPopup();
   }
 
   private prepareBulletHighlighters(paper: HTMLElement): void {
@@ -200,10 +202,7 @@ class InteractiveResume {
   private setupToast(toast: HTMLElement | null): void {
     if (!toast) return;
 
-    requestAnimationFrame(() => toast.classList.add('show'));
-    setTimeout(() => {
-      toast.classList.remove('show');
-    }, 3000);
+    toast.classList.remove('show');
   }
 
   private async setActiveBullet(bullet: HTMLButtonElement): Promise<void> {

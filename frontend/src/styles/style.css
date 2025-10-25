@@ -615,3 +615,160 @@ ol.bullets > li::before {
         padding: 10px 16px;
     }
 }
+
+/* Waitlist popup */
+.waitlist-popup {
+    position: fixed;
+    bottom: 24px;
+    left: 24px;
+    width: min(320px, calc(100vw - 48px));
+    padding: 18px 20px 20px;
+    border-radius: 20px;
+    background: rgba(10, 12, 21, 0.92);
+    color: #e2e8f0;
+    box-shadow: 0 18px 48px rgba(15, 23, 42, 0.32);
+    backdrop-filter: blur(18px);
+    z-index: 1200;
+    font-size: 13px;
+    line-height: 1.4;
+}
+.waitlist-popup__content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.waitlist-popup__close {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    width: 28px;
+    height: 28px;
+    border-radius: 999px;
+    border: none;
+    background: transparent;
+    color: #94a3b8;
+    font-size: 20px;
+    cursor: pointer;
+    transition: color 0.2s ease, background 0.2s ease;
+}
+.waitlist-popup__close:hover,
+.waitlist-popup__close:focus-visible {
+    background: rgba(148, 163, 184, 0.18);
+    color: #f8fafc;
+}
+.waitlist-popup__close:focus-visible {
+    outline: 2px solid rgba(94, 234, 212, 0.55);
+    outline-offset: 2px;
+}
+.waitlist-popup__title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #f8fafc;
+}
+.waitlist-popup__description {
+    margin: 0;
+    color: #cbd5f5;
+}
+.waitlist-popup__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+    white-space: nowrap;
+}
+.waitlist-popup__form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.waitlist-popup__input-row {
+    display: flex;
+    align-items: stretch;
+    gap: 8px;
+}
+.waitlist-popup__input {
+    flex: 1;
+    min-width: 0;
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    background: rgba(15, 23, 42, 0.75);
+    color: #f8fafc;
+    font-size: 13px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.waitlist-popup__input::placeholder {
+    color: rgba(226, 232, 240, 0.55);
+}
+.waitlist-popup__input:focus-visible {
+    outline: none;
+    border-color: rgba(94, 234, 212, 0.65);
+    box-shadow: 0 0 0 2px rgba(94, 234, 212, 0.25);
+}
+.waitlist-popup__submit {
+    border: none;
+    border-radius: 12px;
+    padding: 10px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    color: #0f172a;
+    background: linear-gradient(135deg, #38bdf8, #22d3ee);
+    box-shadow: 0 6px 18px rgba(34, 211, 238, 0.32);
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.waitlist-popup__submit:hover,
+.waitlist-popup__submit:focus-visible {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 26px rgba(34, 211, 238, 0.4);
+}
+.waitlist-popup__submit:disabled {
+    cursor: default;
+    opacity: 0.65;
+    transform: none;
+    box-shadow: none;
+}
+.waitlist-popup__message {
+    min-height: 18px;
+    margin: 0;
+    color: #cbd5f5;
+    font-size: 12px;
+}
+.waitlist-popup__message--success {
+    color: #4ade80;
+}
+.waitlist-popup__message--error {
+    color: #fca5a5;
+}
+.waitlist-popup__form--complete .waitlist-popup__input-row {
+    opacity: 0.6;
+}
+
+@media (max-width: 640px) {
+    .waitlist-popup {
+        left: 16px;
+        right: 16px;
+        width: auto;
+        bottom: 16px;
+        padding: 16px 18px 18px;
+    }
+    .waitlist-popup__input-row {
+        flex-direction: column;
+    }
+    .waitlist-popup__submit {
+        width: 100%;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .waitlist-popup,
+    .waitlist-popup__submit,
+    .waitlist-popup__close {
+        transition: none;
+    }
+}

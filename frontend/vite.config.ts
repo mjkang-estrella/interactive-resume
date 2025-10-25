@@ -44,8 +44,12 @@ export default defineConfig({
     port: 5173,
     open: false,
     proxy: {
-      "/api/chatkit": {
-        target: "http://localhost:3000",
+      '/api/chatkit': {
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+      },
+      '/api/waitlist': {
+        target: 'http://localhost:3000',
         changeOrigin: true,
       },
     },

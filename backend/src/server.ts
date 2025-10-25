@@ -16,7 +16,12 @@ const MODULE_DIR = path.dirname(fileURLToPath(import.meta.url));
 const ROOT_PATH = path.resolve(MODULE_DIR, "../..");
 ensureEnvLoaded();
 
-const REQUIRED_ENV = ["OPENAI_API_KEY", "CHATKIT_WORKFLOW_ID"] as const;
+const REQUIRED_ENV = [
+  "OPENAI_API_KEY",
+  "CHATKIT_WORKFLOW_ID",
+  "SUPABASE_URL",
+  "SUPABASE_SERVICE_ROLE_KEY",
+] as const;
 for (const key of REQUIRED_ENV) {
   requireEnv(key);
 }
@@ -26,6 +31,10 @@ const COOKIE_NAME = process.env.CHATKIT_SESSION_COOKIE ?? "chatkit_session_id";
 const COOKIE_MAX_AGE = 1000 * 60 * 60 * 24 * 30; // 30 days
 const app = express();
 const sessionController = createSessionController();
+
+const supabaseUrl = requireEnv("SUPABASE_URL");
+const supabaseKey = requireEnv("SUPABASE_SERVICE_ROLE_KEY");
+const waitlistEndpoint = new URL("/rest/v1/waitlist_signups", supabaseUrl).toString();
 app.use(
   cors({
     origin: process.env.CHATKIT_CORS_ORIGIN ?? true,
@@ -76,6 +85,72 @@ function applyControllerResult(
   }
   res.status(result.status).json(result.body);
 }
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/i;
+
+function parseEmail(value: unknown): string | null {
+  if (typeof value !== "string") {
+    return null;
+  }
+  const normalized = value.trim().toLowerCase();
+  if (!normalized || normalized.length > 320) {
+    return null;
+  }
+  return EMAIL_REGEX.test(normalized) ? normalized : null;
+}
+
+app.post("/api/waitlist", async (req: Request, res: Response) => {
+  const email = parseEmail((req.body as Record<string, unknown> | undefined)?.email);
+
+  if (!email) {
+    res.status(400).json({ error: "A valid email address is required." });
+    return;
+  }
+
+  try {
+    const response = await fetch(waitlistEndpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        apikey: supabaseKey,
+        Authorization: `Bearer ${supabaseKey}`,
+        Prefer: "return=minimal",
+      },
+      body: JSON.stringify([{ email }]),
+    });
+
+    if (response.status === 409) {
+      res.status(409).json({ error: "This email is already on the waitlist." });
+      return;
+    }
+
+    if (!response.ok) {
+      const errorBody = (await response.json().catch(async () => {
+        const text = await response.text().catch(() => "");
+        return text ? { message: text } : null;
+      })) as Record<string, unknown> | null;
+      const errorMessage =
+        (typeof errorBody?.message === "string" && errorBody.message) ||
+        (typeof errorBody?.error === "string" && errorBody.error) ||
+        "Unable to save your email right now. Please try again.";
+
+      console.error("[Waitlist] Failed to insert email", {
+        status: response.status,
+        error: errorBody,
+      });
+
+      const status = response.status >= 400 && response.status < 600 ? response.status : 500;
+      res.status(status).json({ error: errorMessage });
+      return;
+    }
+
+    res.status(201).json({ message: "Thanks for your interest! We'll reach out soon." });
+  } catch (error) {
+    console.error("[Waitlist] Unexpected error", error);
+    res.status(500).json({ error: "Unexpected error while saving your email." });
+  }
+});
 
 app.post(
   "/api/chatkit/session",
