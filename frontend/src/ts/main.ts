@@ -21,6 +21,8 @@ class InteractiveResume {
   private bulletHighlighters = new WeakMap<HTMLButtonElement, BulletHighlighter>();
   private companyTooltip?: CompanyTooltip;
   private hasDocumentOpened = false;
+  private onboardingTimeout: number | null = null;
+  private onboardingCursor: HTMLDivElement | null = null;
 
   constructor() {
     this.init();
@@ -83,16 +85,7 @@ class InteractiveResume {
       });
 
     this.docManager.syncDocHeight();
-
-    setTimeout(() => {
-      if (this.activeBullet || this.hasDocumentOpened) {
-        return;
-      }
-      const resumeOsBullet = paper.querySelector<HTMLButtonElement>(
-        '.bullet[data-doc="additional-resume-os"]',
-      );
-      resumeOsBullet?.click();
-    }, 2000);
+    this.scheduleResumeOsOnboarding(paper);
 
     new WaitlistPopup();
   }
@@ -247,6 +240,213 @@ class InteractiveResume {
     this.activeBullet = null;
     bullet.classList.remove('bullet--active');
     await highlighter?.fadeOut();
+  }
+
+  private scheduleResumeOsOnboarding(paper: HTMLElement): void {
+    if (this.hasDocumentOpened) {
+      return;
+    }
+
+    if (this.onboardingTimeout !== null) {
+      window.clearTimeout(this.onboardingTimeout);
+    }
+
+    this.onboardingTimeout = window.setTimeout(() => {
+      this.onboardingTimeout = null;
+      this.playResumeOsOnboarding(paper);
+    }, 800);
+  }
+
+  private playResumeOsOnboarding(paper: HTMLElement): void {
+    if (this.hasDocumentOpened) {
+      return;
+    }
+
+    const targetBullet = paper.querySelector<HTMLButtonElement>(
+      '.bullet[data-doc="additional-resume-os"]',
+    );
+
+    if (!targetBullet) {
+      return;
+    }
+
+    const cursor = document.createElement('div');
+    cursor.className = 'cursor-onboarding';
+    cursor.setAttribute('aria-hidden', 'true');
+    document.body.append(cursor);
+    this.onboardingCursor = cursor;
+
+    const timeouts: number[] = [];
+    const schedule = (callback: () => void, delay: number) => {
+      const id = window.setTimeout(() => {
+        timeouts.splice(timeouts.indexOf(id), 1);
+        callback();
+      }, delay);
+      timeouts.push(id);
+      return id;
+    };
+
+    let cleaning = false;
+    const cleanup = (immediate = false) => {
+      if (cleaning) {
+        return;
+      }
+      cleaning = true;
+      timeouts.forEach((id) => window.clearTimeout(id));
+      timeouts.length = 0;
+      if (this.onboardingTimeout !== null) {
+        window.clearTimeout(this.onboardingTimeout);
+        this.onboardingTimeout = null;
+      }
+      const cursorEl = this.onboardingCursor;
+      this.onboardingCursor = null;
+      if (cursorEl) {
+        if (typeof cursorEl.getAnimations === 'function') {
+          for (const animation of cursorEl.getAnimations()) {
+            animation.cancel();
+          }
+        }
+        cursorEl.style.transition = '';
+        if (immediate) {
+          cursorEl.remove();
+        } else {
+          const fade = cursorEl.animate(
+            [
+              {
+                opacity: 1,
+                transform: 'scale(1)',
+                filter: 'drop-shadow(0 6px 16px rgba(15, 23, 42, 0.28))',
+              },
+              {
+                opacity: 0,
+                transform: 'scale(0.92)',
+                filter: 'drop-shadow(0 2px 6px rgba(15, 23, 42, 0.18))',
+              },
+            ],
+            { duration: 420, easing: 'ease-in', fill: 'forwards' },
+          );
+          fade.finished.catch(() => undefined).finally(() => cursorEl.remove());
+        }
+      }
+      window.removeEventListener('pointerdown', cancelOnUserInteraction);
+      window.removeEventListener('scroll', cancelOnUserInteraction);
+    };
+
+    const cancelOnUserInteraction = () => {
+      cleanup(true);
+    };
+
+    window.addEventListener('pointerdown', cancelOnUserInteraction, { once: true });
+    window.addEventListener('scroll', cancelOnUserInteraction, { passive: true });
+
+    targetBullet.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center',
+      inline: 'center',
+    });
+
+    const startAnimation = (rect: DOMRect) => {
+      if (!this.onboardingCursor) {
+        return;
+      }
+
+      const TIP_OFFSET_X = 4;
+      const TIP_OFFSET_Y = 4;
+      const startLeft = window.innerWidth / 2 - TIP_OFFSET_X;
+      const startTop = window.innerHeight / 2 - TIP_OFFSET_Y;
+      const targetLeft = rect.left + rect.width / 2 - TIP_OFFSET_X;
+      const targetTop = rect.top + rect.height / 2 - TIP_OFFSET_Y;
+
+      this.onboardingCursor.style.transition = 'none';
+      this.onboardingCursor.style.left = `${startLeft}px`;
+      this.onboardingCursor.style.top = `${startTop}px`;
+      this.onboardingCursor.style.opacity = '0';
+      this.onboardingCursor.style.transform = 'scale(1)';
+
+      void this.onboardingCursor.offsetWidth;
+
+      this.onboardingCursor.animate(
+        [
+          {
+            opacity: 0,
+            transform: 'scale(0.94)',
+            filter: 'drop-shadow(0 2px 8px rgba(15, 23, 42, 0.18))',
+          },
+          {
+            opacity: 1,
+            transform: 'scale(1)',
+            filter: 'drop-shadow(0 6px 16px rgba(15, 23, 42, 0.28))',
+          },
+        ],
+        { duration: 550, easing: 'ease-out', fill: 'forwards' },
+      );
+
+      this.onboardingCursor.style.transition =
+        'top 1.3s cubic-bezier(0.22, 1, 0.36, 1), left 1.3s cubic-bezier(0.22, 1, 0.36, 1)';
+
+      schedule(() => {
+        if (!this.onboardingCursor) {
+          return;
+        }
+        this.onboardingCursor.style.top = `${targetTop}px`;
+        this.onboardingCursor.style.left = `${targetLeft}px`;
+      }, 20);
+
+      const travelDuration = 1300;
+      schedule(() => {
+        if (this.hasDocumentOpened) {
+          cleanup();
+          return;
+        }
+
+        if (!this.onboardingCursor) {
+          return;
+        }
+
+        if (!this.onboardingCursor) {
+          return;
+        }
+
+        const press = this.onboardingCursor.animate(
+          [
+            { transform: 'scale(1)' },
+            { transform: 'scale(0.92)', offset: 0.4 },
+            { transform: 'scale(1)' },
+          ],
+          { duration: 320, easing: 'ease-out', fill: 'forwards' },
+        );
+
+        targetBullet.click();
+
+        press.finished
+          .catch(() => undefined)
+          .finally(() => {
+            cleanup();
+          });
+      }, travelDuration + 50);
+    };
+
+    const waitForVisibility = (attempt = 0) => {
+      if (!this.onboardingCursor) {
+        return;
+      }
+
+      const rect = targetBullet.getBoundingClientRect();
+      const fullyVisible =
+        rect.top >= 0 &&
+        rect.bottom <= window.innerHeight &&
+        rect.left >= 0 &&
+        rect.right <= window.innerWidth;
+
+      if (fullyVisible || attempt > 60) {
+        startAnimation(rect);
+        return;
+      }
+
+      requestAnimationFrame(() => waitForVisibility(attempt + 1));
+    };
+
+    requestAnimationFrame(() => waitForVisibility());
   }
 }
 
