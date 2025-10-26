@@ -19,10 +19,7 @@ class InteractiveResume {
   private lastTrigger: HTMLElement | null = null;
   private activeBullet: HTMLButtonElement | null = null;
   private bulletHighlighters = new WeakMap<HTMLButtonElement, BulletHighlighter>();
-  private companyTooltip?: CompanyTooltip;
   private hasDocumentOpened = false;
-  private onboardingTimeout: number | null = null;
-  private onboardingCursor: HTMLDivElement | null = null;
   private onboardingTimeout: number | null = null;
   private onboardingCursor: HTMLDivElement | null = null;
 
@@ -72,7 +69,7 @@ class InteractiveResume {
     );
 
     this.prepareBulletHighlighters(paper);
-    this.companyTooltip = new CompanyTooltip(paper);
+    new CompanyTooltip(paper);
 
     // Set up event listeners
     this.setupBulletClickHandlers(toast, paper);
@@ -179,12 +176,6 @@ class InteractiveResume {
 
       requestAnimationFrame(() => this.docManager.focusDoc());
     });
-  }
-
-  private setupToast(toast: HTMLElement | null): void {
-    if (!toast) return;
-
-    toast.classList.remove('show');
   }
 
   private setupCloseButton(closeBtn: HTMLElement | null, paper: HTMLElement): void {
