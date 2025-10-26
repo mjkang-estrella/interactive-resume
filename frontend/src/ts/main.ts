@@ -23,6 +23,8 @@ class InteractiveResume {
   private hasDocumentOpened = false;
   private onboardingTimeout: number | null = null;
   private onboardingCursor: HTMLDivElement | null = null;
+  private onboardingTimeout: number | null = null;
+  private onboardingCursor: HTMLDivElement | null = null;
 
   constructor() {
     this.init();
@@ -75,7 +77,6 @@ class InteractiveResume {
     // Set up event listeners
     this.setupBulletClickHandlers(toast, paper);
     this.setupCloseButton(closeBtn, paper);
-    this.setupToast(toast);
 
     // Initialize with default template
     this.docManager
@@ -180,6 +181,12 @@ class InteractiveResume {
     });
   }
 
+  private setupToast(toast: HTMLElement | null): void {
+    if (!toast) return;
+
+    toast.classList.remove('show');
+  }
+
   private setupCloseButton(closeBtn: HTMLElement | null, paper: HTMLElement): void {
     if (!closeBtn) return;
 
@@ -204,11 +211,6 @@ class InteractiveResume {
     });
   }
 
-  private setupToast(toast: HTMLElement | null): void {
-    if (!toast) return;
-
-    toast.classList.remove('show');
-  }
 
   private async setActiveBullet(bullet: HTMLButtonElement): Promise<void> {
     if (this.activeBullet && this.activeBullet !== bullet) {
@@ -301,31 +303,21 @@ class InteractiveResume {
       const cursorEl = this.onboardingCursor;
       this.onboardingCursor = null;
       if (cursorEl) {
-        if (typeof cursorEl.getAnimations === 'function') {
-          for (const animation of cursorEl.getAnimations()) {
-            animation.cancel();
-          }
-        }
         cursorEl.style.transition = '';
         if (immediate) {
           cursorEl.remove();
         } else {
-          const fade = cursorEl.animate(
-            [
-              {
-                opacity: 1,
-                transform: 'scale(1)',
-                filter: 'drop-shadow(0 6px 16px rgba(15, 23, 42, 0.28))',
-              },
-              {
-                opacity: 0,
-                transform: 'scale(0.92)',
-                filter: 'drop-shadow(0 2px 6px rgba(15, 23, 42, 0.18))',
-              },
-            ],
-            { duration: 420, easing: 'ease-in', fill: 'forwards' },
-          );
-          fade.finished.catch(() => undefined).finally(() => cursorEl.remove());
+          cursorEl.style.transition = 'opacity 0.35s ease, transform 0.32s ease';
+          cursorEl.style.opacity = '0';
+          cursorEl.style.transform = 'scale(0.9)';
+          const handle = (event: TransitionEvent) => {
+            if (event.propertyName !== 'opacity') {
+              return;
+            }
+            cursorEl.removeEventListener('transitionend', handle);
+            cursorEl.remove();
+          };
+          cursorEl.addEventListener('transitionend', handle);
         }
       }
       window.removeEventListener('pointerdown', cancelOnUserInteraction);
@@ -350,8 +342,8 @@ class InteractiveResume {
         return;
       }
 
-      const TIP_OFFSET_X = 4;
-      const TIP_OFFSET_Y = 4;
+      const TIP_OFFSET_X = 0;
+      const TIP_OFFSET_Y = 0;
       const startLeft = window.innerWidth / 2 - TIP_OFFSET_X;
       const startTop = window.innerHeight / 2 - TIP_OFFSET_Y;
       const targetLeft = rect.left + rect.width / 2 - TIP_OFFSET_X;
@@ -365,65 +357,34 @@ class InteractiveResume {
 
       void this.onboardingCursor.offsetWidth;
 
-      this.onboardingCursor.animate(
-        [
-          {
-            opacity: 0,
-            transform: 'scale(0.94)',
-            filter: 'drop-shadow(0 2px 8px rgba(15, 23, 42, 0.18))',
-          },
-          {
-            opacity: 1,
-            transform: 'scale(1)',
-            filter: 'drop-shadow(0 6px 16px rgba(15, 23, 42, 0.28))',
-          },
-        ],
-        { duration: 550, easing: 'ease-out', fill: 'forwards' },
-      );
-
-      this.onboardingCursor.style.transition =
-        'top 1.3s cubic-bezier(0.22, 1, 0.36, 1), left 1.3s cubic-bezier(0.22, 1, 0.36, 1)';
-
-      schedule(() => {
+      requestAnimationFrame(() => {
         if (!this.onboardingCursor) {
           return;
         }
+        this.onboardingCursor.style.transition =
+          'top 1.3s cubic-bezier(0.22, 1, 0.36, 1), left 1.3s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s ease, transform 0.32s ease';
+        this.onboardingCursor.style.opacity = '1';
         this.onboardingCursor.style.top = `${targetTop}px`;
         this.onboardingCursor.style.left = `${targetLeft}px`;
-      }, 20);
+      });
 
       const travelDuration = 1300;
       schedule(() => {
-        if (this.hasDocumentOpened) {
+        if (!this.onboardingCursor) {
+          return;
+        }
+        this.onboardingCursor.style.transform = 'scale(0.9)';
+      }, travelDuration - 120);
+
+      schedule(() => {
+        if (!this.onboardingCursor) {
           cleanup();
           return;
         }
-
-        if (!this.onboardingCursor) {
-          return;
-        }
-
-        if (!this.onboardingCursor) {
-          return;
-        }
-
-        const press = this.onboardingCursor.animate(
-          [
-            { transform: 'scale(1)' },
-            { transform: 'scale(0.92)', offset: 0.4 },
-            { transform: 'scale(1)' },
-          ],
-          { duration: 320, easing: 'ease-out', fill: 'forwards' },
-        );
-
+        this.onboardingCursor.style.transform = 'scale(1)';
         targetBullet.click();
-
-        press.finished
-          .catch(() => undefined)
-          .finally(() => {
-            cleanup();
-          });
-      }, travelDuration + 50);
+        cleanup();
+      }, travelDuration + 220);
     };
 
     const waitForVisibility = (attempt = 0) => {
