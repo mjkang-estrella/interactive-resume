@@ -1,43 +1,146 @@
 <div class="doc-case" data-template="additional-resume-os">
     <h2>Resume OS</h2>
+
+    <div class="doc-case__section doc-case__section--media">
+        <figure class="doc-case__figure">
+            <img
+                src="pages/doc-pages/additional-resume-os-1.png"
+                alt=""
+                loading="lazy"
+            />
+        </figure>
+    </div>
+
     <div class="doc-case__section">
         <p>
-            Resume OS is the AI-first resume experience I built for product hiring teams. It merges the familiar
-            one-page narrative with two interactive layers: clickable bullet points reveal deeper portfolio stories, and
-            an integrated interview bot answers follow-up questions in real time.
+            A resume is a powerful way for a candidate and a recruiter to communicate. A strong resume is a crisp
+            narrative of impact. It quickly signals your skills, outcomes, and trajectory, so a recruiter can decide in
+            seconds. It standardizes evaluation across candidates, highlights quantified results, and aligns your story
+            to a role’s requirements. It’s a forcing function: writing one clarifies your strengths, gaps, and
+            positioning, so you can target the right roles and tell a consistent story.
+        </p>
+        <p>
+            Yet those strengths—speed, uniformity, and compression—are also constraints. A bullet point can’t show the
+            decisions, trade-offs, and learning behind the metric. That’s why we do multiple evaluations—To truly
+            evaluate fit, we need <strong><em>interactive resumes</em></strong>: artifacts that let readers open the
+            story inside each bullet, explore context, and engage with the work itself.
         </p>
     </div>
+
     <div class="doc-case__section">
-        <h3>Why it matters</h3>
+        <h3><strong>Problem: Why I Built Resume OS</strong></h3>
+        <figure class="doc-case__figure">
+            <img
+                src="pages/doc-pages/additional-resume-os-2.png"
+                alt=""
+                loading="lazy"
+            />
+        </figure>
+        <p><em>Great resumes get attention, but great storytelling wins trust.</em> Recruiters don’t just read; they probe. The strongest candidates invite probing. They unpack the <em>how</em> behind the <em>what</em>, connect choices to outcomes, and tailor explanations to the role at hand.</p>
+        <p>
+            Traditional resumes compress complexity into bullets; that’s good for speed, bad for nuance. If your bullet
+            says “Grew activation by 32%,” the real signal is inside the choices: Which segments, which friction points,
+            which experiments, what trade-offs. The story matters. Today, telling it requires back-and-forth: screening
+            calls, follow-ups, and multiple rounds. The process costs time for everyone and often penalizes candidates
+            who are excellent but less practiced at performing in compressed, high-stakes interviews.
+        </p>
+        <p>
+            Resume OS is my answer: Turn every bullet into an expandable story and let an AI interview agent handle the
+            first wave of questions—in your voice, with your facts. Faster verification. Richer context. Less friction.
+        </p>
+    </div>
+
+    <div class="doc-case__section">
+        <h3><strong>Solution: Features I Implemented</strong></h3>
+        <div class="doc-case__media doc-case__media--video">
+            <video src="pages/doc-pages/additional-resume-os-video.mp4" controls preload="metadata"></video>
+        </div>
+        <p>Resume OS is built as a layered artifact:</p>
         <ul class="bullets doc-bullets">
-            <li>Manual resume screens miss context — reviewers rarely have time to click through case studies.</li>
-            <li>AI interview prep tools typically sit outside the resume, forcing candidates to maintain multiple assets.</li>
-            <li>Recruiters still want the scan-ability of a tight one-pager, but with faster paths to evidence.</li>
+            <li>
+                <strong>Clickable bullet point</strong>: Each line expands into a well-structured narrative with the
+                right level of detail for a recruiter or hiring manager.
+            </li>
+            <li>
+                <strong>Context on hover</strong>: Metrics, constraints, stakeholders, timelines, and links to
+                artifacts—dashboards, PRDs, code, and mocks—are available without cluttering the top-level view.
+            </li>
+            <li>
+                <strong>Interactive Q&amp;A</strong>: Recruiters can ask interview and behavioral questions and follow
+                up any time, and they get precise answers grounded in your stories, not generic claims.
+            </li>
+            <li>
+                <strong>JD awareness</strong> (work in progress): The AI interview agent tailors answers to the job
+                description, emphasizing the most relevant skills and outcomes. It speaks in your authentic voice but
+                adapts its focus to the role.
+            </li>
+        </ul>
+        <p>Most of the code was vibe-coded or built with no-code tools.</p>
+    </div>
+
+    <div class="doc-case__section">
+        <h3><strong>How I Built It</strong></h3>
+        <figure class="doc-case__figure">
+            <img
+                src="pages/doc-pages/additional-resume-os-3.png"
+                alt=""
+                loading="lazy"
+            />
+        </figure>
+        <h4>Codex + Zed</h4>
+        <p>I use Codex instead of Claude Code. Here's why:</p>
+        <ul class="bullets doc-bullets">
+            <li>I subscribe to the ChatGPT Pro plan and don’t want another subscription. A recent update enables sync between cloud tasks—executed from the Codex web app—and the Codex CLI.</li>
+            <li>For tasks like this, capabilities are similar, and Codex feels more controllable.</li>
+            <li>I tried Claude Code for tasks Codex failed, but Claude Code overcomplicated the project and created duplicate files, which I don’t like.</li>
+        </ul>
+        <p>
+            Most of the code was vibe-coded, but small tweaks, like CSS variable changes, are easier to do myself. There
+            are times I want to accept some changes but decline others. That’s why I use Codex on top of the
+            <a href="https://zed.dev/?ref=blog.mj-kang.com" class="link">Zed</a> editor. Zed recently announced
+            <a href="https://agentclientprotocol.com/overview/introduction?ref=blog.mj-kang.com" class="link">ACP</a>
+            (Agent Client Protocol), which enables communication between IDEs and AI agents and lets me easily monitor
+            and control an agent’s behavior.
+        </p>
+        <p>
+            I connect it to multiple MCPs, including Notion, Supabase, Context7, Vercel, and GitHub. With Notion and
+            Supabase MCPs, you can pull content from Notion without copying and pasting, and Codex can set up the
+            database on its own.
+        </p>
+        <h4>Other Tools I Used</h4>
+        <ul class="bullets doc-bullets">
+            <li>
+                <strong>OpenAI ChatKit + Agent Builder</strong>: I used tools OpenAI announced at
+                <a href="https://blog.mj-kang.com/openai-devday-2025/" class="link">DevDay</a>. Most tasks could be
+                solved with a custom GPT, but I wanted to try them.
+            </li>
+            <li><strong>Notion</strong>: AI can answer on your behalf, but it can’t know what you don’t provide. I wrote the stories behind each bullet.</li>
+            <li>
+                <strong>Github</strong>(<a href="https://github.com/mjkang-estrella/interactive-resume?ref=blog.mj-kang.com" class="link">repo</a>):
+                Because an AI agent can modify code unexpectedly, it’s important to commit often and manage branches
+                when you vibe-code.
+            </li>
+            <li><strong>Supabase</strong>: I used it for the waitlist database.</li>
+            <li><strong>Vercel</strong>: By connecting it to GitHub, you can manage deployments and publish a working web page.</li>
+            <li><strong>Squarespace</strong>: I bought the domain. (<a href="https://resume-os.com/?ref=blog.mj-kang.com" class="link">resume-os.com</a>)</li>
         </ul>
     </div>
+
     <div class="doc-case__section">
-        <h3>How it works</h3>
+        <h3>What I Learned</h3>
+        <p>The project is ongoing, and here are a few lessons from the process:</p>
         <ul class="bullets doc-bullets">
-            <li>
-                <strong>Interactive bullets:</strong> Each highlight opens a templated deep-dive built with the same
-                content system that powers this resume.
-            </li>
-            <li>
-                <strong>Interview bot:</strong> A lightweight ChatKit agent pre-loaded with my project library, designed
-                so recruiters can ask “how” questions without scheduling a call.
-            </li>
-            <li>
-                <strong>Analytics loop:</strong> Supabase captures which stories and questions get the most attention,
-                informing what to emphasize in follow-up conversations.
-            </li>
+            <li><strong>You can build the tools you want</strong>: I built <a href="https://ardent-footer-45845870.figma.site/?ref=blog.mj-kang.com" class="link">CrossFit Analyzer</a> in a day and this interactive resume in a week. All the tools above, except Codex and the domain, were free.</li>
+            <li><strong>The more you can code, the more efficient you get</strong>: Working with an AI coding agent requires less discussion than working with a human developer. Even with a computer science background and product experience, I need to write prompts that are more low level and more detailed than typical developer conversations. The clearer you are about what you want and how the agent should behave, the better the results.</li>
+            <li><strong>Product sense matters</strong>: You need to design the user experience. As building gets easier, standards rise. People expect meticulous, curated experiences. I designed onboarding with a hover cue that invites clicking a bullet, added a highlight animation to connect the left and right panels, and timed the waitlist pop-up to appear 10 seconds after landing to avoid distraction before onboarding. Those details matter, and they define better products. Implementation is easier, but you still need to know which details to build—that’s product sense.</li>
         </ul>
     </div>
+
     <div class="doc-case__section">
-        <h3>Early impact</h3>
-        <ul class="bullets doc-bullets">
-            <li>Cut time-to-context for recruiters by giving them an interactive brief instead of static PDFs.</li>
-            <li>In pilot interviews, 3 of 4 hiring managers used the bot to dig deeper before the live call.</li>
-            <li>Created a repeatable template other candidates can adapt for their own AI-assisted resumes.</li>
-        </ul>
+        <h3>Waitlist!</h3>
+        <p>
+            I’ve shown this to multiple friends, and they asked if they could make their own, so I’m making it editable
+            and customizable for everyone. Join the waitlist on the site and enter your email!
+        </p>
     </div>
 </div>
