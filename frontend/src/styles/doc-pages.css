@@ -89,13 +89,12 @@
 }
 .doc-case > h2 {
     margin: 0;
-    max-width: 28ch;
     color: var(--text);
     font-size: 24px;
     line-height: 1.2;
     letter-spacing: -0.035em;
     font-weight: 650;
-    text-wrap: balance;
+    text-wrap: wrap;
 }
 .doc-case > .doc-case__lead {
     margin: -14px 0 0;
