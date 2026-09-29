@@ -56,6 +56,13 @@ function animate({ duration, easing, update, shouldStop }: AnimationOptions): Pr
   });
 }
 
+function currentPaperScale(): number {
+  const value = parseFloat(
+    getComputedStyle(document.documentElement).getPropertyValue('--paper-scale'),
+  );
+  return Number.isFinite(value) && value > 0 ? value : 1;
+}
+
 let filterReady = false;
 
 function ensureHighlightFilter(): void {
@@ -176,6 +183,9 @@ export class BulletHighlighter {
     }
 
     const hostRect = this.host.getBoundingClientRect();
+    // Client rects are in screen pixels; ink is positioned inside the (possibly
+    // scaled) paper, so convert back to the paper's own coordinates.
+    const scale = currentPaperScale();
     const totalWidth = rects.reduce((sum, rect) => sum + rect.width, 0);
     let elapsedWidth = 0;
 
@@ -185,11 +195,13 @@ export class BulletHighlighter {
       }
 
       const rect = rects[index];
-      const left = rect.left - hostRect.left + this.host.scrollLeft;
-      const baseTop = rect.top - hostRect.top + this.host.scrollTop;
-      const inset = Math.min(1, rect.height * 0.04);
+      const lineWidth = rect.width / scale;
+      const lineHeight = rect.height / scale;
+      const left = (rect.left - hostRect.left) / scale + this.host.scrollLeft;
+      const baseTop = (rect.top - hostRect.top) / scale + this.host.scrollTop;
+      const inset = Math.min(1, lineHeight * 0.04);
       const top = baseTop + inset;
-      const height = Math.max(1, rect.height - inset * 2);
+      const height = Math.max(1, lineHeight - inset * 2);
 
       const wrap = document.createElement('span');
       wrap.className = HIGHLIGHT_INK_WRAP_CLASS;
@@ -208,7 +220,7 @@ export class BulletHighlighter {
       this.activeInks.push(wrap);
 
       const paragraphProgress = totalWidth > 0 ? elapsedWidth / totalWidth : 0;
-      const duration = this.computeDuration(rect.width, paragraphProgress);
+      const duration = this.computeDuration(lineWidth, paragraphProgress);
       const easing = this.lineEasing(index, rects.length);
 
       await animate({
@@ -216,7 +228,7 @@ export class BulletHighlighter {
         easing,
         shouldStop: () => this.abortRequested,
         update: (progress) => {
-          wrap.style.width = `${rect.width * progress}px`;
+          wrap.style.width = `${lineWidth * progress}px`;
         },
       });
 

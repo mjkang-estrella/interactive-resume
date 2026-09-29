@@ -1,16 +1,18 @@
 {
   "name": "@interactive-resume/frontend",
   "version": "1.0.0",
-  "description": "Frontend for Interactive Resume",
+  "description": "Interactive resume site (static, built with Vite)",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "tsc --noEmit",
+    "lint": "tsc --noEmit && tsc -p tsconfig.node.json",
     "clean": "rm -rf dist"
   },
   "devDependencies": {
+    "@types/node": "^20.19.43",
+    "node-html-parser": "^9.0.4",
     "typescript": "^5.5.4",
     "vite": "^7.1.9"
   }

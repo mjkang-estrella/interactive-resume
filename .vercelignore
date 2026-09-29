@@ -1,27 +1,6 @@
-# Backend (deploy separately if needed)
-backend/
-
-# Source files (needed for builds)
-# (Do not ignore frontend/src so Vite can build on Vercel)
-
-# Development files
+# Local files
 .env
 .env.local
 *.log
-
-# Documentation
-docs/
-*.md
-!README.md
-
-# Git
-.git/
-.gitignore
-
-# Dependencies
 node_modules/
-
-# Misc
 .DS_Store
-*.swp
-*.swo

@@ -1,7 +1,8 @@
 :root {
     --paper-width: 816px; /* 8.5in * 96 */
     --paper-height: 1056px; /* 11in * 96 */
-    --paper-scale: 1;
+    --paper-scale: 1; /* set by PaperFit on narrow screens */
+    --doc-scale: var(--paper-scale);
     --page-gap: calc(var(--paper-width) * 0.04); /* scales with paper */
     --viewport-margin: 24px;
     --page-pad-x: 72px; /* 0.75in left/right */
@@ -62,18 +63,22 @@ p {
     }
 }
 
-/* Layout: resume and detail panel share a horizontal scroll */
+/* Layout: resume and detail panel share a horizontal scroll. The page also
+   scrolls vertically so a paper taller than the viewport stays reachable. */
 .page {
     display: flex;
     align-items: center;
+    align-items: safe center;
     justify-content: center;
     gap: calc(var(--page-gap) * var(--paper-scale));
     width: 100vw;
     height: 100vh;
+    height: 100dvh;
     box-sizing: border-box;
     padding: var(--viewport-margin);
     position: relative;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     opacity: 0;
     animation: pageEnter 560ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
@@ -115,10 +120,10 @@ p {
     flex: 0 0 calc(var(--paper-width) * var(--paper-scale));
     display: flex;
     align-items: flex-start;
-    justify-content: center;
+    /* The paper scales from its top-left corner, so anchor it there. */
+    justify-content: flex-start;
     position: relative;
     overflow: visible;
-    margin: 0 auto;
     transform: translateX(var(--paper-translate));
 }
 .paper-viewport[data-paper-role='doc'] {
@@ -185,11 +190,11 @@ p {
 
 @media print {
     .pdf-link,
-    .agentkit {
+    .ask-ai {
         display: none !important;
     }
 
-    #stage {
+    .page {
         padding: 0;
         gap: 0;
     }
@@ -263,9 +268,6 @@ p {
     gap: 12px;
     margin-bottom: 2px;
 }
-.company {
-    --font-weight: bold;
-}
 .meta {
     color: #111;
     text-align: right;
@@ -274,7 +276,6 @@ p {
 }
 .role {
     font-style: italic;
-    --font-weight: bold;
 }
 .link {
     color: #111;
@@ -397,12 +398,6 @@ ol.bullets > li::before {
     filter: url(#bulletHighlightEdge);
 }
 
-.bullet--intro {
-    position: relative;
-    display: inline;
-    border-radius: 4px;
-    padding: 0 2px;
-}
 
 /* Right-side detail panel */
 .deck {
@@ -425,360 +420,251 @@ ol.bullets > li::before {
     outline-offset: 0;
 }
 
-.toast {
-    position: fixed;
-    left: 50%;
-    bottom: 24px;
-    transform: translateX(-50%) translateY(16px);
-    background: rgba(96, 165, 250, 0.92);
-    color: #f8fafc;
-    padding: 10px 16px;
-    border-radius: 999px;
-    box-shadow:
-        0 12px 32px rgba(30, 64, 175, 0.32),
-        0 4px 12px rgba(30, 64, 175, 0.18);
-    font-size: 13px;
-    line-height: 1.3;
-    opacity: 0;
-    pointer-events: none;
-    transition:
-        opacity 0.4s ease,
-        transform 0.4s ease;
-    z-index: 999;
-}
-.toast.show {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-}
 
-.agentkit {
+/* "Ask an AI" launcher, shared design with mj-kang.com (js/ask-ai.js there). */
+.ask-ai {
+    --ask-raised: #2d2c29;
+    --ask-surface: #1d1c1a;
+    --ask-hover: #42403c;
+    --ask-ink: #fbfaf7;
+    --ask-muted: #c2beb5;
+    --ask-motion-base: 220ms;
+    --ask-motion-slow: 460ms;
+    --ask-ease: cubic-bezier(0.25, 1, 0.5, 1);
     position: fixed;
-    right: 24px;
-    bottom: 24px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 12px;
-    z-index: 1000;
-    pointer-events: none;
+    right: max(24px, env(safe-area-inset-right));
+    bottom: max(20px, env(safe-area-inset-bottom));
+    z-index: 1100;
+    color: var(--ask-ink);
+    font-family: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    color-scheme: dark;
 }
-.agentkit[data-state="closed"] .agentkit__panel {
-    opacity: 0;
-    transform: translateY(12px);
-    pointer-events: none;
-    display: block;
-}
-.agentkit__panel-wrapper {
-    position: relative;
-    width: min(360px, calc(100vw - 32px));
-    height: min(560px, calc(100vh - 120px));
-    pointer-events: auto;
-}
-.agentkit__panel-wrapper[data-loading="true"] .agentkit__panel {
-    opacity: 0;
-    pointer-events: none;
-    display: block;
-}
-.agentkit__panel-wrapper[data-loading="true"] .agentkit__spinner {
-    display: flex;
-}
-.agentkit__panel-wrapper[data-loading="false"] .agentkit__spinner {
+.ask-ai [hidden],
+.ask-ai[hidden] {
     display: none;
 }
-.agentkit__banner,
-.agentkit__spinner {
-    pointer-events: auto;
-    background: rgba(15, 23, 42, 0.92);
-    color: #f8fafc;
-    padding: 10px 14px;
-    border-radius: 12px;
-    font-size: 12px;
-    line-height: 1.4;
-    box-shadow:
-        0 10px 24px rgba(15, 23, 42, 0.28),
-        0 2px 6px rgba(15, 23, 42, 0.16);
-    max-width: min(320px, calc(100vw - 48px));
+.ask-ai button {
+    appearance: none;
+    font: inherit;
+    border: 0;
+    cursor: pointer;
 }
-.agentkit__spinner {
-    position: absolute;
-    top: 0;
-    left: 0;
-    transform: translate(-50%, -50%);
+.ask-ai__trigger {
+    display: flex;
     align-items: center;
-    gap: 8px;
-    font-weight: 600;
-    font-size: 12px;
-    pointer-events: none;
-    padding: 12px 16px;
-}
-
-.agentkit__spinner-ring {
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    border: 2px solid rgba(248, 250, 252, 0.35);
-    border-top-color: #f8fafc;
-    animation: agentkit-spin 0.8s linear infinite;
-}
-
-@keyframes agentkit-spin {
-    to {
-        transform: rotate(360deg);
-    }
-}
-.agentkit__banner[data-variant="success"] {
-    background: rgba(22, 101, 52, 0.96);
-}
-.agentkit__banner[data-variant="warning"] {
-    background: rgba(202, 138, 4, 0.96);
-}
-.agentkit[data-state="open"] .agentkit__panel {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-}
-.agentkit__panel {
-    display: block;
-    width: 100%;
-    height: 100%;
-    border-radius: 24px;
-    box-shadow:
-        0 24px 56px rgba(15, 23, 42, 0.22),
-        0 4px 12px rgba(15, 23, 42, 0.12);
-    transition:
-        opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-        transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-    background: var(--paper-bg);
-    overflow: hidden;
-    pointer-events: auto;
-}
-.agentkit__launcher {
-    pointer-events: auto;
-    border: none;
+    gap: 4px;
+    padding: 4px 4px 4px 16px;
     border-radius: 999px;
-    background: linear-gradient(135deg, #1d4ed8, #7c3aed);
-    color: #f8fafc;
+    background: var(--ask-surface);
+    box-shadow: inset 0 0 0 1px rgb(251 250 247 / 18%), 0 8px 24px rgb(0 0 0 / 16%);
+    transition:
+        background var(--ask-motion-base),
+        transform var(--ask-motion-slow) var(--ask-ease);
+}
+.ask-ai__trigger span {
+    color: var(--ask-ink);
     font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 0.02em;
-    padding: 10px 18px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-    box-shadow:
-        0 12px 30px rgba(30, 64, 175, 0.4),
-        0 4px 12px rgba(30, 64, 175, 0.24);
-    cursor: pointer;
-    transition:
-        transform 0.18s ease,
-        box-shadow 0.18s ease;
-    text-align: center;
+    font-weight: 500;
 }
-.agentkit__launcher:focus {
-    outline: 2px solid rgba(248, 250, 252, 0.9);
-    outline-offset: 4px;
+.ask-ai__bot {
+    display: block;
+    flex: none;
 }
-.agentkit__launcher:hover {
-    transform: translateY(-2px);
-    box-shadow:
-        0 18px 34px rgba(30, 64, 175, 0.5),
-        0 6px 16px rgba(30, 64, 175, 0.28);
-}
-.agentkit__launcher-label {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-}
-.agentkit__launcher-label > span:first-child {
-    font-size: 18px;
-    line-height: 1;
-}
-.agentkit__launcher-hint {
-    font-size: 12px;
-    font-weight: 400;
-    opacity: 0.9;
-}
-
-@media (max-width: 640px) {
-    .agentkit {
-        right: 16px;
-        bottom: 16px;
-    }
-    .agentkit__panel {
-        width: min(100vw - 24px, 420px);
-        height: min(70vh, 520px);
-    }
-    .agentkit__launcher {
-        padding: 10px 16px;
-    }
-}
-
-/* Waitlist popup */
-.waitlist-popup {
-    position: fixed;
-    bottom: 24px;
-    left: 24px;
-    width: min(320px, calc(100vw - 48px));
-    padding: 18px 20px 20px;
-    border-radius: 20px;
-    background: rgba(10, 12, 21, 0.92);
-    color: #e2e8f0;
-    box-shadow: 0 18px 48px rgba(15, 23, 42, 0.32);
-    backdrop-filter: blur(18px);
-    z-index: 1200;
-    font-size: 13px;
-    line-height: 1.4;
-    opacity: 0;
-    transform: translateY(12px);
-    transition: opacity 0.35s ease, transform 0.35s ease;
-    pointer-events: none;
-}
-.waitlist-popup--visible {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-}
-.waitlist-popup__content {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-.waitlist-popup__close {
+.ask-ai__panel {
     position: absolute;
-    top: 10px;
-    right: 12px;
-    width: 28px;
-    height: 28px;
-    border-radius: 999px;
-    border: none;
-    background: transparent;
-    color: #94a3b8;
-    font-size: 20px;
-    cursor: pointer;
-    transition: color 0.2s ease, background 0.2s ease;
+    right: 0;
+    bottom: calc(100% + 12px);
+    width: 297px;
+    max-width: calc(100vw - 48px);
+    max-height: calc(100dvh - 124px - env(safe-area-inset-bottom));
+    overflow-y: auto;
+    box-sizing: border-box;
+    padding: 18px 18px 14px;
+    border-radius: 22px 22px 10px;
+    background: var(--ask-surface);
+    box-shadow: inset 0 0 0 1px rgb(251 250 247 / 18%), 0 12px 32px rgb(0 0 0 / 18%);
+    transform-origin: 100% 100%;
+    animation: ask-ai-open var(--ask-motion-slow) var(--ask-ease) both;
 }
-.waitlist-popup__close:hover,
-.waitlist-popup__close:focus-visible {
-    background: rgba(148, 163, 184, 0.18);
-    color: #f8fafc;
+@keyframes ask-ai-open {
+    from {
+        opacity: 0;
+        transform: translateY(8px) scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
 }
-.waitlist-popup__close:focus-visible {
-    outline: 2px solid rgba(94, 234, 212, 0.55);
-    outline-offset: 2px;
-}
-.waitlist-popup__title {
-    margin: 0;
-    font-size: 16px;
+.ask-ai__panel h2 {
+    font-size: 15px;
     font-weight: 600;
-    color: #f8fafc;
+    margin: 0 0 2px;
 }
-.waitlist-popup__description {
+.ask-ai__panel p {
+    color: var(--ask-muted);
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 0 0 14px;
+}
+.ask-ai__providers {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3px;
+    list-style: none;
     margin: 0;
-    color: #cbd5f5;
+    padding: 0;
 }
-.waitlist-popup__label {
+.ask-ai__providers li {
+    display: flex;
+}
+.ask-ai__providers a {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 52px;
+    border-radius: 10px;
+    background: var(--ask-raised);
+    color: var(--ask-ink);
+    transition:
+        border-radius var(--ask-motion-slow) var(--ask-ease),
+        background var(--ask-motion-base);
+}
+.ask-ai__providers li:first-child a {
+    border-radius: 999px 10px 10px 999px;
+}
+.ask-ai__providers li:last-child a {
+    border-radius: 10px 999px 999px 10px;
+}
+.ask-ai__providers img {
+    display: block;
+    width: 22px;
+    height: 22px;
+}
+.ask-ai .ask-ai__copy {
+    width: 100%;
+    min-height: 44px;
+    margin-top: 12px;
+    border-radius: 12px;
+    background: transparent;
+    color: var(--ask-muted);
+    font-size: 13px;
+    transition:
+        background var(--ask-motion-base),
+        color var(--ask-motion-base);
+}
+.ask-ai__providers a:focus-visible {
+    background: var(--ask-hover);
+    border-radius: 999px;
+}
+.ask-ai :focus-visible {
+    outline: 2px solid var(--ask-ink);
+    outline-offset: 3px;
+}
+.ask-ai__trigger:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--ask-ink), 0 0 0 5px var(--ask-surface);
+}
+@media (hover: hover) {
+    .ask-ai__trigger:hover {
+        background: var(--ask-hover);
+        transform: translateY(-2px);
+    }
+    .ask-ai__providers a:hover {
+        background: var(--ask-hover);
+        border-radius: 999px;
+    }
+    .ask-ai__copy:hover {
+        background: var(--ask-raised);
+        color: var(--ask-ink);
+    }
+}
+.ask-ai__trigger:active,
+.ask-ai__providers a:active {
+    transform: scale(0.97);
+}
+.ask-ai__status {
     position: absolute;
     width: 1px;
     height: 1px;
-    margin: -1px;
     padding: 0;
     overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    border: 0;
+    clip-path: inset(50%);
     white-space: nowrap;
 }
-.waitlist-popup__form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-.waitlist-popup__input-row {
-    display: flex;
-    align-items: stretch;
-    gap: 8px;
-}
-.waitlist-popup__input {
-    flex: 1;
-    min-width: 0;
-    padding: 10px 12px;
-    border-radius: 12px;
-    border: 1px solid rgba(148, 163, 184, 0.35);
-    background: rgba(15, 23, 42, 0.75);
-    color: #f8fafc;
+.ask-ai__prompt {
+    box-sizing: border-box;
+    margin-top: 12px;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--ask-muted);
+    border-radius: 8px;
+    background: var(--ask-raised);
+    color: var(--ask-ink);
+    font: inherit;
     font-size: 13px;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    line-height: 1.5;
+    resize: vertical;
 }
-.waitlist-popup__input::placeholder {
-    color: rgba(226, 232, 240, 0.55);
-}
-.waitlist-popup__input:focus-visible {
-    outline: none;
-    border-color: rgba(94, 234, 212, 0.65);
-    box-shadow: 0 0 0 2px rgba(94, 234, 212, 0.25);
-}
-.waitlist-popup__submit {
-    border: none;
-    border-radius: 12px;
-    padding: 10px 16px;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    color: #0f172a;
-    background: linear-gradient(135deg, #38bdf8, #22d3ee);
-    box-shadow: 0 6px 18px rgba(34, 211, 238, 0.32);
-    transition: transform 0.18s ease, box-shadow 0.18s ease;
-}
-.waitlist-popup__submit:hover,
-.waitlist-popup__submit:focus-visible {
-    transform: translateY(-1px);
-    box-shadow: 0 10px 26px rgba(34, 211, 238, 0.4);
-}
-.waitlist-popup__submit:disabled {
-    cursor: default;
-    opacity: 0.65;
-    transform: none;
-    box-shadow: none;
-}
-.waitlist-popup__message {
-    min-height: 18px;
-    margin: 0;
-    color: #cbd5f5;
-    font-size: 12px;
-}
-.waitlist-popup__message--success {
-    color: #4ade80;
-}
-.waitlist-popup__message--error {
-    color: #fca5a5;
-}
-.waitlist-popup__form--complete .waitlist-popup__input-row {
-    opacity: 0.6;
-}
-
-@media (max-width: 640px) {
-    .waitlist-popup {
-        left: 16px;
-        right: 16px;
-        width: auto;
-        bottom: 16px;
-        padding: 16px 18px 18px;
+@media (max-width: 620px) {
+    .ask-ai {
+        right: max(16px, env(safe-area-inset-right));
     }
-    .waitlist-popup__input-row {
-        flex-direction: column;
-    }
-    .waitlist-popup__submit {
-        width: 100%;
+    .ask-ai__panel {
+        width: calc(100vw - 32px);
+        max-width: calc(100vw - 32px);
+        max-height: calc(100dvh - 192px - env(safe-area-inset-bottom));
     }
 }
-
 @media (prefers-reduced-motion: reduce) {
-    .waitlist-popup,
-    .waitlist-popup__submit,
-    .waitlist-popup__close {
+    .ask-ai__panel {
+        animation: none;
+    }
+    .ask-ai__trigger,
+    .ask-ai__providers a,
+    .ask-ai .ask-ai__copy {
         transition: none;
     }
 }
+
+/* Narrow screens: the resume scales down to fit the width (PaperFit sets
+   --paper-scale) and the detail panel stacks below it at full size. */
+@media (max-width: 863px) {
+    :root {
+        --viewport-margin: 16px;
+        --doc-scale: 1;
+    }
+    .page,
+    .page:not(.deck-hidden),
+    .page.page--deck-center:not(.deck-hidden) {
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 16px;
+        overflow-x: hidden;
+    }
+    .deck {
+        flex: none;
+        width: 100%;
+    }
+    #deck-doc {
+        width: 100%;
+        min-width: 0;
+        max-width: none;
+        /* override the desktop height sync from DocManager */
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        padding: 0;
+        transform: none;
+    }
+    #deck-doc .doc-body {
+        margin-left: 0;
+        margin-right: 0;
+        overflow: visible;
+    }
+}
+
 @keyframes cursorClickPress {
     0% {
         transform: translate(-50%, -50%) scale(1);

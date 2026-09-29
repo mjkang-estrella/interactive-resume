@@ -94,9 +94,9 @@ export class AnimationController {
     this.deckAnimationState = deck.hidden ? 'closed' : 'open';
   }
 
-  private getCurrentScale(): number {
+  private getCurrentScale(property: '--paper-scale' | '--doc-scale' = '--paper-scale'): number {
     const rootStyles = getComputedStyle(document.documentElement);
-    const scaleValue = rootStyles.getPropertyValue('--paper-scale').trim();
+    const scaleValue = rootStyles.getPropertyValue(property).trim();
     const parsed = parseFloat(scaleValue);
     return Number.isFinite(parsed) && parsed > 0 ? parsed : 1;
   }
@@ -112,7 +112,8 @@ export class AnimationController {
   }
 
   private composeDocTransform(deltaX: number, scaleMultiplier: number): string {
-    const scale = this.getCurrentScale();
+    // The detail panel is not scaled on narrow screens (--doc-scale: 1).
+    const scale = this.getCurrentScale('--doc-scale');
     const translatePart = Math.abs(deltaX) < 0.01 ? '' : `translateX(${deltaX}px)`;
     const scaleValue = Math.max(0.01, scale * scaleMultiplier);
     const scalePart = `scale(${scaleValue.toFixed(4)})`;
@@ -329,7 +330,7 @@ export class AnimationController {
     this.page.classList.add('deck-measuring-hide');
     this.deck.style.position = 'absolute';
     this.deck.style.left = `${deckRect.left - pageRect.left}px`;
-    this.deck.style.top = `${deckRect.top - pageRect.top}px`;
+    this.deck.style.top = `${deckRect.top - pageRect.top + this.page.scrollTop}px`;
     this.deck.style.width = `${deckRect.width}px`;
     this.deck.style.height = `${deckRect.height}px`;
     this.deck.style.pointerEvents = 'none';
