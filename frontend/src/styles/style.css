@@ -191,7 +191,8 @@ p {
 
 @media print {
     .pdf-link,
-    .ask-ai {
+    .ask-ai,
+    [data-web-only] {
         display: none !important;
     }
 

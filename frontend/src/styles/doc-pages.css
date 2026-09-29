@@ -1,6 +1,5 @@
 /* Desktop context type is close to the resume body and uses the same scale. */
 .doc {
-    --doc-pad: clamp(24px, 5cqi, 48px);
     flex: 0 0 auto;
     display: flex;
     flex-direction: column;
@@ -12,9 +11,9 @@
     will-change: transform, opacity;
     container-type: inline-size;
 }
-/* Override .paper's print margins only on the context panel. */
+/* Use the same outer content insets as the resume sheet. */
 .doc.paper {
-    padding: 0;
+    padding: var(--page-pad-y) var(--page-pad-x);
 }
 .doc-head {
     flex: none;
@@ -22,7 +21,7 @@
     align-items: center;
     justify-content: space-between;
     gap: 20px;
-    padding: 22px var(--doc-pad);
+    padding: 0 0 20px;
     border-bottom: 1px solid #e2e5e9;
 }
 .doc-head > div {
@@ -67,17 +66,17 @@
 .doc-body {
     flex: 1 1 auto;
     min-height: 0;
-    padding: 38px var(--doc-pad) 64px;
+    padding: 24px 0 0;
     overflow-y: auto;
     overflow-x: hidden;
     overscroll-behavior: contain;
-    scrollbar-gutter: stable;
+    scrollbar-gutter: auto;
     scroll-padding-block: 24px;
 }
 .doc-content {
     width: 100%;
-    max-width: 65ch;
-    margin-inline: auto;
+    max-width: none;
+    margin-inline: 0;
     font-size: 13px;
     line-height: 1.7;
     color: var(--ink-700);
@@ -240,19 +239,15 @@
     }
 }
 @media (max-width: 863px) {
-    .doc {
-        --doc-pad: 24px;
-    }
     .doc-head {
         position: sticky;
         top: 0;
         z-index: 2;
-        padding-block: 18px;
+        padding: 20px 24px;
         background: var(--paper-bg);
     }
     .doc-body {
-        padding-top: 28px;
-        padding-bottom: 96px;
+        padding: 24px 24px 48px;
         scrollbar-gutter: auto;
     }
     .doc-content {
@@ -269,7 +264,8 @@
     }
 }
 @media (max-width: 380px) {
-    .doc {
-        --doc-pad: 20px;
+    .doc-head,
+    .doc-body {
+        padding-inline: 20px;
     }
 }

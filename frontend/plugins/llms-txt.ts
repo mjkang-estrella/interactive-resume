@@ -18,6 +18,7 @@ interface LlmsTxtOptions {
 }
 
 interface BulletRef {
+  webOnly?: boolean;
   doc: string;
   role: string;
   text: string;
@@ -137,14 +138,14 @@ function resume(indexHtml: string): { markdown: string[]; bullets: BulletRef[] }
   const out: string[] = [];
   const bullets: BulletRef[] = [];
   const bulletList = (ul: HTMLElement) =>
-    ul.querySelectorAll('li').map((li) => {
+    ul.querySelectorAll('li').flatMap((li) => {
       const button = li.querySelector('button.bullet');
       const text = tidy(inline(li));
       const doc = button?.getAttribute('data-doc');
       if (button && doc) {
-        bullets.push({ doc, role: button.getAttribute('data-role') ?? '', text });
+        bullets.push({ doc, role: button.getAttribute('data-role') ?? '', text, webOnly: li.hasAttribute('data-web-only') });
       }
-      return `- ${text}`;
+      return li.hasAttribute('data-web-only') ? [] : [`- ${text}`];
     });
 
   for (const child of paper.childNodes) {
@@ -190,7 +191,7 @@ function story(docPagesDir: string, ref: BulletRef): string[] {
   const title = tidy(root.querySelector('h2')?.text ?? ref.doc);
   root.querySelector('h2')?.remove();
   const heading = ref.role.includes(title) ? ref.role : `${ref.role}: ${title}`;
-  const out = [`### ${heading}`, `> Resume bullet: ${ref.text}`];
+  const out = [`### ${heading}`, `> ${ref.webOnly ? 'Site guide' : 'Resume bullet'}: ${ref.text}`];
   blocks(root, 3, out);
   return out;
 }

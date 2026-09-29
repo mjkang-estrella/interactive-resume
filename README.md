@@ -6,13 +6,13 @@ MJ Kang's resume as an interactive web page. The left side is a one-page resume 
 
 ## Updating the resume
 
-The PDF is the source of truth. When it changes:
+The PDF is the source of truth for resume content. The web-only Resume OS guide in Additional is a navigation aid; it is omitted from print and the resume section of `/llms.txt`. Its explanation is included with the other stories. When the resume changes:
 
 1. **PDF:** replace `frontend/public/contents/resume.pdf` (served by the PDF button).
 2. **Paper:** edit the resume markup in `frontend/src/index.html` so the text matches the PDF word for word. Each clickable bullet is a `<button class="bullet" data-doc="…">`.
 3. **Detail pages:** each `data-doc="name"` opens `frontend/src/pages/doc-pages/name.html`, whose root element must carry `data-template="name"`. Put images in `frontend/public/media/` and reference them as `media/<file>`. A bullet without `data-doc` is plain text.
 4. **Company tooltips:** hover text for each `data-company` lives in `frontend/src/ts/modules/companyTooltip.ts`.
-5. **Onboarding:** the first-visit cursor demo clicks the bullet marked `data-onboarding`.
+5. **Onboarding:** the first-visit cursor demo clicks the Resume OS guide, marked `data-onboarding`.
 6. **Tell me about yourself:** `frontend/content/tell-me-about-yourself.md` is published at the end of `/llms.txt`.
 
 `/llms.txt` is rebuilt from steps 2, 3, and 6 on every build, so there is nothing else to update for AI assistants.
