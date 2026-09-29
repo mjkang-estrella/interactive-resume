@@ -50,7 +50,7 @@ frontend/
 ```
 
 - **Rendering:** the paper is static HTML. On click, `TemplateLoader` swaps the matching doc page (all templates are bundled via `import.meta.glob`) into the panel and `AnimationController` animates it in. Reduced-motion preferences are respected.
-- **Layout:** on wide screens the paper and detail panel sit side by side at 100% and the page scrolls. On screens narrower than the paper, `PaperFit` scales the resume to the screen width and the detail panel stacks below it at full size.
+- **Layout:** `PaperFit` fits the entire resume within the viewport width and height, with responsive outer margins. On desktop, both sheets keep that scale when a context page opens, with 12px resume and 13px context body text before scaling. Narrow screens stack the context below the resume with a readable 14px body. Two desktop sheets can scroll horizontally if needed.
 - **Ask an AI:** the widget links to each assistant with a prompt (in `askAi.ts`) that points it at `https://resume-os.com/llms.txt`, a plain-markdown copy of the resume and every story. No API keys or backend involved.
 - **Analytics:** Google Analytics tag in `index.html`.
 

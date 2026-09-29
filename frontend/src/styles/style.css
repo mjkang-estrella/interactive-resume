@@ -1,10 +1,10 @@
 :root {
     --paper-width: 816px; /* 8.5in * 96 */
     --paper-height: 1056px; /* 11in * 96 */
-    --paper-scale: 1; /* set by PaperFit on narrow screens */
+    --paper-scale: 1; /* fit to viewport width and height by PaperFit */
     --doc-scale: var(--paper-scale);
     --page-gap: calc(var(--paper-width) * 0.04); /* scales with paper */
-    --viewport-margin: 24px;
+    --viewport-margin: clamp(24px, 4vmin, 48px);
     --page-pad-x: 72px; /* 0.75in left/right */
     --page-pad-y: 48px; /* 0.5in top/bottom */
     --paper-bg: #fbfbfb;
@@ -63,8 +63,8 @@ p {
     }
 }
 
-/* Layout: resume and detail panel share a horizontal scroll. The page also
-   scrolls vertically so a paper taller than the viewport stays reachable. */
+/* Both sheets share the landing-page scale. If two sheets cannot fit beside
+   each other, horizontal scrolling preserves the original reading size. */
 .page {
     display: flex;
     align-items: center;
@@ -79,6 +79,7 @@ p {
     position: relative;
     overflow-x: hidden;
     overflow-y: auto;
+    scrollbar-gutter: stable;
     opacity: 0;
     animation: pageEnter 560ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
@@ -403,9 +404,10 @@ ol.bullets > li::before {
 .deck {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     flex: 0 0 calc(var(--paper-width) * var(--paper-scale));
     width: calc(var(--paper-width) * var(--paper-scale));
+    height: calc(var(--paper-height) * var(--paper-scale));
     will-change: transform, opacity;
 }
 
@@ -627,11 +629,10 @@ ol.bullets > li::before {
     }
 }
 
-/* Narrow screens: the resume scales down to fit the width (PaperFit sets
-   --paper-scale) and the detail panel stacks below it at full size. */
+/* Phones keep the whole resume visible and stack readable context below it. */
 @media (max-width: 863px) {
     :root {
-        --viewport-margin: 16px;
+        --viewport-margin: 20px;
         --doc-scale: 1;
     }
     .page,
@@ -643,9 +644,13 @@ ol.bullets > li::before {
         gap: 16px;
         overflow-x: hidden;
     }
+    .page.deck-hidden {
+        justify-content: center;
+    }
     .deck {
         flex: none;
         width: 100%;
+        height: auto;
     }
     #deck-doc {
         width: 100%;

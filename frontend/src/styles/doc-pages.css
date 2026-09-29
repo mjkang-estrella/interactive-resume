@@ -1,4 +1,4 @@
-/* Context pages use a reading layout independent of the printed resume. */
+/* Desktop context type is close to the resume body and uses the same scale. */
 .doc {
     --doc-pad: clamp(24px, 5cqi, 48px);
     flex: 0 0 auto;
@@ -78,8 +78,8 @@
     width: 100%;
     max-width: 65ch;
     margin-inline: auto;
-    font-size: 16px;
-    line-height: 1.75;
+    font-size: 13px;
+    line-height: 1.7;
     color: var(--ink-700);
     overflow-wrap: break-word;
 }
@@ -92,7 +92,7 @@
     margin: 0;
     max-width: 28ch;
     color: var(--text);
-    font-size: 32px;
+    font-size: 24px;
     line-height: 1.2;
     letter-spacing: -0.035em;
     font-weight: 650;
@@ -101,7 +101,7 @@
 .doc-case > .doc-case__lead {
     margin: -14px 0 0;
     color: var(--ink-500);
-    font-size: 18px;
+    font-size: 14px;
     line-height: 1.65;
 }
 .doc-case__section,
@@ -118,7 +118,7 @@
 }
 .doc-case h3 {
     margin: 0;
-    font-size: 20px;
+    font-size: 16px;
     line-height: 1.35;
     font-weight: 650;
     letter-spacing: -0.015em;
@@ -255,14 +255,17 @@
         padding-bottom: 96px;
         scrollbar-gutter: auto;
     }
+    .doc-content {
+        font-size: 14px;
+    }
     .doc-case {
         gap: 28px;
     }
     .doc-case > h2 {
-        font-size: 28px;
+        font-size: 24px;
     }
     .doc-case > .doc-case__lead {
-        font-size: 17px;
+        font-size: 15px;
     }
 }
 @media (max-width: 380px) {
