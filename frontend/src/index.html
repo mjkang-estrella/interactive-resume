@@ -14,8 +14,20 @@
         </script>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>MJ Kang — Resume OS</title>
+        <title>MJ Kang — Product Manager · Interactive Resume</title>
+        <meta
+            name="description"
+            content="Interactive resume of Myeongjin (MJ) Kang, product manager and Berkeley Haas MBA. Click any bullet for the story behind it."
+        />
+        <meta property="og:type" content="profile" />
+        <meta property="og:title" content="MJ Kang — Product Manager · Interactive Resume" />
+        <meta
+            property="og:description"
+            content="Click any bullet on MJ Kang's resume for the story behind it, or ask an AI about his experience."
+        />
         <link rel="icon" type="image/jpeg" href="/contents/favicon.jpg" />
+        <!-- Plain-text resume and stories for AI assistants, generated at build time -->
+        <link rel="alternate" type="text/plain" href="/llms.txt" title="llms.txt" />
         <link href="styles/style.css" rel="stylesheet" />
         <link href="styles/doc-pages.css" rel="stylesheet" />
         <!-- Inter font -->
@@ -30,411 +42,390 @@
     </head>
     <body>
         <div class="page deck-hidden">
-            <!-- Left: Resume paper -->
-            <main class="paper" id="paper" aria-label="Resume">
-                <a
-                    class="pdf-link"
-                    href="contents/resume.pdf"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="Open PDF version of resume"
-                >
-                    <i
-                        class="hgi hgi-stroke hgi-pdf-02"
-                        aria-hidden="true"
-                    ></i>
-                </a>
-                <h1 class="name">MYEONGJIN KANG</h1>
-                <div class="contact-bar">
-                    <a href="tel:+15103653689" class="link">(510) 365‑3689</a> ·
-                    <a href="mailto:mj.kang@mba.berkeley.edu" class="link"
-                        >mj.kang@mba.berkeley.edu</a
-                    >
-                    ·
+            <!-- Left: Resume paper (mirrors contents/resume.pdf) -->
+            <div class="paper-viewport" data-paper-role="resume">
+                <main class="paper" id="paper" aria-label="Resume">
                     <a
-                        href="https://linkedin.com/in/mj-kang-product"
-                        class="link"
-                        >linkedin.com/in/mj‑kang‑product</a
+                        class="pdf-link"
+                        href="contents/resume.pdf"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="Open PDF version of resume"
                     >
-                </div>
-
-                <!-- EDUCATION -->
-                <div class="section-bar single-bottom">EDUCATION</div>
-                <section>
-                    <div class="entry">
-                        <div class="entry-row">
-                            <b class ="company">
-                            <a href="https://haas.berkeley.edu/" target="_blank" class="link company" data-company="haas">
-                                University of California, Berkeley, Haas School
-                                of Business
-                            </a></b>
-                            <div class="meta">May 2027</div>
-                        </div>
-                        <b class="role">
-                            Master of Business Administration
-                        </b>
-                        <ul class="bullets">
-                            <li>
-                                <button
-                                    class="bullet"
-                                    data-role="UC Berkeley, Haas — MBA"
-                                    data-section="Education"
-                                    data-doc="edu-haas-courses"
-                                >
-                                    <b>Courses: </b>AI Agent, The Ethics of AI,
-                                    Entrepreneurship
-                                </button>
-                            </li>
-                            <li>
-                                <button
-                                    class="bullet"
-                                    data-role="UC Berkeley, Haas — MBA"
-                                    data-section="Education"
-                                    data-doc="edu-haas-clubs"
-                                >
-                                    <b>Clubs: </b>Product Management Club (Organized PM
-                                    Workshop for 100+ People), AI Club, Tech
-                                    Club
-                                </button>
-                            </li>
-                        </ul>
+                        <i
+                            class="hgi hgi-stroke hgi-pdf-02"
+                            aria-hidden="true"
+                        ></i>
+                    </a>
+                    <h1 class="name">MYEONGJIN KANG</h1>
+                    <div class="contact-bar">
+                        <a href="tel:+15103653689" class="link">(510) 365‑3689</a> ·
+                        <a href="mailto:mj.kang@berkeley.edu" class="link">mj.kang@berkeley.edu</a>
+                        ·
+                        <a
+                            href="https://www.linkedin.com/in/mj-kang-product/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="link"
+                            >linkedin.com/in/mj‑kang‑product</a
+                        >
+                        ·
+                        <a
+                            href="https://mj-kang.com/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="link"
+                            >mj‑kang.com</a
+                        >
                     </div>
-                    <div class="entry">
-                        <div class="entry-row">
-                            <div class="company" data-company="kaist">
-                            <a href="https://www.kaist.ac.kr/en/" target="_blank" class="link" >
-                                <b>KAIST</b></a>, Daejeon, Korea
+
+                    <!-- EDUCATION -->
+                    <div class="section-bar single-bottom">EDUCATION</div>
+                    <section>
+                        <div class="entry">
+                            <div class="entry-row">
+                                <div class="company" data-company="haas">
+                                    <b
+                                        ><a
+                                            href="https://haas.berkeley.edu/"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            class="link"
+                                            >University of California, Berkeley, Haas School of
+                                            Business</a
+                                        ></b
+                                    >
+                                </div>
+                                <div class="meta">May 2027</div>
                             </div>
-                            <div class="meta">Aug 2022</div>
+                            <div class="role"><b>Master of Business Administration</b></div>
+                            <ul class="bullets">
+                                <li>
+                                    <button
+                                        class="bullet"
+                                        data-role="UC Berkeley Haas — MBA"
+                                        data-section="Education"
+                                        data-doc="edu-haas-courses"
+                                    >
+                                        <b>Courses: </b>Agentic AI, AI Automation, AI
+                                        Entrepreneurship, The Ethics of AI
+                                    </button>
+                                </li>
+                                <li>
+                                    <button
+                                        class="bullet"
+                                        data-role="UC Berkeley Haas — MBA"
+                                        data-section="Education"
+                                        data-doc="edu-haas-clubs"
+                                    >
+                                        <b>Clubs: </b>AI Club - VP of Engineering (led 5+
+                                        vibe-coding workshops); PM Club - VP of Branding
+                                    </button>
+                                </li>
+                            </ul>
                         </div>
-                        <div class="role">
-                            <b>Bachelor of Science, Computer Science & Business
-                            Technology Management</b>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- EXPERIENCE -->
-                <div class="section-bar band">EXPERIENCE</div>
-                <section>
-                    <div class="entry">
-                        <div class="entry-row">
-                            <div class="company" data-company="toss-bank">
-                                <a
-                                    href="https://toss.im/en/team"
-                                    target="_blank"
-                                    class="link"
-                                    ><b>Toss Bank</b></a>, Seoul, Korea</div>
-                            <div class="meta">Jun 2023–Jul 2025</div>
-                        </div>
-                        <div class="role">
-                            <b>Product Manager, Social Squad</b> (Feb 2024–Jul 2025)
-                        </div>
-                        <ul class="bullets">
-                            <li>
-                                <button
-                                    class="bullet bullet--intro"
-                                    data-role="Toss Bank — Social Squad"
-                                    data-section="Experience"
-                                    data-doc="exp-toss-challenge-account"
-                                >
-                                    Launched ‘Challenge Account’ for group
-                                    challenge participants, achieving 300K+ MAU
-                                    within one month (fastest in company
-                                    history), 70%+ week‑1 retention, ultimately
-                                    reducing company‑wide churn by 5%
-                                </button>
-                            </li>
-                            <li>
-                                <button
-                                    class="bullet"
-                                    data-role="Toss Bank — Social Squad"
-                                    data-section="Experience"
-                                    data-doc="exp-toss-rate-strategy"
-                                >
-                                    Led a pricing strategy by aligning 40+
-                                    stakeholders on −1.7% interest rate
-                                    reduction for joint accounts, leveraging 30+
-                                    customer interviews and cohort analysis,
-                                    driving $4.3M annual savings while
-                                    maintaining retention
-                                </button>
-                            </li>
-                            <li>
-                                <button
-                                    class="bullet"
-                                    data-role="Toss Bank — Social Squad"
-                                    data-section="Experience"
-                                    data-doc="exp-toss-segmentation"
-                                >
-                                    Utilized SQL and Python to analyze
-                                    behavioral data across 1M+ customers to
-                                    segment Club/Partner cohorts and design
-                                    personalized features, resulting in 20
-                                    points increase in NPS and 30% in daily
-                                    joint account openings
-                                </button>
-                            </li>
-                            <li>
-                                <button
-                                    class="bullet"
-                                    data-role="Toss Bank — Social Squad"
-                                    data-section="Experience"
-                                    data-doc="exp-toss-team-alignment"
-                                >
-                                    Facilitated cross‑functional alignment
-                                    through structured feedback and quarterly
-                                    OKRs, earning 95% team satisfaction and
-                                    improving team retention
-                                </button>
-                            </li>
-                        </ul>
-                        <div class="entry-row">
+                        <div class="entry">
+                            <div class="entry-row">
+                                <div class="company" data-company="kaist">
+                                    <b
+                                        ><a
+                                            href="https://www.kaist.ac.kr/en/"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            class="link"
+                                            >KAIST</a
+                                        >
+                                        (Korea Advanced Institute of Science and Technology)</b
+                                    >, Daejeon, Korea
+                                </div>
+                                <div class="meta">Aug 2022</div>
+                            </div>
                             <div class="role">
-                                <b>Product Manager, Growth Squad</b> (Jun 2023–Jan 2024)
+                                <b
+                                    >Bachelor of Science, Computer Science &amp; Business Technology
+                                    Management</b
+                                >
                             </div>
                         </div>
-                        <ul class="bullets">
-                            <li>
-                                <button
-                                    class="bullet"
-                                    data-role="Toss Bank — Growth Squad"
-                                    data-section="Experience"
-                                    data-doc="exp-toss-growth-accounts"
-                                >
-                                    Drove 2.1M+ new accounts (+30% growth in 6
-                                    months) by leading developers and designers
-                                    to deploy viral referral, SEO optimization,
-                                    and rewards programs, establishing Toss Bank
-                                    as Korea’s fastest‑growing bank
-                                </button>
-                            </li>
-                            <li>
-                                <button
-                                    class="bullet"
-                                    data-role="Toss Bank — Growth Squad"
-                                    data-section="Experience"
-                                    data-doc="exp-toss-viral-engine"
-                                >
-                                    Built scalable viral‑growth engine using
-                                    behavioral psychology principles that
-                                    generated 100M+ shares within 72 hours;
-                                    successfully scaled across multiple squads
-                                    to onboard 3M+ additional users (≈40% of
-                                    customer base)
-                                </button>
-                            </li>
-                            <li>
-                                <button
-                                    class="bullet"
-                                    data-role="Toss Bank — Growth Squad"
-                                    data-section="Experience"
-                                    data-doc="exp-toss-ab-tests"
-                                >
-                                    Prioritized and conducted 15+ data‑driven
-                                    A/B tests across acquisition funnel that
-                                    addressed key friction points identified
-                                    through data analysis and qualitative user
-                                    research, increasing conversion rate by 15%
-                                </button>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="entry">
-                        <div class="entry-row">
-                            <div class="company" data-company="doeat">
-                            <a href="https://teamdoeat.career.greetinghr.com/en/home" target="_blank" class="link">
-                                <b>DoEat</b></a>, Seoul, Korea
-                            </div>
-                            <div class="meta">Apr 2025–Jun 2025</div>
-                        </div>
-                        <div class="role"><b>Growth Product Manager</b></div>
-                        <ul class="bullets">
-                            <li>
-                                <button
-                                    class="bullet"
-                                    data-role="DoEat — Growth PM"
-                                    data-section="Experience"
-                                    data-doc="exp-doeat-expansion"
-                                >
-                                    Drove regional expansion from 1 to 5 cities
-                                    by orchestrating a GTM strategy leveraging
-                                    local partnerships and data‑driven campaigns
-                                    with sales, marketing and CS, achieving 50%
-                                    membership penetration within 1 month
-                                </button>
-                            </li>
-                            <li>
-                                <button
-                                    class="bullet"
-                                    data-role="DoEat — Growth PM"
-                                    data-section="Experience"
-                                    data-doc="exp-doeat-reactivation"
-                                >
-                                    Designed and scaled a dessert‑giveaway
-                                    reactivation program, boosted dormant‑user
-                                    returns 3x, membership conversions 5x, and
-                                    maintaining 2x higher long‑term retention
-                                    compared to baseline
-                                </button>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="entry">
-                        <div class="entry-row">
-                            <div class="company" data-company="hyperconnect">
-                            <a
-                                href="https://hyperconnect.com/en/"
-                                target="_blank"
-                                class="link"
-                            >
-                                <b>Match Group Inc., HYPERCONNECT</b></a>, Seoul, Korea
-                            </div>
-                            <div class="meta">Dec 2020–May 2023</div>
-                        </div>
-                        <div class="role">
-                            <b>Product Manager, Hakuna Live</b> (Feb 2021–May 2023)
-                        </div>
-                        <ul class="bullets">
-                            <li>
-                                <button
-                                    class="bullet"
-                                    data-role="Hyperconnect — Hakuna Live"
-                                    data-section="Experience"
-                                    data-doc="exp-hakuna-metaverse"
-                                >
-                                    Owned full product lifecycle of ‘Metaverse
-                                    Live’ (MVP features scoping, strategic
-                                    roadmap development, 20+ iterative launches)
-                                    and led cross‑functional team of 10+,
-                                    driving 10% user growth (100K+ MAU)
-                                </button>
-                            </li>
-                            <li>
-                                <button
-                                    class="bullet"
-                                    data-role="Hyperconnect — Hakuna Live"
-                                    data-section="Experience"
-                                    data-doc="exp-hakuna-insights-platform"
-                                >
-                                    Transformed product decision‑making by
-                                    implementing data collection policies,
-                                    centralized fragmented data sources into a
-                                    single platform, and building real‑time
-                                    dashboards, reducing turnaround time by 40%
-                                </button>
-                            </li>
-                            <li>
-                                <button
-                                    class="bullet"
-                                    data-role="Hyperconnect — Hakuna Live"
-                                    data-section="Experience"
-                                    data-doc="exp-hakuna-safety"
-                                >
-                                    Improved AI‑powered, human‑in‑the‑loop
-                                    moderation system by enhancing human data
-                                    accuracy and building safety monitoring
-                                    dashboard, increasing detection accuracy by
-                                    30% and reducing review latency by 50%
-                                </button>
-                            </li>
-                            <li>
-                                <button
-                                    class="bullet"
-                                    data-role="Hyperconnect — Hakuna Live"
-                                    data-section="Experience"
-                                    data-doc="exp-hakuna-hls"
-                                >
-                                    Boosted viewer engagement by 10% by leading
-                                    implementation of new live streaming
-                                    protocol (HLS), enhancing broadcast
-                                    resolution and capacity for desktop‑first
-                                    content creators
-                                </button>
-                            </li>
-                        </ul>
-                        <div class="entry-row">
-                            <div class="role">
-                                <b>Product Strategy Intern, CPO Team</b> (Dec 2020–Feb 2021)
-                            </div>
-                        </div>
-                        <ul class="bullets">
-                            <li>
-                                <button
-                                    class="bullet"
-                                    data-role="Hyperconnect — CPO Team Intern"
-                                    data-section="Experience"
-                                    data-doc="exp-hakuna-intern-segmentation"
-                                >
-                                    Identified high‑value user segments for
-                                    targeted feature development by analyzing
-                                    3M+ user behaviors in Amplitude, resulting
-                                    in a refined product strategy that increased
-                                    core user conversion rate by 15%
-                                </button>
-                            </li>
-                        </ul>
-                    </div>
-                </section>
+                    </section>
 
-                <!-- ADDITIONAL -->
-                <div class="section-bar band">ADDITIONAL</div>
-                <section>
-                    <ul class="bullets">
-                        <li>
-                            <span class="bullet-text">
-                                <b>Skills:</b> SQL, R, Python, Tableau, Java,
-                                Figma, Cursor, Agile Methodology
-                            </span>
-                        </li>
-                        <li>
-                            <button
-                                class="bullet"
-                                data-role="Resume OS"
-                                data-section="Additional"
-                                data-doc="additional-resume-os"
-                            >
-                                <b>Resume OS:</b> Launched AI-powered resume platform with clickable bullets and interview bot
-                            </button>
-                        </li>
-                        <li>
-                            <button
-                                class="bullet"
-                                data-role="CrossFit Analyzer"
-                                data-section="Additional"
-                                data-doc="additional-crossfit"
-                            >
-                                <b>CrossFit Analyzer:</b> Built AI product
-                                analyzing CrossFit performance to deliver
-                                personalized recommendations
-                            </button>
-                        </li>
-                        <li>
-                            <button
-                                class="bullet"
-                                data-role="Writing"
-                                data-section="Additional"
-                                data-doc="additional-writing"
-                            >
-                                <b>Blog Writing:</b> Authored 100+ posts on
-                                product management, tech, and mathematics (10K+
-                                reads)
-                            </button>
-                        </li>
-                        <li>
-                            <button
-                                class="bullet"
-                                data-role="Interests"
-                                data-section="Additional"
-                                data-doc="additional-interests"
-                            >
-                                <b>Interests:</b> Certified CrossFit Coach,
-                                Amateur Landscape Photographer
-                            </button>
-                        </li>
-                    </ul>
-                </section>
-            </main>
+                    <!-- EXPERIENCE -->
+                    <div class="section-bar band">EXPERIENCE</div>
+                    <section>
+                        <div class="entry">
+                            <div class="entry-row">
+                                <div class="company" data-company="liner">
+                                    <b
+                                        ><a
+                                            href="https://liner.com/"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            class="link"
+                                            >Liner</a
+                                        >
+                                        (AI Search Agent Series C Startup)</b
+                                    >, San Francisco Bay Area
+                                </div>
+                                <div class="meta">May 2026–Aug 2026</div>
+                            </div>
+                            <div class="role">
+                                <b>Product Manager, API Growth &amp; Monetization – MBA Intern</b>
+                            </div>
+                            <ul class="bullets">
+                                <li>
+                                    <button
+                                        class="bullet"
+                                        data-role="Liner — API Growth & Monetization"
+                                        data-section="Experience"
+                                        data-doc="exp-liner-monetization"
+                                    >
+                                        Owned growth and monetization for Liner’s AI search API,
+                                        tripling landing-to-paid conversion by redesigning the
+                                        acquisition-to-purchase journey with interactive product
+                                        comparisons and bonus credits for adding a card
+                                    </button>
+                                </li>
+                                <li>
+                                    <button
+                                        class="bullet"
+                                        data-role="Liner — API Growth & Monetization"
+                                        data-section="Experience"
+                                        data-doc="exp-liner-outbound"
+                                    >
+                                        Built an AI-assisted system for prospect research and
+                                        outbound preparation across 1,200 accounts, contributing to
+                                        an enterprise win and $400K in qualified ARR pipeline
+                                    </button>
+                                </li>
+                                <li>
+                                    <button
+                                        class="bullet"
+                                        data-role="Liner — API Growth & Monetization"
+                                        data-section="Experience"
+                                        data-doc="exp-liner-first-users"
+                                    >
+                                        Acquired the first 1,000 active API users by launching
+                                        integrations with AI assistants and workflow platforms
+                                        alongside developer and startup incentive programs
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="entry">
+                            <div class="entry-row">
+                                <div class="company" data-company="toss-bank">
+                                    <b
+                                        ><a
+                                            href="https://www.tossbank.com/"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            class="link"
+                                            >Toss Bank</a
+                                        >
+                                        (Largest Korea Fintech Company)</b
+                                    >, Seoul, Korea
+                                </div>
+                                <div class="meta">Jun 2023–Jul 2025</div>
+                            </div>
+                            <div class="role">
+                                <b>Product Manager, Social Squad (Feb 2024–Jul 2025)</b>
+                            </div>
+                            <ul class="bullets">
+                                <li>
+                                    <button
+                                        class="bullet"
+                                        data-role="Toss Bank — Social Squad"
+                                        data-section="Experience"
+                                        data-doc="exp-toss-challenge-account"
+                                        data-onboarding
+                                    >
+                                        Launched 0-to-1 social-banking product, Challenge Account,
+                                        by turning savings behavior into a shared daily challenge
+                                        loop; reached 300K+ MAU, 70%+ week-1 retention, and reduced
+                                        company-wide churn by 5%p
+                                    </button>
+                                </li>
+                                <li>
+                                    <button
+                                        class="bullet"
+                                        data-role="Toss Bank — Social Squad"
+                                        data-section="Experience"
+                                        data-doc="exp-toss-rate-strategy"
+                                    >
+                                        Redesigned pricing strategy using cohort analysis and 30+
+                                        customer interviews; aligned 40+ stakeholders to approve a
+                                        1.7pp interest-rate reduction, delivering $4.3M in annual
+                                        savings without harming retention
+                                    </button>
+                                </li>
+                                <li>
+                                    <button
+                                        class="bullet"
+                                        data-role="Toss Bank — Social Squad"
+                                        data-section="Experience"
+                                        data-doc="exp-toss-segmentation"
+                                    >
+                                        Repositioned a generic joint account into distinct offerings
+                                        for couples and clubs using behavioral analysis of 1M+
+                                        users, tailoring budgeting and expense management to lift
+                                        daily account openings 30% and NPS 20 points
+                                    </button>
+                                </li>
+                                <li>
+                                    <button
+                                        class="bullet"
+                                        data-role="Toss Bank — Social Squad"
+                                        data-section="Experience"
+                                        data-doc="exp-toss-team-alignment"
+                                    >
+                                        Aligned engineering and design around shared quarterly OKRs
+                                        and structured feedback, accelerating feature delivery by 20%
+                                        and achieving 95% team satisfaction
+                                    </button>
+                                </li>
+                            </ul>
+                            <div class="role">
+                                <b>Product Manager, Growth Squad (Jun 2023–Jan 2024)</b>
+                            </div>
+                            <ul class="bullets">
+                                <li>
+                                    <button
+                                        class="bullet"
+                                        data-role="Toss Bank — Growth Squad"
+                                        data-section="Experience"
+                                        data-doc="exp-toss-growth-accounts"
+                                    >
+                                        Led cross-functional team of developers and designers to
+                                        drive 2.1M+ new accounts (+30% in 6 months) through viral
+                                        loops, SEO optimization, and rewards programs, establishing
+                                        Toss Bank as Korea’s fastest-growing bank
+                                    </button>
+                                </li>
+                                <li>
+                                    <button
+                                        class="bullet"
+                                        data-role="Toss Bank — Growth Squad"
+                                        data-section="Experience"
+                                        data-doc="exp-toss-viral-engine"
+                                    >
+                                        Built scalable viral-growth engine based on customer behavior
+                                        analysis, generating 100M+ link shares within 72h and
+                                        onboarding 3M+ additional users (40% of total user base)
+                                        after scaling across multiple product teams
+                                    </button>
+                                </li>
+                                <li>
+                                    <button
+                                        class="bullet"
+                                        data-role="Toss Bank — Growth Squad"
+                                        data-section="Experience"
+                                        data-doc="exp-toss-ab-tests"
+                                    >
+                                        Identified funnel friction through behavioral analysis and
+                                        customer research, then prioritized 15+ A/B tests that
+                                        improved acquisition conversion by 15%
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="entry">
+                            <div class="entry-row">
+                                <div class="company" data-company="hyperconnect">
+                                    <b
+                                        ><a
+                                            href="https://hyperconnect.com/en/"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            class="link"
+                                            >Match Group, HYPERCONNECT</a
+                                        >
+                                        (Global Livestreaming Startup)</b
+                                    >, Seoul, Korea
+                                </div>
+                                <div class="meta">Dec 2020–May 2023</div>
+                            </div>
+                            <div class="role"><b>Product Manager, Hakuna Live</b></div>
+                            <ul class="bullets">
+                                <li>
+                                    <button
+                                        class="bullet"
+                                        data-role="Hyperconnect — Hakuna Live"
+                                        data-section="Experience"
+                                        data-doc="exp-hakuna-safety"
+                                    >
+                                        Improved user safety by refining data labeling and custom
+                                        dashboards for AI moderation, increasing detection accuracy by
+                                        30% and reducing review latency by 50%
+                                    </button>
+                                </li>
+                                <li>
+                                    <button
+                                        class="bullet"
+                                        data-role="Hyperconnect — Hakuna Live"
+                                        data-section="Experience"
+                                        data-doc="exp-hakuna-metaverse"
+                                    >
+                                        Owned full product lifecycle of Metaverse Live, an interactive
+                                        avatar space for viewers and streamers, leading a team of 10+
+                                        from roadmap and MVP through 20+ releases, growing MAU by 10%
+                                        (100K+ additional users)
+                                    </button>
+                                </li>
+                                <li>
+                                    <button
+                                        class="bullet"
+                                        data-role="Hyperconnect — Hakuna Live"
+                                        data-section="Experience"
+                                        data-doc="exp-hakuna-hls"
+                                    >
+                                        Led a phased rollout of a new streaming solution, prioritizing
+                                        large partner channels to balance upfront costs and delivery
+                                        economics, resulting in a 10% increase in viewer engagement and
+                                        creator CSAT by 20 points
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    </section>
+
+                    <!-- ADDITIONAL -->
+                    <div class="section-bar band">ADDITIONAL</div>
+                    <section>
+                        <ul class="bullets">
+                            <li>
+                                <button
+                                    class="bullet"
+                                    data-role="Vibe-Coded Projects"
+                                    data-section="Additional"
+                                    data-doc="additional-projects"
+                                >
+                                    <b>Vibe-Coded Projects:</b> Open-weight LLM comparison platform,
+                                    AI health assistant on NVIDIA DGX Spark, AI-Powered Task Manager,
+                                    Machine-readable newsletter for AI agents, Product spec generator
+                                    for coding agents
+                                </button>
+                            </li>
+                            <li>
+                                <span class="bullet-text">
+                                    <b>Technical Skills:</b> SQL, Python, TypeScript, Rust, Next.js; AI
+                                    prototyping with Codex, Claude Code, Supabase, Convex
+                                </span>
+                            </li>
+                            <li>
+                                <button
+                                    class="bullet"
+                                    data-role="Interests"
+                                    data-section="Additional"
+                                    data-doc="additional-interests"
+                                >
+                                    <b>Interests:</b> Certified CrossFit Coach, Amateur Photographer,
+                                    Chess, Speed Cubing, Cooking
+                                </button>
+                            </li>
+                        </ul>
+                    </section>
+                </main>
+            </div>
 
             <!-- Right: Detail panel -->
             <aside class="deck" id="deck" hidden aria-live="polite">
@@ -465,73 +456,36 @@
                 </section>
             </aside>
         </div>
-        <div
-            class="agentkit"
-            data-agentkit
-            data-state="closed"
-            aria-live="polite"
-        >
-            <div
-                class="agentkit__banner"
-                data-agentkit-banner
-                role="alert"
-                hidden
-            ></div>
-            <div
-                class="agentkit__panel-wrapper"
-                data-agentkit-panel-wrapper
-                data-loading="false"
-            >
-                <openai-chatkit
-                    id="agentkit-widget"
-                    class="agentkit__panel"
-                    data-agentkit-panel
-                    hidden
-                    aria-label="Chat with MJ Kang’s AI agent"
-                ></openai-chatkit>
-                <div class="agentkit__spinner" data-agentkit-spinner>
-                    <div class="agentkit__spinner-ring" aria-hidden="true"></div>
-                    <p>Warming up AI agent…</p>
-                </div>
-            </div>
+        <div class="ask-ai" hidden>
             <button
+                class="ask-ai__trigger"
                 type="button"
-                class="agentkit__launcher"
-                data-action="toggle-agentkit"
-                aria-haspopup="dialog"
-                aria-controls="agentkit-widget"
                 aria-expanded="false"
+                aria-controls="ask-ai-panel"
+                aria-label="Ask an AI about MJ Kang"
             >
-                <span class="agentkit__launcher-label">
-                    <span aria-hidden="true">🤖</span>
-                    <span>AI Agent</span>
-                </span>
-                <span class="agentkit__launcher-hint">
-                    Resume, Interview Questions
-                </span>
+                <span>Ask an AI</span>
+                <svg class="ask-ai__bot" width="64" height="64" viewBox="-158 -158 316 316" aria-hidden="true">
+                    <circle r="100" fill="#fbfaf7" />
+                    <g fill="#1d1c1a">
+                        <rect class="ask-ai__eye" x="-9.3" y="-20.6" width="18.6" height="41.2" rx="9.3" transform="matrix(.77,-.25,.12,.96,-62,-12)" />
+                        <rect class="ask-ai__eye" x="-9.3" y="-20.6" width="18.6" height="41.2" rx="9.3" transform="matrix(.98,-.15,.12,.96,-14,-23)" />
+                    </g>
+                </svg>
             </button>
+            <section class="ask-ai__panel" id="ask-ai-panel" aria-labelledby="ask-ai-title" hidden>
+                <h2 id="ask-ai-title">Ask an AI about me</h2>
+                <p>Opens your favorite assistant with a ready-made question.</p>
+                <ul class="ask-ai__providers" aria-label="AI assistants">
+                    <li><a data-ai-provider="chatgpt" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer" aria-label="Ask ChatGPT" title="ChatGPT"><img src="media/icons/ask-ai-chatgpt.svg" width="22" height="22" alt="" /></a></li>
+                    <li><a data-ai-provider="claude" href="https://claude.ai/new" target="_blank" rel="noopener noreferrer" aria-label="Ask Claude" title="Claude"><img src="media/icons/ask-ai-claude.svg" width="22" height="22" alt="" /></a></li>
+                    <li><a data-ai-provider="gemini" href="https://www.google.com/search?udm=50" target="_blank" rel="noopener noreferrer" aria-label="Ask Gemini (Google AI Mode)" title="Gemini · Google AI Mode"><img src="media/icons/ask-ai-gemini.svg" width="22" height="22" alt="" /></a></li>
+                </ul>
+                <button class="ask-ai__copy" type="button">Copy the prompt instead</button>
+                <p class="ask-ai__status" role="status"></p>
+                <textarea class="ask-ai__prompt" aria-label="Prompt to copy" readonly rows="6" hidden></textarea>
+            </section>
         </div>
-        <div class="toast" id="tip-toast" role="status" aria-live="polite">
-            💡 Tip: Click on any bullet point to see project details.
-        </div>
-        <script
-            src="https://cdn.platform.openai.com/deployments/chatkit/chatkit.js"
-            async
-            data-agentkit-loader="chatkit"
-        ></script>
-        <script type="module">
-            if (typeof window !== 'undefined' && !window.OPENAI_DOMAIN_KEY) {
-                const candidates = [import.meta.env.VITE_CHATKIT_DOMAIN_KEY, import.meta.env.OPENAI_DOMAIN_KEY];
-                for (const candidate of candidates) {
-                    if (typeof candidate === 'string' && candidate.trim().length > 0) {
-                        window.OPENAI_DOMAIN_KEY = candidate;
-                        break;
-                    }
-                }
-            }
-        </script>
-        <script type="module" src="/ts/agentkit-config.ts"></script>
-        <script type="module" src="/ts/agentkit.ts"></script>
         <script type="module" src="/ts/main.ts"></script>
     </body>
 </html>

@@ -1,19 +1,20 @@
+// Hover context for each [data-company] on the paper. The resume line already names
+// the company type, so these add context instead of repeating it.
 const COMPANY_DETAILS: Record<string, { html: string }> = {
   haas: {
-    html: `Hub of technology and Innovation.</br> Go Bears!`,
+    html: `UC Berkeley’s business school, in the heart of the Bay Area tech ecosystem.<br />Go Bears!`,
   },
   kaist: {
-    html: `<b>Korea Advanced Institute of Science and
-    Technology</b></br>South Korea's MIT-like university, known for its strong focus on research and innovation.`,
+    html: `South Korea’s leading science and technology university, often called the MIT of Korea.`,
+  },
+  liner: {
+    html: `AI search agent startup. I worked on the developer-facing <b>AI search API</b>.`,
   },
   'toss-bank': {
-    html: `Korea's largest fintech company`,
-  },
-  doeat: {
-    html: `Series‑A Food Delivery Startup with 50 employees`,
+    html: `Internet-only bank from Toss (Viva Republica), Korea’s largest fintech company.`,
   },
   hyperconnect: {
-    html: `Global Live streaming platform`,
+    html: `Maker of Azar and Hakuna Live, acquired by Match Group in 2021.`,
   },
 };
 

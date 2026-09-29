@@ -1,24 +1,17 @@
 {
   "name": "interactive_resume",
   "version": "1.0.0",
-  "description": "Interactive resume site with optional ChatKit agent backend.",
+  "description": "Interactive resume: click any bullet for the story behind it, or ask an AI about it.",
   "private": true,
   "workspaces": [
-    "packages/shared",
-    "frontend",
-    "backend"
+    "frontend"
   ],
   "scripts": {
-    "dev": "concurrently -k -n frontend,backend \"npm run dev:frontend\" \"npm run dev:backend\"",
-    "dev:frontend": "npm run dev --workspace=frontend",
-    "dev:backend": "npm run dev --workspace=backend",
-    "build": "npm run build --workspaces",
-    "build:frontend": "npm run build --workspace=frontend",
-    "build:backend": "npm run build --workspace=backend",
-    "start": "npm run start --workspace=backend",
-    "lint": "npm run lint --workspaces",
-    "clean": "npm run clean --workspaces",
-    "postinstall": "npm run build --workspace=@interactive-resume/shared"
+    "dev": "npm run dev --workspace=frontend",
+    "build": "npm run build --workspace=frontend",
+    "preview": "npm run preview --workspace=frontend",
+    "lint": "npm run lint --workspace=frontend",
+    "clean": "npm run clean --workspace=frontend"
   },
   "repository": {
     "type": "git",
@@ -28,23 +21,14 @@
     "resume",
     "interactive",
     "portfolio",
-    "chatkit",
+    "llms-txt",
     "typescript",
     "vite"
   ],
-  "author": "Myeongjin Kang <mj.kang@mba.berkeley.edu>",
+  "author": "Myeongjin Kang <mj.kang@berkeley.edu>",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/mjkang-estrella/interactive-resume/issues"
   },
-  "homepage": "https://github.com/mjkang-estrella/interactive-resume#readme",
-  "dependencies": {
-    "dotenv": "^16.4.5",
-    "openai": "^6.3.0"
-  },
-  "devDependencies": {
-    "@types/node": "^20.14.9",
-    "concurrently": "^8.2.2",
-    "typescript": "^5.5.4"
-  }
+  "homepage": "https://resume-os.com/"
 }

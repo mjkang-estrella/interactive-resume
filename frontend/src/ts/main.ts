@@ -9,7 +9,8 @@ import { AnimationController } from './modules/animationController';
 import { DocManager } from './modules/docManager';
 import { BulletHighlighter } from './modules/bulletHighlighter';
 import { CompanyTooltip } from './modules/companyTooltip';
-import { WaitlistPopup } from './modules/waitlistPopup';
+import { AskAi } from './modules/askAi';
+import { PaperFit } from './modules/paperFit';
 
 class InteractiveResume {
   private motionPreference!: MotionPreference;
@@ -43,8 +44,8 @@ class InteractiveResume {
     const sub = $<HTMLElement>('.doc-sub', doc);
     const title = $<HTMLElement>('.doc-title', doc);
     const closeBtn = $<HTMLElement>('.doc-close', doc);
-    const toast = $<HTMLElement>('#tip-toast');
 
+    new PaperFit();
     this.setupDeckLayoutWatcher(page, deck);
 
     // Initialize modules
@@ -72,7 +73,7 @@ class InteractiveResume {
     new CompanyTooltip(paper);
 
     // Set up event listeners
-    this.setupBulletClickHandlers(toast, paper);
+    this.setupBulletClickHandlers(paper);
     this.setupCloseButton(closeBtn, paper);
 
     // Initialize with default template
@@ -83,9 +84,9 @@ class InteractiveResume {
       });
 
     this.docManager.syncDocHeight();
-    this.scheduleResumeOsOnboarding(paper);
+    this.scheduleOnboarding(paper);
 
-    new WaitlistPopup();
+    AskAi.mount();
   }
 
   private prepareBulletHighlighters(paper: HTMLElement): void {
@@ -136,7 +137,7 @@ class InteractiveResume {
     scheduleUpdate();
   }
 
-  private setupBulletClickHandlers(toast: HTMLElement | null, paper: HTMLElement): void {
+  private setupBulletClickHandlers(paper: HTMLElement): void {
     paper.addEventListener('click', async (event) => {
       const target = (event.target as HTMLElement | null)?.closest<HTMLButtonElement>('.bullet');
       if (!target || !paper.contains(target)) {
@@ -145,10 +146,6 @@ class InteractiveResume {
 
       this.lastTrigger = target;
       this.animationController.showDeck();
-
-      if (toast) {
-        toast.classList.remove('show');
-      }
 
       const templateName = target.getAttribute('data-doc');
       const dataText = target.getAttribute('data-text');
@@ -160,7 +157,6 @@ class InteractiveResume {
           section: target.getAttribute('data-section') || undefined,
           roleTitle: target.getAttribute('data-role') || undefined,
           bulletText,
-          url: target.getAttribute('data-url') || undefined,
           template: templateName || undefined,
         });
         await this.setActiveBullet(target);
@@ -235,7 +231,7 @@ class InteractiveResume {
     await highlighter?.fadeOut();
   }
 
-  private scheduleResumeOsOnboarding(paper: HTMLElement): void {
+  private scheduleOnboarding(paper: HTMLElement): void {
     if (this.hasDocumentOpened) {
       return;
     }
@@ -246,18 +242,20 @@ class InteractiveResume {
 
     this.onboardingTimeout = window.setTimeout(() => {
       this.onboardingTimeout = null;
-      this.playResumeOsOnboarding(paper);
+      this.playOnboarding(paper);
     }, 800);
   }
 
-  private playResumeOsOnboarding(paper: HTMLElement): void {
+  /**
+   * First-visit demo: a cursor glides to the bullet marked `data-onboarding`
+   * and clicks it, showing that bullets open a detail story.
+   */
+  private playOnboarding(paper: HTMLElement): void {
     if (this.hasDocumentOpened) {
       return;
     }
 
-    const targetBullet = paper.querySelector<HTMLButtonElement>(
-      '.bullet[data-doc="additional-resume-os"]',
-    );
+    const targetBullet = paper.querySelector<HTMLButtonElement>('.bullet[data-onboarding]');
 
     if (!targetBullet) {
       return;

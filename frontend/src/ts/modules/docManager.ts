@@ -33,7 +33,7 @@ export class DocManager {
     }
   }
 
-  private applyDocData({ section, roleTitle, bulletText, url }: DocData): void {
+  private applyDocData({ section, roleTitle, bulletText }: DocData): void {
     const sectionSlot = this.docContent.querySelector<HTMLElement>("[data-slot='section']");
     if (sectionSlot) sectionSlot.textContent = section || '';
 
@@ -52,50 +52,12 @@ export class DocManager {
       if (bulletText != null) {
         bulletSlot.textContent = bulletText;
       } else if (!bulletSlot.textContent.trim()) {
-        bulletSlot.textContent = 'Pick any bullet on the resume to populate this detail.';
-      }
-    }
-
-    const embedContainer = this.docContent.querySelector<HTMLElement>(
-      "[data-slot='embed-container']"
-    );
-    const embedFrame = this.docContent.querySelector<HTMLIFrameElement>(
-      "[data-slot='embed-frame']"
-    );
-
-    if (embedFrame) {
-      const isStaticEmbed =
-        (embedContainer && embedContainer.hasAttribute('data-static-embed')) ||
-        embedFrame.hasAttribute('data-static-embed');
-
-      if (url) {
-        embedFrame.src = url;
-        if (embedContainer) {
-          embedContainer.hidden = false;
-          embedContainer.style.display = 'flex';
-        } else {
-          embedFrame.hidden = false;
-        }
-      } else if (isStaticEmbed) {
-        if (embedContainer) {
-          embedContainer.hidden = false;
-          embedContainer.style.display = 'flex';
-        } else {
-          embedFrame.hidden = false;
-        }
-      } else {
-        embedFrame.src = 'about:blank';
-        if (embedContainer) {
-          embedContainer.hidden = true;
-          embedContainer.style.display = 'none';
-        } else {
-          embedFrame.hidden = true;
-        }
+        bulletSlot.textContent = 'Select any bullet on the resume to see the story behind it.';
       }
     }
   }
 
-  public async populateDoc({ section, roleTitle, bulletText, url, template }: DocData): Promise<void> {
+  public async populateDoc({ section, roleTitle, bulletText, template }: DocData): Promise<void> {
     if (this.sub) this.sub.textContent = section || 'Selected bullet';
     if (this.title) this.title.textContent = roleTitle || 'Detail view';
 
@@ -111,7 +73,7 @@ export class DocManager {
         }
       }
 
-      this.applyDocData({ section, roleTitle, bulletText, url });
+      this.applyDocData({ section, roleTitle, bulletText });
       this.syncDocHeight();
     };
 
