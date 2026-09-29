@@ -1,49 +1,18 @@
 <div class="doc-case" data-template="exp-hakuna-safety">
-    <h2>AI Moderation System</h2>
-    <div class="doc-case__section">
-        <h3>Background</h3>
-        <p>
-            Hakuna Live is a multi-participant live streaming platform where maintaining a safe and respectful environment is essential. To handle the massive volume of real-time video streams, the team had built an AI-powered, human-in-the-loop moderation system. The system took screenshots from live broadcasts every second or upon user reports and automatically screened them with a safety model trained on human-reviewed labels. Human reviewers then verified or corrected the AI’s decisions to continuously improve model performance.
-        </p>
-    </div>
-    <div class="doc-case__section">
-        <h3>Problem</h3>
-        <p>
-            Despite having a feedback loop between AI and human reviewers, the accuracy of human labeling, which is the ground truth data for training, was inconsistent. After collaborating with the AI/ML team, we found that the human labeling dataset contained significant inaccuracies, causing the model to learn from unreliable feedback.
-        </p>
-        <p>
-            Through interviews with the human reviewers, I discovered that the root cause was not a lack of skill, but a <em>confusing and inefficient admin interface</em>. The labeling UI did not clearly display contextual information (e.g., sequence of frames, user reports, or confidence scores), leading to misjudgments and slower reviews.
-        </p>
-    </div>
-    <div class="doc-case__section">
-        <h3>Solution</h3>
-        <ol>
-            <li>
-                <strong>Root-Cause Validation:</strong> Conducted structured interviews and workflow observations with the moderation team to identify where errors occurred and why reviewers often second-guessed the AI’s confidence scores.
-            </li>
-            <li>
-                <strong>UI/UX Redesign</strong>
-                <ul>
-                    <li>Rebuilt the moderation admin panel to show frame sequences and metadata for better context.</li>
-                    <li>Simplified the labeling process with clearer action buttons and keyboard shortcuts to reduce latency.</li>
-                    <li>Introduced real-time feedback indicators showing how human inputs influenced model retraining.</li>
-                </ul>
-            </li>
-            <li>
-                <strong>Labeling Policy &amp; Onboarding Manual:</strong> Defined standardized labeling guidelines and documentation to align reviewer decisions, ensuring consistent interpretation of the safety criteria across shifts and regions.
-            </li>
-            <li>
-                <strong>Safety Monitoring Dashboard:</strong> Partnered with data and AI/ML teams to build a <strong>centralized dashboard</strong> tracking detection accuracy, reviewer latency, and labeling consistency metrics in real time.
-            </li>
-        </ol>
-    </div>
-    <div class="doc-case__section">
-        <h3>Result &amp; Analytics</h3>
-        <ul>
-            <li>Detection accuracy improved by 30%, driven by higher-quality human-verified data.</li>
-            <li>Review latency reduced by 50% due to faster, clearer UI and standardized workflows.</li>
-            <li>The dashboard became a daily monitoring tool for both moderation and AI/ML teams, enabling ongoing optimization of model performance.</li>
-            <li>The project evolved into a company-wide case study on improving AI-human collaboration systems, showing how operational UX directly affects machine learning outcomes.</li>
-        </ul>
-    </div>
+<h2>Better review tools for AI moderation</h2>
+<p class="doc-case__lead">I improved the labeling workflow and monitoring dashboards for Hakuna's moderation team. Detection accuracy increased 30%, and review latency fell 50%.</p>
+<section class="doc-case__section">
+<h3>The model learned from inconsistent labels</h3>
+<p>Hakuna's safety model screened screenshots captured from live broadcasts every second or when users filed reports. Human reviewers checked its decisions, and those labels fed back into training.</p>
+<p>Working with the AI/ML team, we found errors in the human-labeled data. Reviewer interviews and workflow observations pointed to the admin interface: people lacked clear frame sequences, report context, and confidence information when making decisions.</p>
+</section>
+<section class="doc-case__section">
+<h3>Give reviewers the context they need</h3>
+<p>We rebuilt the panel to show frame sequences and metadata, clarified action buttons, and added keyboard shortcuts. I also wrote labeling guidelines and onboarding documentation so reviewers could apply the same criteria across shifts.</p>
+<p>With the data and AI/ML teams, I built dashboards for detection accuracy, review latency, and labeling consistency. Moderation and AI/ML teams used them for daily monitoring.</p>
+</section>
+<section class="doc-case__section">
+<h3>Result</h3>
+<p>Detection accuracy improved <strong>30%</strong>, and review latency fell <strong>50%</strong>.</p>
+</section>
 </div>

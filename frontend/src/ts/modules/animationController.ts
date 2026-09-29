@@ -273,6 +273,8 @@ export class AnimationController {
         paperEnterTiming
       );
       const cleanupPaper = () => {
+        // Release the animation's fixed scale so viewport fitting stays live.
+        paperAnimation?.cancel();
         paperAnimation = null;
       };
       paperAnimation.addEventListener('finish', cleanupPaper);
@@ -280,7 +282,8 @@ export class AnimationController {
     }
 
     this.deckAnimationInstance = this.deck.animate(deckEnterKeyframes, deckEnterTiming);
-    this.docAnimationInstance = this.doc.animate(this.buildDocEnterKeyframes(), docEnterTiming);
+    const docAnimation = this.doc.animate(this.buildDocEnterKeyframes(), docEnterTiming);
+    this.docAnimationInstance = docAnimation;
 
     this.deckAnimationInstance.addEventListener('finish', () => {
       this.deckAnimationInstance = null;
@@ -291,10 +294,12 @@ export class AnimationController {
     });
 
     const docCleanup = () => {
-      this.docAnimationInstance = null;
+      // The CSS transform tracks the current fit after the entrance finishes.
+      docAnimation.cancel();
+      if (this.docAnimationInstance === docAnimation) this.docAnimationInstance = null;
     };
-    this.docAnimationInstance.addEventListener('finish', docCleanup);
-    this.docAnimationInstance.addEventListener('cancel', docCleanup);
+    docAnimation.addEventListener('finish', docCleanup);
+    docAnimation.addEventListener('cancel', docCleanup);
   }
 
   public hideDeck(): Promise<boolean> {

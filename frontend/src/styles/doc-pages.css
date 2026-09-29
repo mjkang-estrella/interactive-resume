@@ -1,243 +1,270 @@
-/* Styles specific to doc detail content */
+/* Desktop context type is close to the resume body and uses the same scale. */
 .doc {
-    --lk-phi: 1.61803398875;
-    --lk-space-sm: 0.75rem;
-    --lk-space-md: calc(var(--lk-space-sm) * var(--lk-phi));
-    --lk-space-xs: calc(var(--lk-space-sm) / var(--lk-phi));
-    --lk-space-xxs: calc(var(--lk-space-xs) / var(--lk-phi));
-    --lk-space-between: calc((var(--lk-space-sm) + var(--lk-space-md)) / 2);
-    --lk-space-muted: calc((var(--lk-space-sm) + var(--lk-space-xs)) / 2);
-    --lk-space-split: calc(var(--lk-space-md) + var(--lk-space-xs));
     flex: 0 0 auto;
-    width: 100%;
-    scroll-snap-align: center;
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
     height: var(--paper-height);
     min-height: var(--paper-height);
     max-height: var(--paper-height);
-    will-change: transform, opacity;
     background: var(--paper-bg);
+    will-change: transform, opacity;
+    container-type: inline-size;
+}
+/* Use the same outer content insets as the resume sheet. */
+.doc.paper {
+    padding: var(--page-pad-y) var(--page-pad-x);
 }
 .doc-head {
+    flex: none;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: var(--lk-space-sm);
-    padding: var(--lk-space-sm) var(--lk-space-between);
-    border-bottom: 1px solid #e5e7eb;
-    background: var(--paper-bg);
+    gap: 20px;
+    padding: 0 0 20px;
+    border-bottom: 1px solid #e2e5e9;
+}
+.doc-head > div {
+    min-width: 0;
 }
 .doc-sub {
-    margin: 0;
+    margin: 0 0 5px;
     font-size: 11px;
-    text-transform: uppercase;
+    line-height: 1.4;
     letter-spacing: 0.08em;
-    color: #525252;
+    text-transform: uppercase;
+    color: #5c6673;
 }
 .doc-title {
     margin: 0;
-    font-size: 15px;
-    font-weight: 700;
-    letter-spacing: 0.02em;
+    font-size: 14px;
+    line-height: 1.5;
+    font-weight: 600;
+    color: var(--ink-600);
 }
 .doc-close {
-    border: 1px solid #e5e7eb;
-    background: transparent;
-    font-size: 18px;
-    line-height: 1;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    cursor: pointer;
+    flex: none;
     display: grid;
     place-items: center;
-    color: #1f2937;
+    width: 44px;
+    height: 44px;
+    border: 1px solid #d8dde3;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--ink-700);
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
 }
 .doc-close:hover {
-    background: #f8fafc;
+    background: #edf0f3;
 }
-
+.doc :focus-visible {
+    outline: 2px solid #4257a2;
+    outline-offset: 4px;
+}
 .doc-body {
-    padding: var(--lk-space-sm) var(--lk-space-between);
+    flex: 1 1 auto;
+    min-height: 0;
+    padding: 24px 0 0;
     overflow-y: auto;
     overflow-x: hidden;
-    display: flex;
-    flex-direction: column;
-    gap: var(--lk-space-between);
-    flex: 1 1 auto;
-    min-height: 0;
-    max-height: 100%;
     overscroll-behavior: contain;
-    margin-left: 20px;
-    margin-right: 20px;
+    scrollbar-gutter: auto;
+    scroll-padding-block: 24px;
 }
 .doc-content {
-    display: flex;
-    flex-direction: column;
-    gap: var(--lk-space-between);
-    flex: 1 1 auto;
-    min-height: 0;
-}
-.doc-highlight {
-    display: flex;
-    flex-direction: column;
-    gap: var(--lk-space-between);
-}
-.doc-entry {
-    margin-bottom: 0;
-}
-.doc-entry .bullets li::before {
-    top: 0.12em;
-}
-.doc-entry .bullets span {
-    display: inline-block;
-}
-.doc-entry .bullets {
-    margin-top: 0;
-}
-.doc-bullet--plain {
-    line-height: 1.6;
-    margin: 0;
+    width: 100%;
+    max-width: none;
+    margin-inline: 0;
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--ink-700);
+    overflow-wrap: break-word;
 }
 .doc-case {
     display: flex;
     flex-direction: column;
-    gap: var(--lk-space-between);
-}
-.doc-case > h2,
-.doc-case > h3 {
-    line-height: 1.4;
-    color: var(--ink-600);
-    margin: 0 0 var(--lk-space-between);
-    text-align: left;
-    font-weight: 700;
+    gap: 32px;
 }
 .doc-case > h2 {
+    margin: 0;
+    color: var(--text);
     font-size: 24px;
+    line-height: 1.2;
+    letter-spacing: -0.035em;
+    font-weight: 650;
+    text-wrap: wrap;
 }
-.doc-case > h3 {
-    font-size: 20px;
-}
-.doc-case__section {
-    display: flex;
-    flex-direction: column;
-    gap: var(--lk-space-xxs);
-}
-.doc-case__section h3 {
-    font-size: 16px;
-    font-weight: 700;
-    letter-spacing: 0.01em;
-    text-transform: none;
+.doc-case > .doc-case__lead {
+    margin: -14px 0 0;
     color: var(--ink-500);
-    margin: 0;
-}
-.doc-case__section h4 {
     font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 0.01em;
-    text-transform: none;
-    color: var(--ink-500);
-    margin: 0;
+    line-height: 1.65;
 }
-.doc-case__section p {
-    margin: 0;
-    line-height: 1.4;
-    color: var(--ink-700);
-}
-.doc-case__section p:last-child {
-    margin-bottom: 0;
-}
-.doc-case__section ul {
-    margin: var(--lk-space-xxs) 0 var(--lk-space-sm);
-    padding-left: var(--lk-space-md);
-    display: grid;
-    gap: var(--lk-space-xxs);
-    color: var(--ink-700);
-    line-height: var(--lk-line-body);
-}
-.doc-case__section ol {
-    margin: var(--lk-space-xxs) 0 var(--lk-space-sm);
-    padding-left: var(--lk-space-md);
-    display: grid;
-    gap: var(--lk-space-xxs);
-    color: var(--ink-700);
-    line-height: 1.4;
-}
-.doc-case__section ol li {
-    margin: 0;
-}
-.doc-case__divider {
-    border: 0;
-    border-top: 1px solid rgba(15, 23, 42, 0.1);
-    margin: var(--lk-space-sm) 0;
-}
-.doc-case__block {
-    display: flex;
-    flex-direction: column;
-    gap: var(--lk-space-muted);
-}
-.doc-case__eyebrow {
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    font-weight: 700;
-    color: var(--ink-500);
-    margin: 0;
-}
-.doc-case__figure {
-    margin: var(--lk-space-md) 0 0;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow:
-        0 12px 40px rgba(15, 23, 42, 0.18),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-}
-.doc-case__figure img {
-    display: block;
-    width: 100%;
-    height: auto;
-}
-.doc-case__split {
-    display: grid;
-    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
-    gap: var(--lk-space-split);
-    align-items: start;
-}
-.doc-case__split-media {
-    display: flex;
-    justify-content: center;
-}
+.doc-case__section,
+.doc-case__block,
 .doc-case__split-content {
     display: flex;
     flex-direction: column;
-    gap: var(--lk-space-muted);
+    gap: 16px;
+    min-width: 0;
 }
-.doc-case__split--even {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+.doc-case__section + .doc-case__section {
+    border-top: 1px solid #e2e5e9;
+    padding-top: 28px;
 }
+.doc-case h3 {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.35;
+    font-weight: 650;
+    letter-spacing: -0.015em;
+    color: var(--text);
+    text-wrap: pretty;
+}
+.doc-case h4 {
+    margin: 8px 0 0;
+    font-size: 16px;
+    line-height: 1.5;
+    font-weight: 600;
+    color: var(--ink-600);
+}
+.doc-case p,
+.doc-bullet--plain {
+    margin: 0;
+    line-height: inherit;
+}
+.doc-case strong {
+    font-weight: 650;
+    color: var(--text);
+}
+.doc-case ul,
+.doc-case ol {
+    display: grid;
+    gap: 10px;
+    margin: 0;
+    padding-left: 1.35em;
+    line-height: inherit;
+}
+/* The resume's custom bullet positioning and tight leading do not apply here. */
+.doc-case li {
+    list-style: disc;
+    padding-left: 0.2em;
+    margin: 0;
+    line-height: inherit;
+}
+.doc-case ol > li {
+    list-style: decimal;
+}
+.doc-case li::before {
+    content: none;
+}
+.doc-case li::marker {
+    color: #687282;
+}
+.doc-case li > ul,
+.doc-case li > ol,
+.doc-case li > p {
+    margin-top: 10px;
+}
+.doc-case .link {
+    color: #304d83;
+    text-decoration: underline;
+    text-decoration-color: #b5c2d6;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+}
+.doc-case .link:hover {
+    color: #173367;
+    text-decoration-color: currentColor;
+}
+.doc-case__divider {
+    width: 100%;
+    margin: 0;
+    border: 0;
+    border-top: 1px solid #e2e5e9;
+}
+.doc-case .doc-case__eyebrow {
+    margin: 0 0 -10px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #5c6673;
+}
+.doc-case__figure {
+    width: 100%;
+    margin: 8px 0;
+    align-self: center;
+}
+.doc-case__figure > a {
+    display: block;
+    border-radius: 8px;
+    cursor: zoom-in;
+}
+.doc-case__figure img,
 .doc-case__image {
+    display: block;
     width: 100%;
     height: auto;
-    border-radius: 16px;
-    box-shadow:
-        0 14px 36px rgba(15, 23, 42, 0.24),
-        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    box-sizing: border-box;
+    border: 1px solid #e0e4e9;
+    border-radius: 8px;
+    background: #fff;
 }
-
-
-
-
-@media (max-width: 900px) {
+.doc-case__figure--compact {
+    max-width: 360px;
+}
+.doc-case__figure figcaption {
+    margin-top: 10px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #5c6673;
+}
+.doc-case__figure figcaption span {
+    white-space: nowrap;
+}
+.doc-case__split {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 24px;
+    align-items: start;
+}
+.doc-entry {
+    margin: 0;
+}
+@container (max-width: 600px) {
     .doc-case__split {
         grid-template-columns: 1fr;
-        gap: var(--lk-space-md);
     }
-    .doc-case__split--even {
-        grid-template-columns: 1fr;
+}
+@media (max-width: 863px) {
+    .doc-head {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        padding: 20px 24px;
+        background: var(--paper-bg);
     }
-    .doc-case__split-media {
-        order: -1;
+    .doc-body {
+        padding: 24px 24px 48px;
+        scrollbar-gutter: auto;
+    }
+    .doc-content {
+        font-size: 14px;
+    }
+    .doc-case {
+        gap: 28px;
+    }
+    .doc-case > h2 {
+        font-size: 24px;
+    }
+    .doc-case > .doc-case__lead {
+        font-size: 15px;
+    }
+}
+@media (max-width: 380px) {
+    .doc-head,
+    .doc-body {
+        padding-inline: 20px;
     }
 }

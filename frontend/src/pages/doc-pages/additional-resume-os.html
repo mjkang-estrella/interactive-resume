@@ -1,0 +1,95 @@
+<div class="doc-case" data-template="additional-resume-os">
+    <h2>Resume OS</h2>
+    <p class="doc-case__lead">
+        This is my interactive resume. Start with the one-page summary, then open any
+        clickable bullet to read the decisions and work behind it.
+    </p>
+    <section class="doc-case__section">
+        <h3>How to use this page</h3>
+        <ol>
+            <li>Click a resume bullet. Its story opens in the detail sheet, and the selected bullet is highlighted.</li>
+            <li>Scroll inside the detail sheet to read the full story and see supporting images. Click an image to open it at full size.</li>
+            <li>Choose another bullet to switch stories, or use the close button to return to the resume. On a phone, stories appear below the resume.</li>
+        </ol>
+        <p>
+            Hover over a company name for a short introduction. For the conventional one-page
+            version, use the PDF icon at the top of the resume.
+        </p>
+    </section>
+    <section class="doc-case__section">
+        <h3>Ask a follow-up question</h3>
+        <p>
+            Use <strong>Ask an AI</strong> in the bottom-right corner to choose ChatGPT, Claude,
+            or Google AI Mode. It opens your chosen assistant with a question and a link to the
+            resume and stories. You can also copy the prompt.
+        </p>
+        <p>
+            Try asking about a product decision, my role in a project, or how my experience
+            relates to a job. The assistant can read the same material at
+            <a class="link" href="/llms.txt" target="_blank" rel="noopener noreferrer">llms.txt</a>.
+        </p>
+    </section>
+    <section class="doc-case__section">
+        <h3>Why I built it</h3>
+        <p>
+            A resume makes it easy to scan roles and results, but a short bullet leaves out
+            most of the work. I wanted a place to explain what we tried, which constraints
+            mattered, and why we changed direction.
+        </p>
+        <p>
+            Resume OS keeps that detail attached to the relevant bullet. Readers can choose
+            which projects to explore without working through a separate portfolio.
+        </p>
+        <figure class="doc-case__figure">
+            <a href="media/additional-resume-os-1.png" target="_blank" rel="noopener noreferrer"
+                aria-label="Open full-size image: original Resume OS concept">
+                <img src="media/additional-resume-os-1.png" alt="Original Resume OS concept with a one-page resume"
+                    loading="lazy" decoding="async" width="3892" height="2188" />
+            </a>
+            <figcaption>The original Resume OS concept, with an earlier version of my resume.</figcaption>
+        </figure>
+    </section>
+    <section class="doc-case__section">
+        <h3>From the first prototype to this version</h3>
+        <p>
+            I built the first version with Codex and Zed, wrote the project stories in Notion,
+            and used GitHub and Vercel to manage and publish the site. That version included
+            an embedded interview bot built with ChatKit and Agent Builder, plus a waitlist
+            backed by Supabase.
+        </p>
+        <figure class="doc-case__figure">
+            <a href="media/additional-resume-os-2.png" target="_blank" rel="noopener noreferrer"
+                aria-label="Open full-size image: earlier Resume OS prototype">
+                <img src="media/additional-resume-os-2.png"
+                    alt="Earlier Resume OS prototype with a highlighted bullet, a project story, and an embedded interview bot"
+                    loading="lazy" decoding="async" width="3714" height="2410" />
+            </a>
+            <figcaption>The earlier prototype. The current version uses the Ask an AI launcher instead of an embedded bot.</figcaption>
+        </figure>
+        <p>
+            The current site is static. It publishes the resume and stories for external
+            assistants to read, without running a chat backend or collecting waitlist signups.
+            The clickable bullets, highlighting, and animated sheets remain the main way to explore.
+        </p>
+    </section>
+    <section class="doc-case__section">
+        <h3>What I learned building it</h3>
+        <p>
+            I built the first version in about a week. Coding agents helped me get it working,
+            but I still had to decide how someone would discover the interaction. The moving
+            cursor demonstrates a click, and the highlight connects the resume bullet to the
+            story that opens beside it.
+        </p>
+        <p>
+            Small layout and timing choices needed repeated checks in the browser. Being able
+            to inspect the code and adjust it myself made that work easier.
+        </p>
+        <p>
+            Read the <a class="link" href="https://blog.mj-kang.com/resume-os/" target="_blank"
+                rel="noopener noreferrer">original write-up</a>, browse the
+            <a class="link" href="https://github.com/mjkang-estrella/interactive-resume" target="_blank"
+                rel="noopener noreferrer">source code</a>, or see my other projects at
+            <a class="link" href="https://mj-kang.com/" target="_blank" rel="noopener noreferrer">mj-kang.com</a>.
+        </p>
+    </section>
+</div>
