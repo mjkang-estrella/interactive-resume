@@ -2,10 +2,10 @@
 // the company type, so these add context instead of repeating it.
 const COMPANY_DETAILS: Record<string, { html: string }> = {
   haas: {
-    html: `UC Berkeley’s business school, in the heart of the Bay Area tech ecosystem.<br />Go Bears!`,
+    html: `UC Berkeley's business school.<br />Go Bears!`,
   },
   kaist: {
-    html: `South Korea’s leading science and technology university, often called the MIT of Korea.`,
+    html: `A science and technology university in Daejeon, South Korea.`,
   },
   liner: {
     html: `AI search agent startup. I worked on the developer-facing <b>AI search API</b>.`,

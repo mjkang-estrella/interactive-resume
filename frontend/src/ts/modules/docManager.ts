@@ -74,6 +74,9 @@ export class DocManager {
       }
 
       this.applyDocData({ section, roleTitle, bulletText });
+      // Each story starts at its title, even after scrolling a longer one.
+      const body = this.doc.querySelector<HTMLElement>('.doc-body');
+      if (body) body.scrollTop = 0;
       this.syncDocHeight();
     };
 

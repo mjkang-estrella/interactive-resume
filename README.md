@@ -22,12 +22,17 @@ Detail pages use the `doc-case` layout:
 ```html
 <div class="doc-case" data-template="exp-example">
     <h2>Title</h2>
-    <div class="doc-case__section">
-        <h3>Background</h3>
+    <p class="doc-case__lead">A short introduction to the work and its outcome.</p>
+    <section class="doc-case__section">
+        <h3>The decision behind the work</h3>
         <p>…</p>
-    </div>
+    </section>
 </div>
 ```
+
+Use sentence-case headings and paragraphs that describe the actual decisions. Keep unknown facts in `<!-- TODO(MJ): … -->` comments, which are excluded from `/llms.txt`. Context typography lives in `doc-pages.css` and is separate from the resume paper.
+
+Wrap screenshots in `doc-case__figure`, add a caption, and include intrinsic `width` and `height` attributes to prevent layout shifts. Link detailed images to their full-size files. Use `doc-case__figure--compact` for small illustrations or badges; charts should keep the full reading width.
 
 ## Architecture
 

@@ -1,109 +1,41 @@
 <div class="doc-case" data-template="exp-hakuna-hls">
-    <h2>Phased Streaming Rollout</h2>
-    <div class="doc-case__section">
-        <h3>Background</h3>
-        <p>As a live streaming service, improving overall broadcast quality and reliability was a top priority.</p>
-        <p>We hypothesized that higher-quality streaming would directly lead to increased viewer satisfaction, longer watch times, and higher overall engagement.</p>
-        <p>Better streaming infrastructure is expensive, so we rolled it out in phases, prioritizing large partner channels to balance upfront costs against delivery economics.</p>
-    </div>
-
-    <hr class="doc-case__divider" />
-
-    <div class="doc-case__section">
-        <h3>Iteration 1: Video &amp; Audio Quality Improvement</h3>
-        <h4>Problem</h4>
-        <ul class="bullets doc-bullets">
-            <li>Hakuna’s live streams were originally limited to 480p resolution, which led to frequent user complaints about low visual quality.</li>
-            <li>This negatively impacted both perceived platform quality and user retention, especially in regions with better network infrastructure.</li>
-        </ul>
-        <h4>Solution</h4>
-        <ul class="bullets doc-bullets">
-            <li><strong>Upgraded the maximum streaming resolution to 720p</strong>, while introducing adaptive bitrate streaming to dynamically switch between 480p and 720p based on device performance and network conditions.</li>
-            <li>After evaluating trade-offs between infrastructure cost, user satisfaction, and global network environments, we selected 720p instead of 1080p as the optimal resolution.</li>
-        </ul>
-        <h4>Result</h4>
-        <ul class="bullets doc-bullets">
-            <li>Received positive feedback from streamers and viewers regarding improved broadcast quality.</li>
-            <li>The number of customer service complaints related to low resolution dropped by over <strong>60%</strong>.</li>
-        </ul>
-    </div>
-
-    <hr class="doc-case__divider" />
-
-    <div class="doc-case__section">
-        <h3>Iteration 2: HLS-Based PC Broadcasting Infrastructure</h3>
-        <h4>Background</h4>
-        <ul class="bullets doc-bullets">
-            <li>Hakuna’s existing live streaming protocol was WebRTC, optimized for low-latency mobile streaming.</li>
-            <li>However, professional streamers typically use OBS (Open Broadcaster Software) for screen composition and output, which only supports Virtual Camera and HLS streaming.</li>
-        </ul>
-        <h4>Problem</h4>
-        <ul class="bullets doc-bullets">
-            <li>While video quality had improved, demand for professional PC streaming increased rapidly.</li>
-            <li>To support both casual mobile users and professional streamers, Hakuna aimed to expand its ecosystem by providing a studio-grade broadcasting environment.</li>
-            <li>The existing WebRTC architecture, however, imposed limitations on advanced content creation and professional production.</li>
-        </ul>
-        <figure class="doc-case__figure">
-            <img src="media/exp-hakuna-hls-overview.png" alt="Diagram of Hakuna HLS-based streaming infrastructure" />
-        </figure>
-        <h4>Solution</h4>
-        <ul class="bullets doc-bullets">
-            <li>Built a <strong>new HLS-based streaming infrastructure</strong> to enable PC broadcasting via OBS, supporting <strong>1080p resolution and 60fps</strong> frame rate.</li>
-            <li>This allowed professional streamers to broadcast with higher flexibility, better visuals, and multi-screen composition capabilities.</li>
-        </ul>
-        <figure class="doc-case__figure">
-            <img src="media/exp-hakuna-hls-results.png" alt="Performance metrics from HLS streamers" />
-        </figure>
-        <h4>Result</h4>
-        <ul class="bullets doc-bullets">
-            <li>HLS streamers showed <strong>25% more viewers per broadcast and 9% longer average session duration.</strong></li>
-            <li>Collected highly positive feedback from professional streamers.</li>
-            <li>However, compared to WebRTC, HLS incurred:
-                <ul class="bullets doc-bullets">
-                    <li>Higher latency (1s → 7s delay)</li>
-                    <li>Significantly higher infrastructure costs (~$300/user/month)</li>
-                </ul>
-            </li>
-            <li>Therefore, the feature was limited to curated events and professional streamers, rather than full-scale rollout.</li>
-        </ul>
-    </div>
-
-    <hr class="doc-case__divider" />
-
-    <div class="doc-case__section">
-        <h3>Iteration 3: WebRTC-Based PC Broadcasting Infrastructure</h3>
-        <h4>Problem</h4>
-        <ul class="bullets doc-bullets">
-            <li>While HLS confirmed the demand and impact of PC broadcasting, its latency and cost made it unsuitable for full deployment.</li>
-            <li>A more scalable and cost-efficient infrastructure was needed for general user adoption.</li>
-        </ul>
-        <h4>Solution</h4>
-        <ul class="bullets doc-bullets">
-            <li>Developed a <strong>WebRTC-based PC broadcasting system</strong>, leveraging the existing low-latency protocol.</li>
-            <li>Although limited to 720p resolution and 30fps, it offered:
-                <ul class="bullets doc-bullets">
-                    <li>Better accessibility</li>
-                    <li>Minimal delay</li>
-                    <li>Lower operational cost</li>
-                </ul>
-            </li>
-            <li>This provided a more inclusive option for everyday streamers while maintaining acceptable quality.</li>
-        </ul>
-        <figure class="doc-case__figure">
-            <img src="media/exp-hakuna-hls-webrtc.png" alt="WebRTC-based PC broadcasting workflow diagram" />
-        </figure>
-        <h4>Result</h4>
-        <ul class="bullets doc-bullets">
-            <li>The adoption rate of PC streaming increased over <strong>4x</strong> after the rollout.</li>
-            <li>Viewers of WebRTC PC broadcasts exhibited over <strong>10% higher average watch time</strong> than traditional mobile broadcasts.</li>
-            <li>This established a sustainable and scalable foundation for hybrid mobile–PC streaming growth.</li>
-        </ul>
-    </div>
-
-    <hr class="doc-case__divider" />
-
-    <div class="doc-case__section">
-        <h3>Overall</h3>
-        <p>Across the phased rollout, viewer engagement rose <strong>10%</strong> and creator CSAT rose <strong>20 points</strong>.</p>
-    </div>
+<h2>Choosing streaming quality we could afford to roll out</h2>
+<p class="doc-case__lead">I led a phased streaming rollout at Hakuna, starting with large partner channels. Viewer engagement rose 10%, and creator satisfaction rose 20 points.</p>
+<section class="doc-case__section">
+<h3>First, improve the mobile stream</h3>
+<p>Hakuna's streams were limited to 480p, and customers complained about picture quality. We raised the maximum to 720p and added adaptive bitrate switching based on device and network conditions.</p>
+<p>We chose 720p over 1080p for this phase to balance quality and infrastructure cost. Complaints about low resolution fell by more than <strong>60%</strong>.</p>
+</section>
+<section class="doc-case__section">
+<h3>Try higher-quality PC broadcasting</h3>
+<p>Professional streamers wanted to broadcast from a PC using OBS. We introduced an HLS-based option with 1080p resolution and 60 frames per second.</p>
+<figure class="doc-case__figure">
+<a href="media/exp-hakuna-hls-overview.png" target="_blank" rel="noopener noreferrer" aria-label="Open full-size image: Hakuna HLS-based streaming infrastructure">
+<img src="media/exp-hakuna-hls-overview.png" alt="Hakuna HLS-based streaming infrastructure" loading="lazy" decoding="async" width="2242" height="696" />
+</a>
+<figcaption>The HLS-based PC broadcasting setup. <span>Open image for detail.</span></figcaption>
+</figure>
+<p>HLS broadcasts had <strong>25% more viewers</strong> and <strong>9% longer average sessions</strong>. But delay rose from about one second to seven, and infrastructure cost was about $300 per streamer per month. We kept this option limited to curated events and professional streamers.</p>
+<figure class="doc-case__figure">
+<a href="media/exp-hakuna-hls-results.png" target="_blank" rel="noopener noreferrer" aria-label="Open full-size image: Performance metrics from HLS streamers">
+<img src="media/exp-hakuna-hls-results.png" alt="Performance metrics from HLS streamers" loading="lazy" decoding="async" width="670" height="406" />
+</a>
+<figcaption>Viewer and session metrics from the HLS rollout. <span>Open image for detail.</span></figcaption>
+</figure>
+</section>
+<section class="doc-case__section">
+<h3>Use WebRTC for the broader rollout</h3>
+<p>We then built PC broadcasting on the existing WebRTC protocol. It supported 720p at 30 frames per second, with lower delay and operating cost.</p>
+<figure class="doc-case__figure">
+<a href="media/exp-hakuna-hls-webrtc.png" target="_blank" rel="noopener noreferrer" aria-label="Open full-size image: WebRTC-based PC broadcasting workflow">
+<img src="media/exp-hakuna-hls-webrtc.png" alt="WebRTC-based PC broadcasting workflow" loading="lazy" decoding="async" width="1672" height="524" />
+</a>
+<figcaption>The WebRTC option for broader PC broadcasting access. <span>Open image for detail.</span></figcaption>
+</figure>
+<p>PC broadcasting adoption increased more than <strong>4x</strong>. Viewers of these broadcasts watched for over <strong>10% longer</strong> on average than viewers of mobile broadcasts.</p>
+</section>
+<section class="doc-case__section">
+<h3>Overall result</h3>
+<p>Across the phases, viewer engagement increased <strong>10%</strong> and creator CSAT increased <strong>20 points</strong>.</p>
+</section>
 </div>
